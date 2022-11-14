@@ -45,13 +45,21 @@ nav li a{
     width: 60px;
 
 }
-nav ul li a:hover{
-    text-decoration: underline;
-}
+
 
 body{
     margin: 0px;
     padding: 0px;
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+canvas{
+    width: 400px;
+    height: 400px;
 }
 
 footer{
