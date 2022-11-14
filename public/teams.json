@@ -1,0 +1,54 @@
+[
+    {   
+        "name": "team 1",
+        "number_students": "3",
+        "row_one": {
+            "red": 2,
+            "blue": 1
+        },
+        "row_two": {
+            "red": 2,
+            "blue": 1
+        },
+        "row_three": {
+            "red": 3,
+            "blue": 0
+        }
+
+    },
+    {   
+        "name": "team 2",
+        "number_students": "3",
+        "row_one": {
+            "red": 2,
+            "blue": 1
+        },
+        "row_two": {
+            "red": 2,
+            "blue": 1
+        },
+        "row_three": {
+            "red": 3,
+            "blue": 0
+        }
+
+    },
+    {   
+        "name": "team 3",
+        "number_students": "3",
+        "row_one": {
+            "red": 2,
+            "blue": 1
+        },
+        "row_two": {
+            "red": 2,
+            "blue": 1
+        },
+        "row_three": {
+            "red": 3,
+            "blue": 0
+        }
+
+    }
+
+]
