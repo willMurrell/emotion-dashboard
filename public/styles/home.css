@@ -1,6 +1,64 @@
-/* why is this not working :( */
+/* Layout */
+:root {
+    --aside-width: 300px;
+    --header-height: 100px;
+    --footer-height: 50px;
+}
+
+header{
+    background-color: #8ecae6;
+
+    padding: 10px 20px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+}
+
+header h1{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+nav{
+    padding-left: 10px;
+    background-color: #8ecae6;
+}
+nav ul {
+    display: flex;
+    justify-content: flex-start;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li{
+    padding: 5px;
+}
+nav li:hover{
+    background-color: #219ebc;
+    cursor: pointer;
+}
+nav li a{
+    display: block;
+    width: 60px;
+
+}
+nav ul li a:hover{
+    text-decoration: underline;
+}
 
 body{
-    background-color: black;
-    color: blue;
+    margin: 0px;
+    padding: 0px;
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: #8ecae6;
+    text-align: center;
 }
