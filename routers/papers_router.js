@@ -6,11 +6,11 @@ const express = require('express');
 const router = express.Router();
 
 
-console.log("This is where i am");
+console.log("Papers router!!");
 
 router.get('/', async (req, res) => {
 
-    res.render('home');
+    res.render('papers');
 })
 
 
