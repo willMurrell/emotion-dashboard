@@ -6,7 +6,10 @@ const express = require('express');
 const router = express.Router();
 
 
-console.log("Papers router!!");
+
+//console.log("Papers router!!");
+
+
 
 router.get('/', async (req, res) => {
 

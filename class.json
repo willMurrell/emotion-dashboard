@@ -1,0 +1,20 @@
+[
+    {
+        "name": "COSC100",
+        "no_students": "3",
+        "no_negative": "2",
+        "no_positive": "1" 
+    },
+    {
+        "name": "COSC200",
+        "no_students": "3",
+        "no_negative": "0",
+        "no_positive": "3" 
+    },
+    {
+        "name": "COSC300",
+        "no_students": "3",
+        "no_negative": "1",
+        "no_positive": "2" 
+    }
+]
