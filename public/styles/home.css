@@ -52,14 +52,14 @@ body{
     padding: 0px;
 }
 
-.container{
+#new{
     display: flex;
     flex-wrap: wrap;
 }
 
 canvas{
-    width: 400px;
-    height: 400px;
+    width: 800px;
+    height: 800px;
 }
 
 footer{
