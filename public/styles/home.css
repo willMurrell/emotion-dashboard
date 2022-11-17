@@ -62,6 +62,11 @@ canvas{
     height: 800px;
 }
 
+main{
+    margin-bottom: 100px;
+}
+
+
 footer{
     position: fixed;
     bottom: 0;
