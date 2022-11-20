@@ -7,7 +7,7 @@ html(lang='en')
         link(rel='stylesheet',type="text/css" , href='../static/styles/home.css')
         link(rel='stylesheet',type="text/css" , href='../static/styles/team.css')
         script(defer, src='../static/scripts/populate.js')
-       
+        script(src='../static/scripts/order.js')
         //script(defer, src='../static/scripts/plotly.js')
         script(src='https://cdn.plot.ly/plotly-2.16.1.min.js')
         //script(defer, src='../static/scripts/chartly.js')
@@ -17,6 +17,8 @@ html(lang='en')
     body
         include templates/header.pug
         main
+            div(class="filters")
+                button(onclick="order()") Order
 
             //input(type="file" id="file-input")
             //div(id="file-content")
