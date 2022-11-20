@@ -1,9 +1,11 @@
+
+
 /*
  *   emotionColours is a map that containst the emotions and the colour associated with it
  */
 const emotionColours = new Map();
 
-emotionColours.set("Positive", "#008000");
+emotionColours.set("Positive", "#48A9A6");
 emotionColours.set("Happy/Joyful", "#008000");
 emotionColours.set("Engaged", "#118C11");
 emotionColours.set("Curious/Interested", "#1F991F");
@@ -13,7 +15,7 @@ emotionColours.set("Hopeful", "#47B347");
 emotionColours.set("Proud", "#60BF60");
 emotionColours.set("Empathy", "#7ACC7A");
 
-emotionColours.set("Negative", "#A50104");
+emotionColours.set("Negative", "#D1603D");
 emotionColours.set("Confused", "#A50104");
 emotionColours.set("Frustrated", "#B81702");
 emotionColours.set("Angry", "#EC3F13");
@@ -26,7 +28,7 @@ emotionColours.set("Hopeless", "#7A0103");
 emotionColours.set("Exhausted/Tired", "#8E0103");
 emotionColours.set("Shamed/Apologetic", "#db6612");
 
-emotionColours.set("Other_emotion", "##a1a1a1");
+emotionColours.set("Other_emotion", "#a1a1a1");
 
 /*
  *   positiveEmotions and negative Emotions are arrays used when
@@ -59,38 +61,38 @@ const negativeEmotions = new Array(
     "Shamed/Apologetic"
 );
 const positiveExperience = new Array(
-
-    "Clear Direction",
-    "Enough Knowledge",
-    "Sense of Achievements",
-    "Good Timing",
-    "Adequate Project Scope",
-    "Good Team Communication",
-    "Good Team Collaboration",
-    "Good Project Monitoring ",
-    "Good Client Communication",
-    "Good Academic Staff Communication",
-    "Personality Match",
+    //"None_positive",
+    "ClearDirection",
+    "EnoughKnowledge",
+    "SenseofAchievements",
+    "GoodTiming",
+    "AdequateProjectScope",
+    "GoodTeamCommunication",
+    "GoodTeamCollaboration",
+    "GoodProjectMonitoring ",
+    "GoodClientCommunication",
+    "GoodAcademicStaffCommunication",
+    "PersonalityMatch",
     "Discovery",
-    //"Other",
+    "Other_positive",
 );
 const negativeExperience = new Array(
-    "Lack of Direction",
-    "Limited Knowledge",
-    "Technical Issues",
-    "Lack of Achievements",
-    "Time Pressure",
-    "Project Scope - too big",
-    "Project Scope - too small",
-    "Team Communication",
-    "Team Collaboration",
-    "Project Monitoring ",
-    "Client Communication",
-    "Academic Staff Communication",
-    "Personality Clash",
+    "LackofDirection",
+    "LimitedKnowledge",
+    "TechnicalIssues",
+    "LackofAchievements",
+    "TimePressure",
+    "ProjectScope-toobig",
+    "ProjectScope-toosmall",
+    "TeamCommunication",
+    "TeamCollaboration",
+    "ProjectMonitoring ",
+    "ClientCommunication",
+    "AcademicStaffCommunication",
+    "PersonalityClash",
     "Hindsights",
-    "Additional Commitments",
-    //"Other",
+    "AdditionalCommitments",
+    "Other_issue",
 );
 
 
@@ -116,6 +118,7 @@ class Group {
         this.otherEmotion = 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
+        
     }
     addToPositiveEmotion(percent) {
         this.positiveEmotion += percent;
@@ -151,6 +154,7 @@ class GroupPerWeek {
         this.otherEmotion = 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
+       
     }
     addToPositiveEmotion(percent) {
         this.positiveEmotion += percent;
@@ -166,6 +170,14 @@ class GroupPerWeek {
     }
     addToNegativeExp(percent) {
         this.negativeExp += percent;
+    }
+    getOverallNegative(){
+        var totalEmo = this.negativeEmotion + this.positiveEmotion;
+        var totalExp = this.negativeExp + this.positiveExp;
+        var percentEmo = this.negativeEmotion / totalEmo;
+        var percentExp = this.negativeExp / totalExp;
+        return percentEmo + percentExp;
+
     }
 }
 
@@ -188,7 +200,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
             // In this case, we are setting the border of each horizontal bar to be 2px wide
             elements: {
                 bar: {
-                    borderWidth: 2,
+                    borderWidth: 0,
                 }
             },
             responsive: false,
@@ -211,6 +223,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
                 x: {
                     stacked: true,
                     display: false
+                    
                 },
                 y: {
                     stacked: true,
@@ -219,7 +232,10 @@ function buildHorizontalGraph(datac, labels, title, id) {
             },
             layout: {
                 padding: 5
-            }
+            },
+            barPercentage: 0.9,
+            categoryPercentage: 1.0,
+            maintainAspectRatio: false
         },
     };
 
@@ -241,7 +257,9 @@ function datasetMaker(key, value) {
         label: key,
         backgroundColor: emotionColours.get(key),
         borderColor: emotionColours.get(key),
-        data: [value]
+        data: [value],
+        barPercentage: 1.0,
+        categoryPercentage: 1.0
     };
     return obj;
 
@@ -272,12 +290,13 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
  */
 
 function createGroupData(data) {
+    //console.log(data);
     var groupName = (data.group + " " + data.week)
     //var groupName = (data.group)
     if (groupMap.has(groupName)) {
 
         Object.entries(data).forEach((entry) => {
-
+            //console.log(data.name + " " + data.group + " " + data.week);
             if (positiveEmotions.includes(entry[0])) {
                 groupMap.get(groupName).addToPositiveEmotion(entry[1])
 
@@ -288,9 +307,11 @@ function createGroupData(data) {
 
                 groupMap.get(groupName).addToOtherEmotion(entry[1])
             } else if (negativeExperience.includes(entry[0])) {
+                //console.log(entry[0]);
                 groupMap.get(groupName).addToNegativeExp(entry[1])
 
             } else if (positiveExperience.includes(entry[0])) {
+                //console.log(entry[0]);
                 groupMap.get(groupName).addToPositiveExp(entry[1])
 
             }
@@ -364,7 +385,7 @@ const getStudents = async () => {
     //fetching data from server
     const res = await fetch("http://localhost:8080/home/students/")
     const students = await res.json()
-
+    //console.log(students);
 
 
 
@@ -372,9 +393,6 @@ const getStudents = async () => {
     Object.entries(students).forEach((student) => {
         //turning data into JSON objects
         studentData = JSON.parse(student[1]);
-
-
-
         //Not actually displaying the graphs!
         processData(studentData, null);
 
@@ -384,6 +402,18 @@ const getStudents = async () => {
 
 
 }
+/*
+*   clearGraphs is a function that removes all canva elements
+*   and creates a new empty div
+*/
+function clearGraphs(){
+    document.querySelector('#new').remove();
+    var newDiv = document.createElement("div");
+    newDiv.setAttribute("id", "new");
+    var parent = document.querySelector('main');
+    parent.appendChild(newDiv);
+}
+
 
 /*
  *   makeCanva is a function that creates a canva HTML element
@@ -397,14 +427,27 @@ function makeCanva(id) {
 
 }
 
+function sortMapNegative(){
+    const unsortedArray = [...groupMap];
+    return unsortedArray.sort((a,b) => (a[1].getOverallNegative() < b[1].getOverallNegative()) ? 1 : -1);
+}
+function sortMapPositive(){
+    const unsortedArray = [...groupMap];
+    return unsortedArray.sort((a,b) => (a[1].getOverallNegative() > b[1].getOverallNegative()) ? 1 : -1);
+}
+
+
 /*
  *   displayGroupGraph is a function that, when called
  *   will create graphs from the groupMap Map.
  */
 
 function displayGroupGraph() {
-    groupMap.forEach((key, value) => {
-        console.log(key);
+
+    var sortedMap = new Map(sortMapNegative());
+    //groupMap.forEach((key, value) => {
+    sortedMap.forEach((key, value) => {
+        console.log(key.getOverallNegative());
         var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
         var exp_total = key.positiveExp + key.negativeExp;
         var dataG = new Array();
