@@ -58,6 +58,41 @@ const negativeEmotions = new Array(
     "Exhausted/Tired",
     "Shamed/Apologetic"
 );
+const positiveExperience = new Array(
+
+    "Clear Direction",
+    "Enough Knowledge",
+    "Sense of Achievements",
+    "Good Timing",
+    "Adequate Project Scope",
+    "Good Team Communication",
+    "Good Team Collaboration",
+    "Good Project Monitoring ",
+    "Good Client Communication",
+    "Good Academic Staff Communication",
+    "Personality Match",
+    "Discovery",
+    //"Other",
+);
+const negativeExperience = new Array(
+    "Lack of Direction",
+    "Limited Knowledge",
+    "Technical Issues",
+    "Lack of Achievements",
+    "Time Pressure",
+    "Project Scope - too big",
+    "Project Scope - too small",
+    "Team Communication",
+    "Team Collaboration",
+    "Project Monitoring ",
+    "Client Communication",
+    "Academic Staff Communication",
+    "Personality Clash",
+    "Hindsights",
+    "Additional Commitments",
+    //"Other",
+);
+
 
 /*
  *   groupMap is a map that contains each Group from the data, and the number of positive
@@ -76,18 +111,61 @@ var groupMap = new Map();
 class Group {
     constructor(name) {
         this.name = name;
-        this.negative = 0;
-        this.positive = 0;
-        this.other = 0;
+        this.negativeEmotion = 0;
+        this.positiveEmotion = 0;
+        this.otherEmotion = 0;
+        this.negativeExp = 0;
+        this.positiveExp = 0;
     }
-    addToPositive(percent) {
-        this.positive += percent;
+    addToPositiveEmotion(percent) {
+        this.positiveEmotion += percent;
     }
-    addToNegative(percent) {
-        this.negative += percent;
+    addToNegativeEmotion(percent) {
+        this.negativeEmotion += percent;
     }
-    addToOther(percent) {
-        this.other += percent;
+    addToOtherEmotion(percent) {
+        this.otherEmotion += percent;
+    }
+    addToPositiveExp(percent) {
+        this.positiveExp += percent;
+    }
+    addToNegativeExp(percent) {
+        this.negativeExp += percent;
+    }
+}
+
+/*
+ *   GroupPerWeek is a class that takes group and week as a constructor
+ *
+ *   addToPositive / Negative / Other are setters that allow
+ *   the total number in each value to be increased
+ */
+
+class GroupPerWeek {
+    constructor(group, week) {
+        this.name = group + " " + week;
+        this.group = group;
+        this.week = week.substring(4);
+        this.negativeEmotion = 0;
+        this.positiveEmotion = 0;
+        this.otherEmotion = 0;
+        this.negativeExp = 0;
+        this.positiveExp = 0;
+    }
+    addToPositiveEmotion(percent) {
+        this.positiveEmotion += percent;
+    }
+    addToNegativeEmotion(percent) {
+        this.negativeEmotion += percent;
+    }
+    addToOtherEmotion(percent) {
+        this.otherEmotion += percent;
+    }
+    addToPositiveExp(percent) {
+        this.positiveExp += percent;
+    }
+    addToNegativeExp(percent) {
+        this.negativeExp += percent;
     }
 }
 
@@ -170,32 +248,60 @@ function datasetMaker(key, value) {
 }
 
 /*
+ *   datasetMakerDuo is a function that takes a key (the name if the value)
+ *   and 2 values (emotion and learning experience) and creates a Chartly dataset for a graph
+ *
+ *   @return obj an object containing label, colour and data
+ */
+function datasetMakerDuo(key, emotion_value, exp_value) {
+    var obj = new Object();
+    var obj = {
+        label: key,
+        backgroundColor: emotionColours.get(key),
+        borderColor: emotionColours.get(key),
+        data: [emotion_value, exp_value]
+    };
+    return obj;
+
+}
+
+/*
  *  createGroupData is function that is passed each entry and
  *  adds the positive, negative and other emotions to the
  *  group map.
  */
 
 function createGroupData(data) {
-
-    if (groupMap.has(data.group)) {
+    var groupName = (data.group + " " + data.week)
+    //var groupName = (data.group)
+    if (groupMap.has(groupName)) {
 
         Object.entries(data).forEach((entry) => {
 
             if (positiveEmotions.includes(entry[0])) {
-                groupMap.get(data.group).addToPositive(entry[1])
+                groupMap.get(groupName).addToPositiveEmotion(entry[1])
 
             } else if (negativeEmotions.includes(entry[0])) {
-                groupMap.get(data.group).addToNegative(entry[1])
+                groupMap.get(groupName).addToNegativeEmotion(entry[1])
 
             } else if (entry[0] == "Other_emotion") {
 
-                groupMap.get(data.group).addToOther(entry[1])
+                groupMap.get(groupName).addToOtherEmotion(entry[1])
+            } else if (negativeExperience.includes(entry[0])) {
+                groupMap.get(groupName).addToNegativeExp(entry[1])
+
+            } else if (positiveExperience.includes(entry[0])) {
+                groupMap.get(groupName).addToPositiveExp(entry[1])
+
             }
         });
 
     } else {
-        var newGroup = new Group(data.group);
-        groupMap.set(data.group, newGroup);
+        //var newGroup = new Group(data.group);
+        var newGroup = new GroupPerWeek(data.group, data.week);
+        //groupMap.set(data.group, newGroup);
+        groupMap.set((data.group + " " + data.week), newGroup);
+        createGroupData(data);
     }
 
 }
@@ -298,14 +404,15 @@ function makeCanva(id) {
 
 function displayGroupGraph() {
     groupMap.forEach((key, value) => {
-        console.log(key.name);
+        console.log(key);
+        var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
+        var exp_total = key.positiveExp + key.negativeExp;
         var dataG = new Array();
         makeCanva(key.name);
-        dataG.push(datasetMaker("Positive", key.positive));
-        console.log("Pushing " + key.positive + " to " + key.name);
-        dataG.push(datasetMaker("Negative", key.negative));
-        dataG.push(datasetMaker("Other_emotion", key.other));
-        buildHorizontalGraph(dataG, ["Emotions"], key.name, key.name);
+        dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
+        dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
+        dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
+        buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
     });
 
 }

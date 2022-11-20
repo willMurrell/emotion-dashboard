@@ -53,8 +53,75 @@ const emotions = [
     "Hopeless",
     "Exhausted/Tired",
     "Shamed/Apologetic",
-    "Other_emotion"
+    "Other_emotion",
+    //seeing if i can lump it all into one
+    "None",
+    "Lack of Direction",
+    "Limited Knowledge",
+    "Technical Issues",
+    "Lack of Achievements",
+    "Time Pressure",
+    "Project Scope - too big",
+    "Project Scope - too small",
+    "Team Communication",
+    "Team Collaboration",
+    "Project Monitoring ",
+    "Client Communication",
+    "Academic Staff Communication",
+    "Personality Clash",
+    "Hindsights",
+    "Additional Commitments",
+    "Other",
+    "None",
+    "Clear Direction",
+    "Enough Knowledge",
+    "Sense of Achievements",
+    "Good Timing",
+    "Adequate Project Scope",
+    "Good Team Communication",
+    "Good Team Collaboration",
+    "Good Project Monitoring ",
+    "Good Client Communication",
+    "Good Academic Staff Communication",
+    "Personality Match",
+    "Discovery",
+    "Other",
     ]
+const learning_experiences = [
+    "None",
+    "Lack of Direction",
+    "Limited Knowledge",
+    "Technical Issues",
+    "Lack of Achievements",
+    "Time Pressure",
+    "Project Scope - too big",
+    "Project Scope - too small",
+    "Team Communication",
+    "Team Collaboration",
+    "Project Monitoring ",
+    "Client Communication",
+    "Academic Staff Communication",
+    "Personality Clash",
+    "Hindsights",
+    "Additional Commitments",
+    "Other",
+    "None",
+    "Clear Direction",
+    "Enough Knowledge",
+    "Sense of Achievements",
+    "Good Timing",
+    "Adequate Project Scope",
+    "Good Team Communication",
+    "Good Team Collaboration",
+    "Good Project Monitoring ",
+    "Good Client Communication",
+    "Good Academic Staff Communication",
+    "Personality Match",
+    "Discovery",
+    "Other",
+]
+
+
    var entries = new Array();
     
     //console.log(readJSON(filename))
@@ -108,10 +175,10 @@ const emotions = [
     
     function emotionCounter(data, name, group, week){
         //console.log(name + group + week);
-        const emotionMap = new Map();
-        emotionMap.set("name", name);
-        emotionMap.set("group", group);
-        emotionMap.set("week", week);
+        const entryMap = new Map();
+        entryMap.set("name", name);
+        entryMap.set("group", group);
+        entryMap.set("week", week);
         const num_sentences = data.length - 1;
         for(let i = 0; i < num_sentences; i++){
             //console.log(data[i].Text);
@@ -119,16 +186,16 @@ const emotions = [
             
     
             // emotions.forEach(emotion => {
-            //     emotionMap.set(emotion, 0);
+            //     entryMap.set(emotion, 0);
             // })
     
             emotions.forEach(emotion => {
                 if(data[i][emotion] == 1){
                     //console.log(emotion + ": " + data[i][emotion]);
-                    if(emotionMap.has(emotion)){
-                        emotionMap.set(emotion, emotionMap.get(emotion) + 1)
+                    if(entryMap.has(emotion)){
+                        entryMap.set(emotion, entryMap.get(emotion) + 1)
                     } else {
-                        emotionMap.set(emotion, 1);
+                        entryMap.set(emotion, 1);
                     }
                     
                 }
@@ -139,15 +206,15 @@ const emotions = [
         }
         
         var x = 3;
-        for (var [key, value]of emotionMap){
+        for (var [key, value]of entryMap){
             if(x != 0){
                 x--;
             } else {
-                emotionMap.set(key, value/num_sentences);
+                entryMap.set(key, value/num_sentences);
             }
             
         }
-        var obj = Object.fromEntries(emotionMap);
+        var obj = Object.fromEntries(entryMap);
         var jsonString = JSON.stringify(obj);
         //console.log(jsonString);
         //console.log("\n\n");
