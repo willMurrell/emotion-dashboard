@@ -4,8 +4,13 @@ function order(){
     //const graphs = document.querySelectorAll("new div")
     const graphs = document.querySelector('#new').children
     for(var i = 0; i < graphs.length; i++){
-        var order = graphs[i].id.substring(5,6) + graphs[i].id.substring(11);
-        document.getElementById(graphs[i].id).style.order = order;
+        //console.log("ah");
+        var order = graphs[i].id.split(" ");
+        var rank = order[0].substring(5) + order[1].substring(4);
+        console.log(rank);
+        // document.getElementById(graphs[i].id).style.order = order;
+        var container = document.getElementById(graphs[i].id);
+        container.setAttribute("style", "order: "+rank);
     }
     
 }

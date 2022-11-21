@@ -154,22 +154,28 @@ class GroupPerWeek {
         this.otherEmotion = 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
+        
        
     }
     addToPositiveEmotion(percent) {
         this.positiveEmotion += percent;
+        ;
     }
     addToNegativeEmotion(percent) {
         this.negativeEmotion += percent;
+        
     }
     addToOtherEmotion(percent) {
         this.otherEmotion += percent;
+        
     }
     addToPositiveExp(percent) {
         this.positiveExp += percent;
+        
     }
     addToNegativeExp(percent) {
         this.negativeExp += percent;
+        
     }
     getOverallNegative(){
         var totalEmo = this.negativeEmotion + this.positiveEmotion;
@@ -181,12 +187,71 @@ class GroupPerWeek {
     }
 }
 
+function mostRecent(){
+    clearGraphs();
+    var sortedMap = new Map(sortMapNegative());
+    //groupMap.forEach((key, value) => {
+    // var currentWeek = 0;
+    // sortedMap.forEach((key, value) => {
+    //     if(currentWeek < key.week){
+    //         currentWeek = key.week;
+    //     }
+    // });
+    // console.log(currentWeek);
+    sortedMap.forEach((key, value) => {
+        
+            //console.log(key.getOverallNegative());
+            var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
+            var exp_total = key.positiveExp + key.negativeExp;
+            var dataG = new Array();
+            makeCanva(key.name);
+            dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
+            dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
+            dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
+            buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
+            
+            var emoChange = document.getElementById(key.name + " emo change");
+            var expChange = document.getElementById(key.name + " exp change");
+            if(key.week > 1){
+                var currentWeek = key.week;
+                var prevWeek = key.name.substring(0,key.name.length -1) + (currentWeek - 1);
+                console.log(key.getOverallNegative());
+                if(groupMap.has(prevWeek)){
+
+                    var prev = groupMap.get(prevWeek)
+
+                    var prevEmoTotal = prev.positiveEmotion + prev.negativeEmotion + prev.otherEmotion;
+                    
+                    var ChangeInEmo = (key.positiveEmotion/emotion_total)-(prev.positiveEmotion/prevEmoTotal);
+                    
+
+                    var prevExpTotal = prev.positiveExp + prev.negativeExp;
+                    
+                    var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
+                    
+                    //emoChange.textContent = Math.round((key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal)) * 100)/100
+                    //emoChange.textContent = (key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal));
+                    emoChange.textContent = Math.round(ChangeInEmo * 100 * 100)/100;
+                    expChange.textContent = Math.round(ChangeInExp * 100 * 100)/100;
+                    emoChange.textContent += "%";
+                    expChange.textContent += "%";
+                }
+            }
+            
+            
+        
+
+    });
+}
+
 /*
  *   buildHorizontalGraph is a function that takes a dataset, an array of labels
  *   a title and the HTML element id and creates a horizontal bar graph
  *   in that location by using Chartly
  */
 function buildHorizontalGraph(datac, labels, title, id) {
+    var group = title.substring(5,6);
+    var week = title.substring(11,12);
     const newData = {
         labels: labels,
         datasets: datac
@@ -206,7 +271,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
             responsive: false,
             plugins: {
                 legend: {
-                    position: 'right',
+                    position: 'top',
                 },
                 title: {
                     display: true,
@@ -214,8 +279,9 @@ function buildHorizontalGraph(datac, labels, title, id) {
                         size: 20,
                         weight: 'bold',
                         lineHeight: 1.2,
+                        family: 'Poppins'
                     },
-                    text: title,
+                    text: "Group " + group + " week " + week,
 
                 }
             },
@@ -414,16 +480,42 @@ function clearGraphs(){
     parent.appendChild(newDiv);
 }
 
+function makeAside(id){
+    var parentDiv = document.createElement("div");
+    var emoDiv = document.createElement("div");
+    var expDiv = document.createElement("div");
+    parentDiv.setAttribute("class", "graphAside");
+    emoDiv.setAttribute("class", "changeValues");
+    expDiv.setAttribute("class", "changeValues");
+    emoDiv.setAttribute("id", id + " emo change");
+    expDiv.setAttribute("id", id + " exp change");
+
+    parentDiv.appendChild(emoDiv);
+    parentDiv.appendChild(expDiv);
+
+    return parentDiv;
+}
 
 /*
  *   makeCanva is a function that creates a canva HTML element
  *   it takes an id to be used to identify it.
  */
 function makeCanva(id) {
+    var canvaContainer = document.createElement("div");
+    canvaContainer.setAttribute("class", "canvaContainer");
+    canvaContainer.setAttribute("id", id + " container");
+    
+
     var newCanva = document.createElement("canvas");
     newCanva.setAttribute("id", id)
+
+
+    var newDiv = makeAside(id);
+
     var element = document.getElementById("new");
-    element.appendChild(newCanva);
+    canvaContainer.appendChild(newCanva);
+    canvaContainer.appendChild(newDiv);
+    element.appendChild(canvaContainer);
 
 }
 
