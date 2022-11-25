@@ -6,27 +6,29 @@
 const emotionColours = new Map();
 
 emotionColours.set("Positive", "#48A9A6");
-emotionColours.set("Happy/Joyful", "#008000");
-emotionColours.set("Engaged", "#118C11");
-emotionColours.set("Curious/Interested", "#1F991F");
-emotionColours.set("Suprised", "#1F991F");
-emotionColours.set("Confident", "#32A632");
-emotionColours.set("Hopeful", "#47B347");
-emotionColours.set("Proud", "#60BF60");
-emotionColours.set("Empathy", "#7ACC7A");
+
+// emotionColours.set("Happy/Joyful", "#008000");
+// emotionColours.set("Engaged", "#118C11");
+// emotionColours.set("Curious/Interested", "#1F991F");
+// emotionColours.set("Suprised", "#1F991F");
+// emotionColours.set("Confident", "#32A632");
+// emotionColours.set("Hopeful", "#47B347");
+// emotionColours.set("Proud", "#60BF60");
+// emotionColours.set("Empathy", "#7ACC7A");
 
 emotionColours.set("Negative", "#D1603D");
-emotionColours.set("Confused", "#A50104");
-emotionColours.set("Frustrated", "#B81702");
-emotionColours.set("Angry", "#EC3F13");
-emotionColours.set("Worry", "#FA5E1F");
-emotionColours.set("Anxious", "#FF7E33");
-emotionColours.set("Fearful", "#FF931F");
-emotionColours.set("Sad", "#FFAD33");
-emotionColours.set("Bored", "#FFB950");
-emotionColours.set("Hopeless", "#7A0103");
-emotionColours.set("Exhausted/Tired", "#8E0103");
-emotionColours.set("Shamed/Apologetic", "#db6612");
+
+// emotionColours.set("Confused", "#A50104");
+// emotionColours.set("Frustrated", "#B81702");
+// emotionColours.set("Angry", "#EC3F13");
+// emotionColours.set("Worry", "#FA5E1F");
+// emotionColours.set("Anxious", "#FF7E33");
+// emotionColours.set("Fearful", "#FF931F");
+// emotionColours.set("Sad", "#FFAD33");
+// emotionColours.set("Bored", "#FFB950");
+// emotionColours.set("Hopeless", "#7A0103");
+// emotionColours.set("Exhausted/Tired", "#8E0103");
+// emotionColours.set("Shamed/Apologetic", "#db6612");
 
 emotionColours.set("Other_emotion", "#a1a1a1");
 
@@ -102,7 +104,7 @@ const negativeExperience = new Array(
  */
 
 var groupMap = new Map();
-
+var studentMap = new Map()
 /*
  *   Group is a class that takes name as a constructor
  *
@@ -213,9 +215,12 @@ function mostRecent(){
             var emoChange = document.getElementById(key.name + " emo change");
             var expChange = document.getElementById(key.name + " exp change");
             if(key.week > 1){
+                var info_array = key.name.split('-');
                 var currentWeek = key.week;
-                var prevWeek = key.name.substring(0,key.name.length -1) + (currentWeek - 1);
-                console.log(key.getOverallNegative());
+                //console.log(key);
+                var prevWeek = key.group +" Week" +(currentWeek - 1);
+                //console.log(prevWeek);
+                //console.log(key.getOverallNegative());
                 if(groupMap.has(prevWeek)){
 
                     var prev = groupMap.get(prevWeek)
@@ -250,8 +255,10 @@ function mostRecent(){
  *   in that location by using Chartly
  */
 function buildHorizontalGraph(datac, labels, title, id) {
-    var group = title.substring(5,6);
-    var week = title.substring(11,12);
+    var titleArr = title.split(" ");
+    var group = titleArr[0];
+    var week = titleArr[1].substring(4);
+    console.log("WEEK: "+week+"GROUP: " + group);
     const newData = {
         labels: labels,
         datasets: datac
@@ -281,7 +288,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
                         lineHeight: 1.2,
                         family: 'Poppins'
                     },
-                    text: "Group " + group + " week " + week,
+                    text: group + " Week " + week,
 
                 }
             },
@@ -318,6 +325,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
  *   @return obj an object containing label, colour and data
  */
 function datasetMaker(key, value) {
+    
     var obj = new Object();
     var obj = {
         label: key,
@@ -357,7 +365,11 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
 
 function createGroupData(data) {
     //console.log(data);
-    var groupName = (data.group + " " + data.week)
+    console.log("Group: " + data.group);
+    console.log("Week: " + data.week);
+    var groupName = (data.group + " " + data.week);
+
+    //console.log("Group Name: " + groupName);
     //var groupName = (data.group)
     if (groupMap.has(groupName)) {
 
@@ -400,12 +412,12 @@ function createGroupData(data) {
 function studentToGraph(student) {
 
     var datac = new Array();
-
+    
     var name, week, group;
     var x = 0;
     Object.entries(student).forEach((entry) => {
         const [key, value] = entry;
-
+        //console.log(key);
         if (x == 0) {
             name = value;
             x++;
@@ -414,9 +426,10 @@ function studentToGraph(student) {
             x++;
         } else if (x == 2) {
             week = value;
+            //console.log(week);
             x++;
         } else {
-
+            //key = 'Other_issue' 'Happy/Joyful'
             var data = datasetMaker(key, value);
 
             datac.push(data);
@@ -439,20 +452,26 @@ function processData(data, filter) {
     //studentToGraph(data);
 
     //Creates group data.
-    createGroupData(data);
+    if(filter == 'group' || 'set'){
+        createGroupData(data);
+    } 
+    if(filter =='individuals'){
+        //studentToGraph(data);
+    }
+    
 }
 
 /*
  *   getStudents is a function that is immediately called when the page loads.
  *   its job its to get the data from the web server and pass it on
  */
-const getStudents = async () => {
+const getStudents = async (set) => {
 
     //fetching data from server
     const res = await fetch("http://localhost:8080/home/students/")
     const students = await res.json()
     //console.log(students);
-
+    //console.log(set)
 
 
     //iterating over each entry
@@ -460,10 +479,18 @@ const getStudents = async () => {
         //turning data into JSON objects
         studentData = JSON.parse(student[1]);
         //Not actually displaying the graphs!
-        processData(studentData, null);
+        processData(studentData, set);
 
     });
-    displayGroupGraph();
+    if(set =='none'){
+        displayGroups();
+    }else if(set == 'group'){
+        displayGroupGraph();
+    } else if(set == 'individuals'){
+       
+        // displayIndividuals();
+    }
+    
 
 
 
@@ -474,13 +501,18 @@ const getStudents = async () => {
 */
 function clearGraphs(){
     document.querySelector('#new').remove();
+    document.querySelector('#groupButtonDiv').remove();
     var newDiv = document.createElement("div");
     newDiv.setAttribute("id", "new");
+    var newDiv2 = document.createElement("div");
+    newDiv2.setAttribute("id", "groupButtonDiv");
     var parent = document.querySelector('main');
     parent.appendChild(newDiv);
+    parent.appendChild(newDiv2);
 }
 
 function makeAside(id){
+    console.log(id);
     var parentDiv = document.createElement("div");
     var emoDiv = document.createElement("div");
     var expDiv = document.createElement("div");
@@ -539,10 +571,11 @@ function displayGroupGraph() {
     var sortedMap = new Map(sortMapNegative());
     //groupMap.forEach((key, value) => {
     sortedMap.forEach((key, value) => {
-        console.log(key.getOverallNegative());
+        //console.log(key.getOverallNegative());
         var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
         var exp_total = key.positiveExp + key.negativeExp;
         var dataG = new Array();
+        console.log(key.name);
         makeCanva(key.name);
         dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
         dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
@@ -552,4 +585,42 @@ function displayGroupGraph() {
 
 }
 
-getStudents();
+function displayGroups(){
+    //console.log("ah");
+    //console.log(groupMap);
+    var sillyGroup = new Map();
+    //console.log(groupMap);
+    groupMap.forEach((key, value) =>{
+        sillyGroup.set(key.group, key.group);
+    });
+    //console.log(sillyGroup);
+    sillyGroup.forEach((key, value) => {
+        //console.log(key);
+        var groupButton = document.createElement('a');
+        var element = document.querySelector('#groupButtonDiv');
+        groupButton.setAttribute("class", "groupButton");
+        groupButton.setAttribute("id", key);
+        //var link = '/home/:'+ key;
+        //console.log(link);
+        groupButton.setAttribute("href", "classes/"+key);
+        groupButton.textContent = key.substring(0,5) + " " + key.substring(5);
+        
+        element.appendChild(groupButton);
+        //var parent = document.querySelector('main');
+        //parent.appendChild(element);
+        
+    });
+}
+function getIndividuals(){
+    clearGraphs();
+    getStudents('individuals');
+}
+function getGroups(){
+    clearGraphs();
+    getStudents('group');
+}
+
+getStudents('none');
+
+//var set = 'group';
+//getStudents(set);

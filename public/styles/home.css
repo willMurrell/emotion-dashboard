@@ -60,6 +60,9 @@ body{
     padding: 0px;
     font-family: 'Poppins', sans-serif;
 }
+main{
+    margin-bottom: 100px;
+}
 
 .filters{
     height: 100px;
@@ -87,10 +90,12 @@ body{
 #new{
     display: flex;
     flex-wrap: wrap;
+    
 }
 
 .canvaContainer{
     display: flex;
+    height: 400px;
     
 }
 
@@ -98,21 +103,52 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    width:100px;
+    height: 250px;
     
 }
 .graphAside > div{
-    margin-bottom: 50px;
-    margin-top: 20px;
+    /*margin-bottom: 50px;
+    margin-top: 20px;*/
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.groupButtonDiv{
+    height: auto;
+    background-color: #8ecae6;
+    display: flex;
+   
+    
+    
+}
+
+.groupButton{
+   
+    text-align: center;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    /*
+    padding-top: 30px;
+    
+    height: 75px;
+    width: 125px;
+    */
+    width: 150px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 5px;
+    background-color: #8ecae6;
+    
 }
 
 canvas{
-    width: 600px;
-    height: 400px
+    width: 500px;
+    height: 400px;
 }
 
-main{
-    margin-bottom: 100px;
-}
+
 
 
 footer{

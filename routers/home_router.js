@@ -18,6 +18,11 @@ router.get('/', async (req, res) => {
     res.render('home');
 })
 
+router.get('/classes/:param/', async (req, res) => {
+    console.log(req.params.param);
+    res.render('group');
+})
+
 
 
 
@@ -125,14 +130,15 @@ const learning_experiences = [
    var entries = new Array();
     
     //console.log(readJSON(filename))
-    iterateOverFiles('Example_Input_File');
+    var csvFolder = 'SummerStudentCSV';
+    iterateOverFiles(csvFolder);
     router.get('/students', (req, res) =>{
         res.send(JSON.stringify(entries));
     })
 
     
     function parseCSV(input, output){
-        let fileInputName = 'Example_Input_File/' + input; 
+        let fileInputName = csvFolder+'/' + input; 
         let fileOutputName = 'JSON/' + output;
     
         const promise = new Promise((resolve, reject) =>{
@@ -153,12 +159,14 @@ const learning_experiences = [
             let info_array, name, group, week, out_name;
             if(file.name.substring(file.name.length-3) === 'csv'){
                 //console.log(file.name.substring(file.name.length-3));
+
                 info_array = file.name.split('-');
                 name = info_array[0];
                 group = info_array[1];
-                week = info_array[2].substring(0, info_array[2].length-4);
+                week = info_array[2].substring(4);
+                console.log(week);
                 out_name = file.name.substring(0, file.name.length-4) + '.json';
-    
+                //console.log(info_array);
                 parseCSV(file.name, out_name);
                 
     
@@ -216,7 +224,7 @@ const learning_experiences = [
         }
         var obj = Object.fromEntries(entryMap);
         var jsonString = JSON.stringify(obj);
-        //console.log(jsonString);
+        console.log(jsonString);
         //console.log("\n\n");
         entries.push(jsonString);
  
@@ -234,12 +242,14 @@ const learning_experiences = [
                     readJSON(filename);
                     return;
                 }
-                //console.log(data);
+                
                 var weekData = JSON.parse(data);
+                
                 var info_array = filename.split('-');
                 var name = info_array[0].substring(5);
                 var group = info_array[1];
-                var week = info_array[2].substring(0, info_array[2].length-5);
+                var week = info_array[2];
+                console.log(info_array);
                 emotionCounter(weekData, name, group, week);
                 
             }
