@@ -164,7 +164,7 @@ const learning_experiences = [
                 name = info_array[0];
                 group = info_array[1];
                 week = info_array[2].substring(4);
-                console.log(week);
+                //console.log(info_array);
                 out_name = file.name.substring(0, file.name.length-4) + '.json';
                 //console.log(info_array);
                 parseCSV(file.name, out_name);
@@ -224,7 +224,8 @@ const learning_experiences = [
         }
         var obj = Object.fromEntries(entryMap);
         var jsonString = JSON.stringify(obj);
-        console.log(jsonString);
+        
+        
         //console.log("\n\n");
         entries.push(jsonString);
  
@@ -249,7 +250,8 @@ const learning_experiences = [
                 var name = info_array[0].substring(5);
                 var group = info_array[1];
                 var week = info_array[2];
-                console.log(info_array);
+                
+                //console.log(info_array);
                 emotionCounter(weekData, name, group, week);
                 
             }

@@ -85,7 +85,7 @@ function loadDataHeader(){
     
         let filename = 'Project-Group-Student.json'
         let rawData = fs.readFile('SummerStudent/' + filename, (err, data)=> {
-            //console.log("hm");
+            
             if(err){
                 console.log("there was an error! " + err);
             } else {
@@ -96,30 +96,28 @@ function loadDataHeader(){
                 var JSONdata = JSON.parse(data);
               
                 for(var i = 0; i < JSONdata.length; i++){
-                    //console.log(JSONdata[i]);
+                    
 
                     if(startDateMap.has(JSONdata[i].ProjectNumber)){
 
                     } else {
                         var dateArr = JSONdata[i].StartDate.split('/');
-                        //console.log(dateArr);
+                        
                         var year = '20' + dateArr[2];
                         var month = dateArr[1] - 1;
                         var day = dateArr[0];
                         startDateMap.set(JSONdata[i].ProjectNumber, new Date(year, month, day));
-                        //console.log(" ahhh " + startDateMap.get(JSONdata[i].ProjectNumber).toString());
                     }
                     if(studentGroupMap.has(JSONdata[i].StudentName)){
                         studentGroupMap.get(JSONdata[i].StudentName).set(JSONdata[i].ProjectNumber, JSONdata[i].GroupName);
-                        //console.log(studentGroupMap);
+                        
                     } else {
                         var mp = new Map();
                         mp.set(JSONdata[i].ProjectNumber, JSONdata[i].GroupName);
                         studentGroupMap.set(JSONdata[i].StudentName, mp);
                     }
                 }
-                //console.log(startDateMap);
-                //console.log(studentGroupMap);
+                
                 xlsxToCSV();
             }
             
@@ -157,6 +155,7 @@ function xlsxToCSV(){
         //Iterate through all files in a directory
         while((file = directory.readSync()) !== null){
             let info_array, name, group, month, day, year, dateArray,week, out_name;
+
             // if(file.name.substring(file.name.length-3) === 'csv'){
             //     let fileInputName = 'SummerStudent/' + file.name; 
             //     let fileOutputName = 'SummerStudent/' +file.name.substring(0, file.name.length-4) + '.json';
@@ -181,33 +180,32 @@ function xlsxToCSV(){
                 name = info_array[2];
                
 
-                //console.log(studentGroupMap);
+                
                 
                 dateArray = info_array[3].split(" ");
                 var index = 0;
+                
                 if(dateArray.length == 4){
                     index++;
                     month = months.indexOf(dateArray[index+1]) ;
+                    
                     day = dateArray[index];
+                    
                 } else {
-                    month = months.indexOf(dateArray[index]) -1;
+                    month = months.indexOf(dateArray[index]) ;
+                    
                     day = dateArray[index+1].substring(0,dateArray[index+1].length-1) ;
+                    
+                }
                 
-                }
-                month++;
-                if(month.toString().length == 1){
-                    month = "0" + month.toString();
-                }else{
-                    month = month.toString();
-                }
+                
                 year = dateArray[index+2].substring(0, dateArray[index+2].length-5);
                 
                 var entryDate = new Date(year, month, day);
-                //console.log(startDateMap);
+                
                 var proj_num = 0;
                 for(var i = 1; i < startDateMap.size + 1; i++){
-                    //console.log("Start Date: " + startDateMap.get(i));
-                    //console.log("Entry: " + entryDate);
+                    
 
                     
                     if(entryDate > startDateMap.get(i)){
@@ -218,9 +216,7 @@ function xlsxToCSV(){
                         
                     } 
                 }
-                //console.log(proj_num);
-
-                //console.log(studentGroupMap.get(name));
+                
                 group = studentGroupMap.get(name).get(proj_num);
 
                 if(studentMap.has(name)){
@@ -235,42 +231,9 @@ function xlsxToCSV(){
             
             
         }
-        //console.log(studentGroupMap);
-        directory.closeSync();
-        //console.log(studentMap);
-
-        // var sortedMap = new Map();
-        // for(let [key, value] of studentMap){
-        //     var currentArray = value;
-        //     var newArray = currentArray.sort(function(a, b){
-        //         return ( a.year - b.year )|| (a.month - b.month) || (a.day - b.day);
-        //     });
-        //     sortedMap.set(key, newArray);
- 
-        // }
-
-        // var earliestYear = '9999'
-        // var earliestMonth = '12';
-        // var earliestDay = '31';
-        // for(let [key, value] of sortedMap){
-        //     //console.log(value[0]);
-        //     if(value[0].year <= earliestYear){
-        //         earliestYear = value[0].year;
-        //         if(value[0].month <= earliestMonth){
-        //             earliestMonth = value[0].month;
-        //             if(value[0].day < earliestDay){
-        //                 earliestDay = value[0].day;
-        //             }
-        //         } 
-        //     } 
-        // }
-
-        //console.log(sortedMap);
-
-        // var earliestDate = new Date(earliestYear+"-"+earliestMonth+"-"+earliestDay);
-        //var weekOffset = getWeekOfMonth(earliestDate);
         
-        //console.log(startDateMap);
+        directory.closeSync();
+
         
         for(var i = 1; i < startDateMap.size + 1; i++){
             var projWeek = new Map();
@@ -283,23 +246,23 @@ function xlsxToCSV(){
                 currentWeek.setDate(currentWeek.getDate()+7);
                 weekArrayMap.get(i).set(currentWeek.toDateString(),"Week"+j);
             }
-            //console.log(weekArrayMap);
+            
         }
         
 
         
         //for(let [key, value] of sortedMap){
         for(let [key, value] of studentMap){
-           // console.log(value);
+           
             
             for(var i = 0; i < value.length; i++){
                 var date = new Date(value[i].year, value[i].month, value[i].day);
-                //console.log(date.toDateString());
+                
+
                 var calcdWeek = weekArrayMap.get(value[i].proj_num).get(getWeekOfMonth(date).toDateString());
-                //console.log(weekArrayMap.get(value[i].proj_num));
-                //console.log(getWeekOfMonth(date).toDateString());
-                //console.log(calcdWeek);
-                //var calcdWeek = 'poop';
+                
+                
+                
                 var inputFilename = "SummerStudent/" + value[i].filename;
                 var outputFilename = "SummerStudentCSV/" + value[i].name +"-"+value[i].group+"-"+calcdWeek+"-"+value[i].proj_num+".csv";
                 
@@ -308,7 +271,7 @@ function xlsxToCSV(){
             }
             
         }
-        //console.log(weekArrayMap);
+        
 
     
     
@@ -323,49 +286,57 @@ function xlsxToCSV(){
 
 */
 function getWeekOfMonth(date) {
-    //console.log(date.getDate());
-    //var dateArray = date.toString().split(" ");
-    //console.log(dateArray);
+    
     var dayOfWeek = date.getDay();
     var dayOfMonth = date.getDate();
+    
     var year = date.getFullYear();
-    var month = date.getUTCMonth() ;
+    var month = date.getMonth() ;
     var startDate;
-    //console.log(year + " " + month + " " + dayOfMonth);
+    
+    if(month == 7){
+        
 
+    }
+    
+    
+    
+    
 
     if(dayOfWeek == 0){
         dayOfWeek = 7;
     }
     
     if((dayOfMonth - (dayOfWeek - 1)) > 0){
-        //console.log(dayOfMonth - (dayOfWeek - 1));
+        
         var startDay = dayOfMonth - (dayOfWeek - 1);
         startDate = new Date(date.getFullYear(), month, startDay );
-        //console.log(startDate);
-        //console.log(startDate.toString());
+        if(month == 7){
+            
+        }
+        
+        
     } else {
-        //console.log(dayOfMonth - (dayOfWeek - 1));
+        
        if(month == 0){
         var lastDayOfMonth = new Date(date.getFullYear()-1, 0, 0).getDate();
         var newDayOfMonth = lastDayOfMonth + (dayOfMonth - (dayOfWeek - 1));
-        //console.log(dayOfMonth);
-        startDate = new Date(date.getFullYear(), date.getUTCMonth() - 1, newDayOfMonth);
-        //console.log(startDate.toString());
+        
+        startDate = new Date(date.getFullYear(), date.getMonth()-1 , newDayOfMonth);
+        
        } else {
-            var lastDayOfMonth = new Date(date.getFullYear(), date.getUTCMonth(), 0).getDate();
+            var lastDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
             var newDayOfMonth = lastDayOfMonth + (dayOfMonth - (dayOfWeek - 1));
-            //console.log(dayOfMonth);
-            startDate = new Date(date.getFullYear(), date.getUTCMonth() - 1, newDayOfMonth);
-            //console.log(startDate.toString());
+            
+            startDate = new Date(date.getFullYear(), date.getMonth() -1 , newDayOfMonth);
+            
        }
         
     }
 
     return(startDate);
     // var calcdWeek = weekArrayMap.get(startDate.toDateString());
-    // console.log(weekArrayMap);
-    // console.log(startDate.toDateString());
+   
     // var inputFilename = "SummerStudent/" + value[i].filename;
     // var outputFilename = "SummerStudentCSV/" + value[i].name +"-"+value[i].group+"-"+calcdWeek+"-"+value[i].proj_num+".csv";
     

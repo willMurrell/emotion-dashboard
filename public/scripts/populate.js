@@ -199,10 +199,10 @@ function mostRecent(){
     //         currentWeek = key.week;
     //     }
     // });
-    // console.log(currentWeek);
+    
     sortedMap.forEach((key, value) => {
         
-            //console.log(key.getOverallNegative());
+            
             var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
             var exp_total = key.positiveExp + key.negativeExp;
             var dataG = new Array();
@@ -217,10 +217,9 @@ function mostRecent(){
             if(key.week > 1){
                 var info_array = key.name.split('-');
                 var currentWeek = key.week;
-                //console.log(key);
+                
                 var prevWeek = key.group +" Week" +(currentWeek - 1);
-                //console.log(prevWeek);
-                //console.log(key.getOverallNegative());
+                
                 if(groupMap.has(prevWeek)){
 
                     var prev = groupMap.get(prevWeek)
@@ -258,7 +257,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
     var titleArr = title.split(" ");
     var group = titleArr[0];
     var week = titleArr[1].substring(4);
-    console.log("WEEK: "+week+"GROUP: " + group);
+    
     const newData = {
         labels: labels,
         datasets: datac
@@ -364,17 +363,15 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
  */
 
 function createGroupData(data) {
-    //console.log(data);
-    console.log("Group: " + data.group);
-    console.log("Week: " + data.week);
+    
     var groupName = (data.group + " " + data.week);
 
-    //console.log("Group Name: " + groupName);
+    
     //var groupName = (data.group)
     if (groupMap.has(groupName)) {
 
         Object.entries(data).forEach((entry) => {
-            //console.log(data.name + " " + data.group + " " + data.week);
+            
             if (positiveEmotions.includes(entry[0])) {
                 groupMap.get(groupName).addToPositiveEmotion(entry[1])
 
@@ -385,11 +382,11 @@ function createGroupData(data) {
 
                 groupMap.get(groupName).addToOtherEmotion(entry[1])
             } else if (negativeExperience.includes(entry[0])) {
-                //console.log(entry[0]);
+                
                 groupMap.get(groupName).addToNegativeExp(entry[1])
 
             } else if (positiveExperience.includes(entry[0])) {
-                //console.log(entry[0]);
+                
                 groupMap.get(groupName).addToPositiveExp(entry[1])
 
             }
@@ -417,7 +414,7 @@ function studentToGraph(student) {
     var x = 0;
     Object.entries(student).forEach((entry) => {
         const [key, value] = entry;
-        //console.log(key);
+        
         if (x == 0) {
             name = value;
             x++;
@@ -426,7 +423,7 @@ function studentToGraph(student) {
             x++;
         } else if (x == 2) {
             week = value;
-            //console.log(week);
+            
             x++;
         } else {
             //key = 'Other_issue' 'Happy/Joyful'
@@ -470,8 +467,7 @@ const getStudents = async (set) => {
     //fetching data from server
     const res = await fetch("http://localhost:8080/home/students/")
     const students = await res.json()
-    //console.log(students);
-    //console.log(set)
+    
 
 
     //iterating over each entry
@@ -512,7 +508,7 @@ function clearGraphs(){
 }
 
 function makeAside(id){
-    console.log(id);
+    
     var parentDiv = document.createElement("div");
     var emoDiv = document.createElement("div");
     var expDiv = document.createElement("div");
@@ -571,11 +567,11 @@ function displayGroupGraph() {
     var sortedMap = new Map(sortMapNegative());
     //groupMap.forEach((key, value) => {
     sortedMap.forEach((key, value) => {
-        //console.log(key.getOverallNegative());
+        
         var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
         var exp_total = key.positiveExp + key.negativeExp;
         var dataG = new Array();
-        console.log(key.name);
+        
         makeCanva(key.name);
         dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
         dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
@@ -586,22 +582,21 @@ function displayGroupGraph() {
 }
 
 function displayGroups(){
-    //console.log("ah");
-    //console.log(groupMap);
+    
     var sillyGroup = new Map();
-    //console.log(groupMap);
+    
     groupMap.forEach((key, value) =>{
         sillyGroup.set(key.group, key.group);
     });
-    //console.log(sillyGroup);
+    
     sillyGroup.forEach((key, value) => {
-        //console.log(key);
+        
         var groupButton = document.createElement('a');
         var element = document.querySelector('#groupButtonDiv');
         groupButton.setAttribute("class", "groupButton");
         groupButton.setAttribute("id", key);
         //var link = '/home/:'+ key;
-        //console.log(link);
+        
         groupButton.setAttribute("href", "classes/"+key);
         groupButton.textContent = key.substring(0,5) + " " + key.substring(5);
         
