@@ -1,5 +1,6 @@
 
 
+
 /*
  *   emotionColours is a map that containst the emotions and the colour associated with it
  */
@@ -104,7 +105,8 @@ const negativeExperience = new Array(
  */
 
 var groupMap = new Map();
-var studentMap = new Map()
+var studentMap = new Map();
+var highestWeek = 0;
 /*
  *   Group is a class that takes name as a constructor
  *
@@ -213,6 +215,7 @@ function mostRecent(){
             buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
             
             var emoChange = document.getElementById(key.name + " emo change");
+            
             var expChange = document.getElementById(key.name + " exp change");
             if(key.week > 1){
                 var info_array = key.name.split('-');
@@ -233,12 +236,54 @@ function mostRecent(){
                     
                     var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
                     
-                    //emoChange.textContent = Math.round((key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal)) * 100)/100
-                    //emoChange.textContent = (key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal));
-                    emoChange.textContent = Math.round(ChangeInEmo * 100 * 100)/100;
-                    expChange.textContent = Math.round(ChangeInExp * 100 * 100)/100;
+                    var em = Math.round(ChangeInEmo * 100 * 100)/100;
+                    var ex = Math.round(ChangeInExp * 100 * 100)/100;
+                    emoChange.textContent = em
+                    expChange.textContent = ex
                     emoChange.textContent += "%";
                     expChange.textContent += "%";
+
+                   
+                    //upArrow.textContent = "ahhh";
+                    
+                    //downArrow.textContent = "ahhh";
+                    
+                    //flatIcon.textContent = "ahhh";
+
+                    var x = document.createElement("div");
+                    x.setAttribute("class", "apoo");
+                   
+                    if(em == 0){
+                        var flatIcon = document.createElement("i");
+                    flatIcon.setAttribute("class", "fa-solid fa-minus");
+                        emoChange.appendChild(flatIcon);
+                    } else if(em > 0){
+                        var upArrow = document.createElement('i');
+                        upArrow.setAttribute("class", "fa-solid fa-caret-up");
+                        emoChange.appendChild(upArrow);
+                    } else if (em < 0){
+                        var downArrow = document.createElement("i");
+                    downArrow.setAttribute("class", "fa-solid fa-caret-down");
+                        var flatIcon = document.createElement("i");
+                    flatIcon.setAttribute("class", "fa-solid fa-minus");
+                        emoChange.appendChild(downArrow);
+                    }
+                    if(ex == 0){
+                        var flatIcon = document.createElement("i");
+                    flatIcon.setAttribute("class", "fa-solid fa-minus");
+                        expChange.appendChild(flatIcon);
+                    } else if(ex > 0){
+                        var upArrow = document.createElement('i');
+                        upArrow.setAttribute("class", "fa-solid fa-caret-up");
+                        expChange.appendChild(upArrow);
+                    } else if (ex < 0){
+                        var downArrow = document.createElement("i");
+                        downArrow.setAttribute("class", "fa-solid fa-caret-down");
+                        expChange.appendChild(downArrow);
+                    }
+                    //emoChange.textContent = Math.round((key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal)) * 100)/100
+                    //emoChange.textContent = (key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal));
+                    
                 }
             }
             
@@ -365,7 +410,10 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
 function createGroupData(data) {
     
     var groupName = (data.group + " " + data.week);
-
+    
+    if(data.week.substring(4) > highestWeek){
+        highestWeek = data.week.substring(4);
+    }
     
     //var groupName = (data.group)
     if (groupMap.has(groupName)) {
@@ -451,6 +499,7 @@ function processData(data, filter) {
     //Creates group data.
     if(filter == 'group' || 'set'){
         createGroupData(data);
+        
     } 
     if(filter =='individuals'){
         //studentToGraph(data);
@@ -474,14 +523,17 @@ const getStudents = async (set) => {
     Object.entries(students).forEach((student) => {
         //turning data into JSON objects
         studentData = JSON.parse(student[1]);
+        
         //Not actually displaying the graphs!
         processData(studentData, set);
 
     });
+
     if(set =='none'){
         displayGroups();
     }else if(set == 'group'){
         displayGroupGraph();
+        buildForm(groupMap, highestWeek);
     } else if(set == 'individuals'){
        
         // displayIndividuals();
@@ -578,7 +630,7 @@ function displayGroupGraph() {
         dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
     });
-
+    mostRecent();
 }
 
 function displayGroups(){
@@ -615,7 +667,32 @@ function getGroups(){
     getStudents('group');
 }
 
-getStudents('none');
+function buildForm(groupMap, highestWeek){
+    var week = parseInt(highestWeek);
+    for(var i = 1; i < week + 1 ; i++){
+        console.log(i)
+        var option = document.createElement("option");
+        option.setAttribute("value", ("week"+i));
+        option.textContent = "Week " + i;
+        var element = document.getElementById('weekSelector');
+        element.appendChild(option);
+    }
+    var groupSet = new Set()
+    groupMap.forEach((key)=>{
+        groupSet.add(key.group);
+    });
+    
+    groupSet.forEach((value) =>{
+        var option = document.createElement("option");
+        option.setAttribute("value", value);
+        option.textContent = value;
+        var element = document.getElementById('groupSelector');
+        element.appendChild(option);
+    });
+}
+
+
+getStudents('group');
 
 //var set = 'group';
 //getStudents(set);

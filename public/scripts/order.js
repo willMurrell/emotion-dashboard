@@ -1,17 +1,47 @@
+function filterForm(){
+    var week = document.querySelector('#weekSelector').value;
+    var group = document.querySelector('#groupSelector').value;
+    order(week, group);
+    
+    
+}
 
-
-function order(){
+function order(filterWeek, filterGroup){
     //const graphs = document.querySelectorAll("new div")
     const graphs = document.querySelector('#new').children
     for(var i = 0; i < graphs.length; i++){
-        //console.log("ah");
+        
+
         var order = graphs[i].id.split(" ");
-        console.log(order);
-        var rank = order[0].substring(5) + order[1].substring(4);
-        //console.log(rank);
-        // document.getElementById(graphs[i].id).style.order = order;
+        var group = order[0];
+        var week = order[1].substring(4);
+
+
         var container = document.getElementById(graphs[i].id);
-        container.setAttribute("style", "order: "+rank);
+        container.style.display = "flex";
+        if(filterWeek != "null"){
+            
+            
+            if(week != filterWeek.substring(4)){
+                
+                container.style.display = "none";
+            }
+           
+        }
+        
+        if(filterGroup != "null"){
+            if(group != filterGroup){
+                
+                container.style.display = "none";
+            }
+        }
+        
+        
+
+       
+        //container.setAttribute("style", "order: "+week);
+
     }
     
 }
+

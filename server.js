@@ -82,6 +82,8 @@ function makeObject(name, year, month, day, filename, proj_num, group){
 }
 
 function loadDataHeader(){
+
+
     
         let filename = 'Project-Group-Student.json'
         let rawData = fs.readFile('SummerStudent/' + filename, (err, data)=> {
@@ -156,21 +158,7 @@ function xlsxToCSV(){
         while((file = directory.readSync()) !== null){
             let info_array, name, group, month, day, year, dateArray,week, out_name;
 
-            // if(file.name.substring(file.name.length-3) === 'csv'){
-            //     let fileInputName = 'SummerStudent/' + file.name; 
-            //     let fileOutputName = 'SummerStudent/' +file.name.substring(0, file.name.length-4) + '.json';
-            
-            //     const promise = new Promise((resolve, reject) =>{
-            //         csvToJson.formatValueByType().generateJsonFileFromCsv(fileInputName,fileOutputName);
-            //     });
-            //     promise
-            //         .then((value) => {
-            //             console.log("doing things and stuff!");
-            //         })
-            //         .catch((value) => {
-            //             console.log("Heres an error: " + value);
-            //         });
-            // }
+
             
             
             //Only iterates over .xlsx files
