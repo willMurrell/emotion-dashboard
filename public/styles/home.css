@@ -99,20 +99,7 @@ main{
     
 }
 
-.graphAside{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    width:100px;
-    height: 250px;
-    
-}
-.graphAside > div{
-    /*margin-bottom: 50px;
-    margin-top: 20px;*/
-    padding-top: 20px;
-    padding-bottom: 40px;
-}
+
 
 .groupButtonDiv{
     height: auto;
@@ -175,6 +162,51 @@ canvas{
     font-size: 20px;
 }
 
+
+
+.graphAside{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width:100px;
+    height: 250px;
+    
+}
+.graphAside > div{
+    /*margin-bottom: 50px;
+    margin-top: 20px;*/
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+.changeValues{
+    display: flex;
+    align-items: stretch;
+}
+
+
+.fa-solid.fa-caret-up{
+    font-size: 30px;
+    color: #8ac926;
+    margin-left: 10px;
+    
+    
+}
+
+.fa-solid.fa-caret-down{
+    
+    flex-grow: 2;
+    color: #ff595e;
+    margin-left: 10px;
+    font-size: 30px;
+    margin-bottom: 0px;
+    
+}
+
+.fa-solid.fa-minus{
+    font-size: 30px;
+    
+    margin-left: 10px;
+}
 
 
 footer{
