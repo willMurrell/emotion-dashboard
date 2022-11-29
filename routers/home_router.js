@@ -18,10 +18,7 @@ router.get('/', async (req, res) => {
     res.render('home');
 })
 
-router.get('/classes/:param/', async (req, res) => {
-    console.log(req.params.param);
-    res.render('group');
-})
+
 
 
 
@@ -181,12 +178,13 @@ const learning_experiences = [
 
     }
     
-    function emotionCounter(data, name, group, week){
+    function emotionCounter(data, name, group, week, course){
         //console.log(name + group + week);
         const entryMap = new Map();
         entryMap.set("name", name);
         entryMap.set("group", group);
         entryMap.set("week", week);
+        entryMap.set("course", course);
         const num_sentences = data.length - 1;
         for(let i = 0; i < num_sentences; i++){
             //console.log(data[i].Text);
@@ -213,11 +211,14 @@ const learning_experiences = [
     
         }
         
-        var x = 3;
+        var x = 4;
         for (var [key, value]of entryMap){
+            
             if(x != 0){
+
                 x--;
             } else {
+                
                 entryMap.set(key, value/num_sentences);
             }
             
@@ -250,9 +251,9 @@ const learning_experiences = [
                 var name = info_array[0].substring(5);
                 var group = info_array[1];
                 var week = info_array[2];
-                
-                //console.log(info_array);
-                emotionCounter(weekData, name, group, week);
+                var course = info_array[3].substring(0, info_array[3].length - 5);
+                //console.log(course);
+                emotionCounter(weekData, name, group, week, course);
                 
             }
             

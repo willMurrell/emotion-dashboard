@@ -15,7 +15,7 @@ html(lang='en')
         script(src='https://cdn.jsdelivr.net/npm/chart.js')
         
         
-    body
+    body(onload="getGroups()")
         include templates/header.pug
         main
             //- div(class="filters") 
@@ -31,7 +31,7 @@ html(lang='en')
                 select(id='weekSelector')
                     option(value="null" selected="selected") All Weeks
                 br
-                label(for="weekSelector") Week: 
+                label(for="weekSelector") Group: 
                 select(id='groupSelector')
                     option(value="null" selected="selected") All Groups
                        

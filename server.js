@@ -14,6 +14,7 @@ const XLSX = require('xlsx');
 const bodyParser = require('body-parser');
 const { fstat } = require('fs');
 const e = require('express');
+const { start } = require('repl');
 
 
 const app = express();
@@ -59,14 +60,15 @@ var startDateMap = new Map();
 
 var weekArrayMap = new Map();
 
-loadDataHeader();
+
+loadCSVHeader();
 
 
 
 /*
 *   makeObject() creates an object from the given parameters
 */
-function makeObject(name, year, month, day, filename, proj_num, group){
+function makeObject(name, year, month, day, filename, course, group){
     var obj = new Object({
         filename: filename,
         name: name,
@@ -75,16 +77,32 @@ function makeObject(name, year, month, day, filename, proj_num, group){
         day: day,
         week: null,
         group: group,
-        proj_num: proj_num
+        course: course
         
     })
     return obj;
 }
 
-function loadDataHeader(){
-
-
+function loadCSVHeader(){
     
+    let fileInputName = 'SummerStudent/Project-Group-Student.csv'
+    let fileOutputName = 'SummerStudent/Project-Group-Student.json'
+    
+    const promise = new Promise((resolve, reject) =>{
+        csvToJson.formatValueByType().generateJsonFileFromCsv(fileInputName,fileOutputName);
+        
+    });
+    promise
+        .then(loadJSONHeader())
+        .catch((value) => {
+            console.log("Heres an error: " + value);
+        });
+}
+
+function loadJSONHeader(){
+
+
+        
         let filename = 'Project-Group-Student.json'
         let rawData = fs.readFile('SummerStudent/' + filename, (err, data)=> {
             
@@ -96,11 +114,12 @@ function loadDataHeader(){
                 }
                 
                 var JSONdata = JSON.parse(data);
-              
+                //console.log(JSONdata);
                 for(var i = 0; i < JSONdata.length; i++){
                     
-
-                    if(startDateMap.has(JSONdata[i].ProjectNumber)){
+                    var course = JSONdata[i].Course;
+                    //console.log(course);
+                    if(startDateMap.has(course)){
 
                     } else {
                         var dateArr = JSONdata[i].StartDate.split('/');
@@ -108,14 +127,14 @@ function loadDataHeader(){
                         var year = '20' + dateArr[2];
                         var month = dateArr[1] - 1;
                         var day = dateArr[0];
-                        startDateMap.set(JSONdata[i].ProjectNumber, new Date(year, month, day));
+                        startDateMap.set(course, new Date(year, month, day));
                     }
                     if(studentGroupMap.has(JSONdata[i].StudentName)){
-                        studentGroupMap.get(JSONdata[i].StudentName).set(JSONdata[i].ProjectNumber, JSONdata[i].GroupName);
+                        studentGroupMap.get(JSONdata[i].StudentName).set(course, JSONdata[i].GroupName);
                         
                     } else {
                         var mp = new Map();
-                        mp.set(JSONdata[i].ProjectNumber, JSONdata[i].GroupName);
+                        mp.set(course, JSONdata[i].GroupName);
                         studentGroupMap.set(JSONdata[i].StudentName, mp);
                     }
                 }
@@ -156,7 +175,7 @@ function xlsxToCSV(){
 
         //Iterate through all files in a directory
         while((file = directory.readSync()) !== null){
-            let info_array, name, group, month, day, year, dateArray,week, out_name;
+            let info_array, name, group, month, day, year, dateArray, courseName;
 
 
             
@@ -191,51 +210,77 @@ function xlsxToCSV(){
                 
                 var entryDate = new Date(year, month, day);
                 
-                var proj_num = 0;
-                for(var i = 1; i < startDateMap.size + 1; i++){
-                    
+                
 
+                startDateMap.forEach((value, key) =>{
                     
-                    if(entryDate > startDateMap.get(i)){
-                        if(i > proj_num){
-                            proj_num = i;
+                    if(entryDate > startDateMap.get(key)){
+
+                        if(startDateMap.has(courseName)){
+                            if(startDateMap.get(key) > startDateMap.get(courseName)){
+                                courseName = key;
+                            }
+                        } else {
+                            courseName = key;
                         }
                         
                         
                     } 
+                });
+                    
+
+                    
+                //}   
+                
+                
+                group = studentGroupMap.get(name).get(courseName);
+                if(group == 'Team3'){
+                    console.log(month + " . " + day);
                 }
                 
-                group = studentGroupMap.get(name).get(proj_num);
-
                 if(studentMap.has(name)){
-                    studentMap.get(name).push(makeObject(name, year, month, day,file.name, proj_num, group));
+                    studentMap.get(name).push(makeObject(name, year, month, day,file.name, courseName, group));
                 } else {
                     var entryArray = new Array();
-                    entryArray.push(makeObject(name, year, month, day,  file.name, proj_num, group));
+                    entryArray.push(makeObject(name, year, month, day,  file.name, courseName, group));
                     studentMap.set(name, entryArray);
                 }
                 
-            }
+        }
             
             
         }
-        
+        //console.log(startDateMap);
         directory.closeSync();
 
-        
-        for(var i = 1; i < startDateMap.size + 1; i++){
+        startDateMap.forEach((value, key) =>{
             var projWeek = new Map();
-            weekArrayMap.set(i, projWeek);
-            weekArrayMap.get(i).set(startDateMap.get(i).toDateString(), 'Week1');
+            
+            weekArrayMap.set(key, projWeek);
+           
+            weekArrayMap.get(key).set(startDateMap.get(key).toDateString(), 'Week1');
 
-            var currentWeek = new Date(startDateMap.get(i));
+            var currentWeek = new Date(startDateMap.get(key));
 
             for(var j = 2; j < 53; j++){
                 currentWeek.setDate(currentWeek.getDate()+7);
-                weekArrayMap.get(i).set(currentWeek.toDateString(),"Week"+j);
+                weekArrayMap.get(key).set(currentWeek.toDateString(),"Week"+j);
             }
             
-        }
+        });
+        // for(var i = 1; i < startDateMap.size + 1; i++){
+        //     var projWeek = new Map();
+        //     weekArrayMap.set(i, projWeek);
+        //     weekArrayMap.get(i).set(startDateMap.get(i).toDateString(), 'Week1');
+
+        //     var currentWeek = new Date(startDateMap.get(i));
+
+        //     for(var j = 2; j < 53; j++){
+        //         currentWeek.setDate(currentWeek.getDate()+7);
+        //         weekArrayMap.get(i).set(currentWeek.toDateString(),"Week"+j);
+        //     }
+            
+        // }
         
 
         
@@ -246,13 +291,15 @@ function xlsxToCSV(){
             for(var i = 0; i < value.length; i++){
                 var date = new Date(value[i].year, value[i].month, value[i].day);
                 
-
-                var calcdWeek = weekArrayMap.get(value[i].proj_num).get(getWeekOfMonth(date).toDateString());
+                
+                
+               
+                var calcdWeek = weekArrayMap.get(value[i].course).get(getWeekOfMonth(date).toDateString());
                 
                 
                 
                 var inputFilename = "SummerStudent/" + value[i].filename;
-                var outputFilename = "SummerStudentCSV/" + value[i].name +"-"+value[i].group+"-"+calcdWeek+"-"+value[i].proj_num+".csv";
+                var outputFilename = "SummerStudentCSV/" + value[i].name +"-"+value[i].group+"-"+calcdWeek+"-"+value[i].course+".csv";
                 
                 const workBook = XLSX.readFile(inputFilename);
                 XLSX.writeFile(workBook, outputFilename, { bookType: "csv" });

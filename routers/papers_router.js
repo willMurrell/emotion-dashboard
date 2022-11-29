@@ -17,5 +17,10 @@ router.get('/', async (req, res) => {
 })
 
 
+router.get('/:param/', async (req, res) => {
+    var course = req.params.param;
+    res.render('group', {course: course} );
+})
+
 module.exports = router; // export the router
 

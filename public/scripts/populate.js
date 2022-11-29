@@ -106,6 +106,7 @@ const negativeExperience = new Array(
 
 var groupMap = new Map();
 var studentMap = new Map();
+
 var highestWeek = 0;
 /*
  *   Group is a class that takes name as a constructor
@@ -149,10 +150,11 @@ class Group {
  */
 
 class GroupPerWeek {
-    constructor(group, week) {
+    constructor(group, week, course) {
         this.name = group + " " + week;
         this.group = group;
         this.week = week.substring(4);
+        this.course = course;
         this.negativeEmotion = 0;
         this.positiveEmotion = 0;
         this.otherEmotion = 0;
@@ -408,7 +410,7 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
  */
 
 function createGroupData(data) {
-    
+    //console.log(data);
     var groupName = (data.group + " " + data.week);
     
     if(data.week.substring(4) > highestWeek){
@@ -442,7 +444,7 @@ function createGroupData(data) {
 
     } else {
         //var newGroup = new Group(data.group);
-        var newGroup = new GroupPerWeek(data.group, data.week);
+        var newGroup = new GroupPerWeek(data.group, data.week, data.course);
         //groupMap.set(data.group, newGroup);
         groupMap.set((data.group + " " + data.week), newGroup);
         createGroupData(data);
@@ -511,7 +513,7 @@ function processData(data, filter) {
  *   getStudents is a function that is immediately called when the page loads.
  *   its job its to get the data from the web server and pass it on
  */
-const getStudents = async (set) => {
+const getStudents = async (set, course) => {
 
     //fetching data from server
     const res = await fetch("http://localhost:8080/home/students/")
@@ -528,11 +530,13 @@ const getStudents = async (set) => {
         processData(studentData, set);
 
     });
-
+    if(course == undefined){
+        course = 'all';
+    }
     if(set =='none'){
         displayGroups();
     }else if(set == 'group'){
-        displayGroupGraph();
+        displayGroupGraph(course);
         buildForm(groupMap, highestWeek);
     } else if(set == 'individuals'){
        
@@ -614,31 +618,97 @@ function sortMapPositive(){
  *   will create graphs from the groupMap Map.
  */
 
-function displayGroupGraph() {
+function displayGroupGraph(course) {
 
     var sortedMap = new Map(sortMapNegative());
-    //groupMap.forEach((key, value) => {
+
+    
     sortedMap.forEach((key, value) => {
         
-        var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
-        var exp_total = key.positiveExp + key.negativeExp;
-        var dataG = new Array();
-        
-        makeCanva(key.name);
-        dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
-        dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
-        dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
-        buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
+        if(key.course == course || course == 'all'){
+            var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
+            var exp_total = key.positiveExp + key.negativeExp;
+            var dataG = new Array();
+            makeCanva(key.name);
+            dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
+            dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
+            dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
+            buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
+            
+            var emoChange = document.getElementById(key.name + " emo change");
+            
+            var expChange = document.getElementById(key.name + " exp change");
+            if(key.week > 1){
+                var info_array = key.name.split('-');
+                var currentWeek = key.week;
+                
+                var prevWeek = key.group +" Week" +(currentWeek - 1);
+                
+                if(groupMap.has(prevWeek)){
+
+                    var prev = groupMap.get(prevWeek)
+
+                    var prevEmoTotal = prev.positiveEmotion + prev.negativeEmotion + prev.otherEmotion;
+                    
+                    var ChangeInEmo = (key.positiveEmotion/emotion_total)-(prev.positiveEmotion/prevEmoTotal);
+                    
+
+                    var prevExpTotal = prev.positiveExp + prev.negativeExp;
+                    
+                    var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
+                    
+                    var em = Math.round(ChangeInEmo * 100 * 100)/100;
+                    var ex = Math.round(ChangeInExp * 100 * 100)/100;
+                    emoChange.textContent = em
+                    expChange.textContent = ex
+                    emoChange.textContent += "%";
+                    expChange.textContent += "%";
+
+
+                    var x = document.createElement("div");
+                    x.setAttribute("class", "apoo");
+                   
+                    if(em == 0){
+                        var flatIcon = document.createElement("i");
+                    flatIcon.setAttribute("class", "fa-solid fa-minus");
+                        emoChange.appendChild(flatIcon);
+                    } else if(em > 0){
+                        var upArrow = document.createElement('i');
+                        upArrow.setAttribute("class", "fa-solid fa-caret-up");
+                        emoChange.appendChild(upArrow);
+                    } else if (em < 0){
+                        var downArrow = document.createElement("i");
+                    downArrow.setAttribute("class", "fa-solid fa-caret-down");
+                        var flatIcon = document.createElement("i");
+                    flatIcon.setAttribute("class", "fa-solid fa-minus");
+                        emoChange.appendChild(downArrow);
+                    }
+                    if(ex == 0){
+                        var flatIcon = document.createElement("i");
+                    flatIcon.setAttribute("class", "fa-solid fa-minus");
+                        expChange.appendChild(flatIcon);
+                    } else if(ex > 0){
+                        var upArrow = document.createElement('i');
+                        upArrow.setAttribute("class", "fa-solid fa-caret-up");
+                        expChange.appendChild(upArrow);
+                    } else if (ex < 0){
+                        var downArrow = document.createElement("i");
+                        downArrow.setAttribute("class", "fa-solid fa-caret-down");
+                        expChange.appendChild(downArrow);
+                    }
+                    
+                }
+            }
+        }
     });
-    mostRecent();
 }
 
 function displayGroups(){
     
     var sillyGroup = new Map();
-    
+    //console.log(groupMap);
     groupMap.forEach((key, value) =>{
-        sillyGroup.set(key.group, key.group);
+        sillyGroup.set(key.course, key.course);
     });
     
     sillyGroup.forEach((key, value) => {
@@ -649,8 +719,8 @@ function displayGroups(){
         groupButton.setAttribute("id", key);
         //var link = '/home/:'+ key;
         
-        groupButton.setAttribute("href", "classes/"+key);
-        groupButton.textContent = key.substring(0,5) + " " + key.substring(5);
+        groupButton.setAttribute("href", "papers/"+key);
+        groupButton.textContent = key;
         
         element.appendChild(groupButton);
         //var parent = document.querySelector('main');
@@ -663,6 +733,7 @@ function getIndividuals(){
     getStudents('individuals');
 }
 function getGroups(){
+    //console.log("yeah its working");
     clearGraphs();
     getStudents('group');
 }
@@ -670,7 +741,7 @@ function getGroups(){
 function buildForm(groupMap, highestWeek){
     var week = parseInt(highestWeek);
     for(var i = 1; i < week + 1 ; i++){
-        console.log(i)
+        
         var option = document.createElement("option");
         option.setAttribute("value", ("week"+i));
         option.textContent = "Week " + i;
@@ -691,8 +762,16 @@ function buildForm(groupMap, highestWeek){
     });
 }
 
+function loadCourses(){
+    getStudents('none');
+}
 
-getStudents('group');
+function loadGroup(course){
+    console.log(course);
+    getStudents('group', course);
+}
+
+//getStudents('group');
 
 //var set = 'group';
 //getStudents(set);

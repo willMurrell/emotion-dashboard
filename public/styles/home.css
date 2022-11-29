@@ -5,6 +5,11 @@
     --footer-height: 50px;
 }
 
+main{
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
 header{
     background-color: #8ecae6;
     font-family: 'Poppins', sans-serif;
@@ -102,10 +107,11 @@ main{
 
 
 .groupButtonDiv{
-    height: auto;
+    padding-top: 40px;
+    margin-top: 40px;
     background-color: #8ecae6;
     display: flex;
-   
+    
     
     
 }
@@ -116,18 +122,23 @@ main{
     display: inline-block;
     margin-right: 10px;
     margin-bottom: 10px;
-    /*
-    padding-top: 30px;
-    
-    height: 75px;
-    width: 125px;
-    */
+    text-decoration: none;
     width: 150px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 5px;
     border-radius: 5px;
     background-color: #8ecae6;
     
+}
+
+.groupButton:hover{
+    padding: 18px 4px;
+    text-decoration: underline;
+    background-color: white;
+    border: 1px solid #8ecae6;
+}
+
+.groupButton:visited{
+    color: black;
 }
 
 canvas{
@@ -208,6 +219,30 @@ canvas{
     margin-left: 10px;
 }
 
+#backButton{
+    font-size: 30px;
+    border-style: solid;
+    display: inline-block;
+    padding-top:2px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+#backButton:hover{
+    color: white;
+    background-color: black;
+}
+#backButton:hover i{
+    color: white;
+    background-color: black;
+}
+#backButton:visited{
+    color: black;
+}
+#courseTitle{
+    margin-left: 10px;
+    font-size: 30px;
+    display: inline-block;
+}
 
 footer{
     position: fixed;
