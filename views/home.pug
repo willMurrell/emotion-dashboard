@@ -8,14 +8,14 @@ html(lang='en')
         link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
         link(href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet')
         link(rel='stylesheet',type="text/css" , href='../static/styles/home.css')
-        link(rel='stylesheet',type="text/css" , href='../static/styles/team.css')
+        
         script(src="https://kit.fontawesome.com/04e87abddd.js" crossorigin="anonymous")
         script(defer, src='../static/scripts/populate.js')
         script(src='../static/scripts/order.js')
         script(src='https://cdn.jsdelivr.net/npm/chart.js')
         
         
-    body(onload="getGroups()")
+    body(onload="loadCourses()")
         include templates/header.pug
         main
             //- div(class="filters") 
@@ -34,7 +34,8 @@ html(lang='en')
                 label(for="weekSelector") Group: 
                 select(id='groupSelector')
                     option(value="null" selected="selected") All Groups
-                       
+                label(for="bookmarkInput") Bookmarked: 
+                input(type="checkbox" id="bookmarkInput" value="true")
                 button(onclick="filterForm()") Submit
             //input(type="file" id="file-input")
             //div(id="file-content")

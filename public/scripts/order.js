@@ -1,21 +1,24 @@
 function filterForm(){
     var week = document.querySelector('#weekSelector').value;
     var group = document.querySelector('#groupSelector').value;
-    order(week, group);
+    var bookmark = document.querySelector('#bookmarkInput').checked;
+    
+    order(week, group, bookmark);
     
     
 }
 
-function order(filterWeek, filterGroup){
+function order(filterWeek, filterGroup, bookmark){
     //const graphs = document.querySelectorAll("new div")
     const graphs = document.querySelector('#new').children
     for(var i = 0; i < graphs.length; i++){
         
-
+        
         var order = graphs[i].id.split(" ");
         var group = order[0];
         var week = order[1].substring(4);
-
+        var fullWeek = order[1];
+        //console.log(order);
 
         var container = document.getElementById(graphs[i].id);
         container.style.display = "flex";
@@ -32,6 +35,14 @@ function order(filterWeek, filterGroup){
         if(filterGroup != "null"){
             if(group != filterGroup){
                 
+                container.style.display = "none";
+            }
+        }
+        console.log(bookmark);
+        if(bookmark){
+            var bookmarkElement = document.getElementById(group+ " " +fullWeek + " checkbox");
+            console.log(bookmarkElement);
+            if(!bookmarkElement.checked){
                 container.style.display = "none";
             }
         }

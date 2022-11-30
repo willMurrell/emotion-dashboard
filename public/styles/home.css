@@ -173,7 +173,10 @@ canvas{
     font-size: 20px;
 }
 
-
+#bookmarkInput{
+    width: 20px;
+    height: 17px;
+}
 
 .graphAside{
     display: flex;
@@ -186,36 +189,96 @@ canvas{
 .graphAside > div{
     /*margin-bottom: 50px;
     margin-top: 20px;*/
-    padding-top: 20px;
-    padding-bottom: 40px;
+    padding-top: 25px;
+    padding-bottom: 30px;
 }
+
+.bookmarkDiv{
+    display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.check{
+    position: absolute;
+    opacity: 0.1;
+    cursor: pointer;
+    top: 5px;
+    left: 0;
+    height: 22px;
+    width: 17px;
+    z-index: 10;
+}
+
+.bookmark{
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    height: 25px;
+    width: 20px;
+    
+}
+.fa-regular.fa-bookmark{
+    font-size: 20px;
+    color: black;
+    display: inline;
+}
+
+.fa-solid.fa-bookmark{
+    font-size: 20px;
+    color: green;
+    display: none;
+}
+
+
+
+
+/* When the checkbox is checked, add a blue background */
+.bookmarkDiv input:checked ~ .bookmark .fa-regular.fa-bookmark{
+   
+    display: none;
+}
+/* When the checkbox is checked, add a blue background */
+.bookmarkDiv input:checked ~ .bookmark .fa-solid.fa-bookmark{
+    color: black;
+    display: inline;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.bookmark:after {
+    background-color: #ff595e;
+    position: absolute;
+    display: none;
+  }
+  
+
+
 .changeValues{
     display: flex;
-    align-items: stretch;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    font-size: 20px;
 }
 
 
-.fa-solid.fa-caret-up{
-    font-size: 30px;
+
+.fa-solid{
+    font-size: 27px;
+}
+.fa-solid.fa-caret-up{  
     color: #8ac926;
-    margin-left: 10px;
-    
-    
 }
 
 .fa-solid.fa-caret-down{
-    
-    flex-grow: 2;
     color: #ff595e;
-    margin-left: 10px;
-    font-size: 30px;
-    margin-bottom: 0px;
-    
 }
 
 .fa-solid.fa-minus{
-    font-size: 30px;
-    
     margin-left: 10px;
 }
 
@@ -252,3 +315,5 @@ footer{
     background: #8ecae6;
     text-align: center;
 }
+
+
