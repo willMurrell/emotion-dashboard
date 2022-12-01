@@ -91,7 +91,7 @@ const emotions = [
     "Other_positive",
     ]
 const learning_experiences = [
-    "None",
+    "None_positive",
     "Lack of Direction",
     "Limited Knowledge",
     "Technical Issues",
@@ -107,8 +107,7 @@ const learning_experiences = [
     "Personality Clash",
     "Hindsights",
     "Additional Commitments",
-    "Other",
-    "None",
+    "None_issue",
     "Clear Direction",
     "Enough Knowledge",
     "Sense of Achievements",
@@ -121,7 +120,7 @@ const learning_experiences = [
     "Good Academic Staff Communication",
     "Personality Match",
     "Discovery",
-    "Other",
+    "Other_issue",
 ]
 
 
@@ -198,7 +197,8 @@ const learning_experiences = [
     
             emotions.forEach(emotion => {
                 if(data[i][emotion] == 1){
-                    //console.log(emotion + ": " + data[i][emotion]);
+                    
+                   
                     if(entryMap.has(emotion)){
                         entryMap.set(emotion, entryMap.get(emotion) + 1)
                     } else {

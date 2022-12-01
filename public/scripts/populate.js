@@ -31,9 +31,9 @@ emotionColours.set("Negative", "#D1603D");
 // emotionColours.set("Exhausted/Tired", "#8E0103");
 // emotionColours.set("Shamed/Apologetic", "#db6612");
 
-emotionColours.set("Other_emotion", "#FFE940");
+emotionColours.set("Other", "#E5E5E5");
 //#a1a1a1
-emotionColours.set("None_emotion", "#a1a1a1");
+emotionColours.set("Neutral", "#a1a1a1");
 
 /*
  *   positiveEmotions and negative Emotions are arrays used when
@@ -175,6 +175,8 @@ class GroupPerWeek {
         this.neutralEmotion= 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
+        this.neutralExp = 0;
+        this.otherExp = 0;
         this.bookmarked = false;
        
     }
@@ -202,9 +204,17 @@ class GroupPerWeek {
         this.negativeExp += percent;
         
     }
+    addToOtherExp(percent) {
+        this.otherExp += percent;
+        
+    }
+    addToNeutralExp(percent) {
+        this.neutralExp += percent;
+        
+    }
     getOverallNegative(){
         var totalEmo = this.negativeEmotion + this.positiveEmotion;
-        var totalExp = this.negativeExp + this.positiveExp;
+        var totalExp = this.negativeExp + this.positiveExp ;
         var percentEmo = this.negativeEmotion / totalEmo;
         var percentExp = this.negativeExp / totalExp;
         return percentEmo + percentExp;
@@ -242,6 +252,8 @@ class CoursePerWeek {
         this.neutralEmotion= 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
+        this.neutralExp = 0;
+        this.otherExp = 0;
         this.bookmarked = false;
        
     }
@@ -269,8 +281,16 @@ class CoursePerWeek {
         this.negativeExp += percent;
         
     }
+    addToOtherExp(percent) {
+        this.otherExp += percent;
+        
+    }
+    addToNeutralExp(percent) {
+        this.neutralExp += percent;
+        
+    }
     getOverallNegative(){
-        var totalEmo = this.negativeEmotion + this.positiveEmotion;
+        var totalEmo = this.negativeEmotion + this.positiveEmotion + this.otherEmotion + this.neutralEmotion;
         var totalExp = this.negativeExp + this.positiveExp;
         var percentEmo = this.negativeEmotion / totalEmo;
         var percentExp = this.negativeExp / totalExp;
@@ -278,12 +298,12 @@ class CoursePerWeek {
 
     }
     getEmoNegative(){
-        var totalEmo = this.negativeEmotion + this.positiveEmotion;
+        var totalEmo = this.negativeEmotion + this.positiveEmotion + this.otherEmotion + this.neutralEmotion;
         var percentEmo = this.negativeEmotion / totalEmo;
         return percentEmo;
     }
     getExpNegative(){
-        var totalExp = this.negativeExp + this.positiveExp;
+        var totalExp = this.negativeExp + this.positiveExp + this.neutralExp + this.otherExp;
         var percentExp = this.negativeExp / totalExp;
         return percentExp;
     }
@@ -297,107 +317,7 @@ class CoursePerWeek {
     }
 }
 
-function mostRecent(){
-    clearGraphs();
-    var sortedMap = new Map(sortMapNegative());
-    //groupMap.forEach((key, value) => {
-    // var currentWeek = 0;
-    // sortedMap.forEach((key, value) => {
-    //     if(currentWeek < key.week){
-    //         currentWeek = key.week;
-    //     }
-    // });
-    
-    sortedMap.forEach((key, value) => {
-        
-            
-            var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
-            var exp_total = key.positiveExp + key.negativeExp;
-            var dataG = new Array();
-            makeCanva(key.name);
-            dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
-            dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
-            dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
-            buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
-            
-            var emoChange = document.getElementById(key.name + " emo change");
-            
-            var expChange = document.getElementById(key.name + " exp change");
-            if(key.week > 1){
-                var info_array = key.name.split('-');
-                var currentWeek = key.week;
-                
-                var prevWeek = key.group +" Week" +(currentWeek - 1);
-                
-                if(groupMap.has(prevWeek)){
 
-                    var prev = groupMap.get(prevWeek)
-
-                    var prevEmoTotal = prev.positiveEmotion + prev.negativeEmotion + prev.otherEmotion;
-                    
-                    var ChangeInEmo = (key.positiveEmotion/emotion_total)-(prev.positiveEmotion/prevEmoTotal);
-                    
-
-                    var prevExpTotal = prev.positiveExp + prev.negativeExp;
-                    
-                    var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
-                    
-                    var em = Math.round(ChangeInEmo * 100 * 100)/100;
-                    var ex = Math.round(ChangeInExp * 100 * 100)/100;
-                    emoChange.textContent = em
-                    expChange.textContent = ex
-                    emoChange.textContent += "%";
-                    expChange.textContent += "%";
-
-                   
-                    //upArrow.textContent = "ahhh";
-                    
-                    //downArrow.textContent = "ahhh";
-                    
-                    //flatIcon.textContent = "ahhh";
-
-                    var x = document.createElement("div");
-                    x.setAttribute("class", "apoo");
-                   
-                    if(em == 0){
-                        var flatIcon = document.createElement("i");
-                    flatIcon.setAttribute("class", "fa-solid fa-minus");
-                        emoChange.appendChild(flatIcon);
-                    } else if(em > 0){
-                        var upArrow = document.createElement('i');
-                        upArrow.setAttribute("class", "fa-solid fa-caret-up");
-                        emoChange.appendChild(upArrow);
-                    } else if (em < 0){
-                        var downArrow = document.createElement("i");
-                    downArrow.setAttribute("class", "fa-solid fa-caret-down");
-                        var flatIcon = document.createElement("i");
-                    flatIcon.setAttribute("class", "fa-solid fa-minus");
-                        emoChange.appendChild(downArrow);
-                    }
-                    if(ex == 0){
-                        var flatIcon = document.createElement("i");
-                    flatIcon.setAttribute("class", "fa-solid fa-minus");
-                        expChange.appendChild(flatIcon);
-                    } else if(ex > 0){
-                        var upArrow = document.createElement('i');
-                        upArrow.setAttribute("class", "fa-solid fa-caret-up");
-                        expChange.appendChild(upArrow);
-                    } else if (ex < 0){
-                        var downArrow = document.createElement("i");
-                        downArrow.setAttribute("class", "fa-solid fa-caret-down");
-                        expChange.appendChild(downArrow);
-                    }
-                    //emoChange.textContent = Math.round((key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal)) * 100)/100
-                    //emoChange.textContent = (key.positiveEmotion - (prev.positiveEmotion/prevEmoTotal));
-                    
-                }
-            }
-            
-            
-        
-
-    });
-}
 
 /*
  *   buildHorizontalGraph is a function that takes a dataset, an array of labels
@@ -450,15 +370,20 @@ function buildHorizontalGraph(datac, labels, title, id) {
                 },
                 y: {
                     stacked: true,
-                    display: false
+                    display: false,
+                    ticks :{
+                        beginAtZero: true,
+                        max: 100
+                    }
                 }
             },
             layout: {
                 padding: 5
             },
-            barPercentage: 0.9,
+            barPercentage: 0.90,
             categoryPercentage: 1.0,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            
         },
     };
 
@@ -527,11 +452,13 @@ function createGroupData(data) {
     } else {
         var newCourse = new CoursePerWeek(data.course, data.week);
         courseMap.set((data.course + " " + data.week), newCourse);
+        
     }
     if (groupMap.has(groupName)) {
+        var hasNoneExp = 0;
 
         Object.entries(data).forEach((entry) => {
-            console.log(data);
+            //console.log(hasNoneExp);
             if (positiveEmotions.includes(entry[0])) {
 
                 groupMap.get(groupName).addToPositiveEmotion(entry[1]);
@@ -562,7 +489,32 @@ function createGroupData(data) {
                 groupMap.get(groupName).addToPositiveExp(entry[1]);
                 courseMap.get(courseName).addToPositiveExp(entry[1]);
 
+            } else if(entry[0] == "None_positive"){
+                if(hasNoneExp == 1){
+                    
+                    groupMap.get(groupName).addToNeutralExp(entry[1]);
+                    courseMap.get(courseName).addToNeutralExp(entry[1]);
+                } else {
+                    hasNoneExp++;
+                }
+                
+            } else if(entry[0] == "None_issue"){
+                if(hasNoneExp == 1){
+                    
+                    groupMap.get(groupName).addToNeutralExp(entry[1]);
+                    courseMap.get(courseName).addToNeutralExp(entry[1]);
+                } else {
+                    hasNoneExp++;
+                }
+                
+            } 
+            if(entry[0] == "Other_issue"){
+                console.log("other issue");
+                groupMap.get(groupName).addToOtherExp(entry[1]);
+                courseMap.get(courseName).addToOtherExp(entry[1]);
             }
+
+            //console.log("|"+entry[0]+"|");
         });
 
     } else {
@@ -911,13 +863,14 @@ function displayGroupGraph(course, sortedMap) {
         
         if(key.course == course || course == 'all'){
             var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
-            var exp_total = key.positiveExp + key.negativeExp;
+            var exp_total = key.positiveExp + key.negativeExp+ key.neutralExp + key.otherExp;
             var dataG = new Array();
             makeCanva(key.name);
             dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
-            dataG.push(datasetMakerDuo("None_emotion", key.neutralEmotion/emotion_total));
+            dataG.push(datasetMakerDuo("Neutral", (key.neutralEmotion/emotion_total), (key.neutralExp/exp_total)));
+            
             dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
-            dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
+            dataG.push(datasetMakerDuo("Other", (key.otherEmotion/emotion_total), (key.otherExp/exp_total)));
             
             buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
             
@@ -942,7 +895,7 @@ function displayGroupGraph(course, sortedMap) {
                     var ChangeInEmo = (key.positiveEmotion/emotion_total)-(prev.positiveEmotion/prevEmoTotal);
                     
 
-                    var prevExpTotal = prev.positiveExp + prev.negativeExp;
+                    var prevExpTotal = prev.positiveExp + prev.negativeExp + prev.neutralExp + prev.otherExp;
                     
                     var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
                     
