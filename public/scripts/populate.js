@@ -160,7 +160,7 @@ class GroupPerWeek {
         this.otherEmotion = 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
-        
+        this.bookmarked = false;
        
     }
     addToPositiveEmotion(percent) {
@@ -190,6 +190,25 @@ class GroupPerWeek {
         var percentExp = this.negativeExp / totalExp;
         return percentEmo + percentExp;
 
+    }
+    getEmoNegative(){
+        var totalEmo = this.negativeEmotion + this.positiveEmotion;
+        var percentEmo = this.negativeEmotion / totalEmo;
+        return percentEmo;
+    }
+    getExpNegative(){
+        var totalExp = this.negativeExp + this.positiveExp;
+        var percentExp = this.negativeExp / totalExp;
+        return percentExp;
+    }
+    bookmarkTrue(){
+        //console.log("bookmarked set to true");
+        this.bookmarked = true;
+    }
+    bookmarkFalse(){
+        //console.log("bookmarked set to false");
+        this.bookmarked = false;
+    
     }
 }
 
@@ -203,7 +222,7 @@ class CoursePerWeek {
         this.otherEmotion = 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
-        
+        this.bookmarked = false;
        
     }
     addToPositiveEmotion(percent) {
@@ -233,6 +252,24 @@ class CoursePerWeek {
         var percentExp = this.negativeExp / totalExp;
         return percentEmo + percentExp;
 
+    }
+    getEmoNegative(){
+        var totalEmo = this.negativeEmotion + this.positiveEmotion;
+        var percentEmo = this.negativeEmotion / totalEmo;
+        return percentEmo;
+    }
+    getExpNegative(){
+        var totalExp = this.negativeExp + this.positiveExp;
+        var percentExp = this.negativeExp / totalExp;
+        return percentExp;
+    }
+    bookmarkTrue(){
+        //console.log("bookmarked set to true");
+        this.bookmarked = true;
+    }
+    bookmarkFalse(){
+        //console.log("bookmarked set to false");
+        this.bookmarked = false;
     }
 }
 
@@ -596,18 +633,104 @@ const getStudents = async (set, course) => {
         var sortedMap = new Map(sortMapNegative(set));
         displayGroupGraph(course, sortedMap);
         buildForm(groupMap, highestWeek);
-        
+        bookmarkEventListener(set);
     } else if(set == 'course'){
         console.log(set);
         var sortedMap = new Map(sortMapNegative(set));
         displayGroupGraph(course, sortedMap);
         buildForm(courseMap, highestWeek);
+        bookmarkEventListener(set);
     }
     
 
 
 
 }
+function bookmarkEventListener(set){
+    //console.log(set);
+    const graphs = document.querySelector('#new').children;
+    for(var i = 0; i < graphs.length; i++){
+        var currentMark, newMark;
+        
+        var infArr = graphs[i].id.split(" ");
+        var id = infArr[0] + " " + infArr[1];
+
+        var checkid = infArr[0] + " " + infArr[1] + " checkbox";
+        
+
+      
+        if(set != 'course'){
+            currentMark = groupMap.get(id).bookmarked;
+            
+            if(currentMark){
+                //console.log("currentMark true");
+                groupMap.get(id).bookmarkTrue();
+                
+                document.getElementById(checkid).checked = true;
+            } else {
+                //console.log("currentMark false");
+                groupMap.get(id).bookmarkFalse();
+                document.getElementById(checkid).checked = false;
+            }
+
+        } else if(set =='course'){
+            currentMark = courseMap.get(id).bookmarked;
+            if(currentMark){
+                
+                courseMap.get(id).bookmarkTrue();
+                
+                document.getElementById(checkid).checked = true;
+            } else {
+                
+                courseMap.get(id).bookmarkFalse();
+                document.getElementById(checkid).checked = false;
+            }
+            
+        }
+
+
+        var checkElm = document.getElementById(checkid);
+        
+        
+        checkElm.addEventListener("click",bookmarkClick)
+    }
+}
+
+const bookmarkClick = function (){
+    
+    var currentMark = this.checked;
+    var infArr = this.id.split(" ");
+    var id = infArr[0] + " " + infArr[1];
+    var checkid = this.id;
+
+    if(course == null){
+        if(currentMark){
+            
+            courseMap.get(id).bookmarkTrue();
+            document.getElementById(checkid).checked = true;
+            
+        } else {
+            courseMap.get(id).bookmarkFalse();
+            document.getElementById(checkid).checked = false;
+            
+        }  
+    } else {
+        //console.log(groupMap);
+        if(course == groupMap.get(id).course){
+           if(currentMark){
+            //console.log("setting to true");
+            groupMap.get(id).bookmarkTrue();
+            document.getElementById(checkid).checked = true;
+           } else {
+            //console.log("setting to false");
+            groupMap.get(id).bookmarkFalse();
+            document.getElementById(checkid).checked = false;
+           } 
+        }
+    }
+
+}
+
 /*
 *   clearGraphs is a function that removes all canva elements
 *   and creates a new empty div
@@ -691,6 +814,7 @@ function makeCanva(id) {
 }
 
 function sortMapNegative(set){
+   
     var unsortedArray;
     if(set == 'group'){
         unsortedArray = [...groupMap];
@@ -699,11 +823,46 @@ function sortMapNegative(set){
     } else {
         unsortedArray = [...groupMap];
     }
-    
     return unsortedArray.sort((a,b) => (a[1].getOverallNegative() < b[1].getOverallNegative()) ? 1 : -1);
 }
-function sortMapPositive(){
-    const unsortedArray = [...groupMap];
+
+function sortMapEmoNegative(set){
+   
+    var unsortedArray;
+    if(set == 'group'){
+        unsortedArray = [...groupMap];
+    } else if(set == 'course'){
+        unsortedArray = [...courseMap];
+    } else {
+        unsortedArray = [...groupMap];
+    }
+    return unsortedArray.sort((a,b) => (a[1].getEmoNegative() < b[1].getEmoNegative()) ? 1 : -1);
+}
+
+function sortMapExpNegative(set){
+   
+    var unsortedArray;
+    if(set == 'group'){
+        unsortedArray = [...groupMap];
+    } else if(set == 'course'){
+        unsortedArray = [...courseMap];
+    } else {
+        unsortedArray = [...groupMap];
+    }
+    return unsortedArray.sort((a,b) => (a[1].getExpNegative() < b[1].getExpNegative()) ? 1 : -1);
+}
+
+
+function sortMapPositive(set){
+    console.log(set == 'course');
+    var unsortedArray;
+    if(set == 'group'){
+        unsortedArray = [...groupMap];
+    } else if(set == 'course'){
+        unsortedArray = [...courseMap];
+    } else {
+        unsortedArray = [...groupMap];
+    }
     return unsortedArray.sort((a,b) => (a[1].getOverallNegative() > b[1].getOverallNegative()) ? 1 : -1);
 }
 
@@ -717,7 +876,7 @@ function displayGroupGraph(course, sortedMap) {
 
 
     
-    console.log(sortedMap);
+    
     
     sortedMap.forEach((key, value) => {
         
@@ -738,7 +897,7 @@ function displayGroupGraph(course, sortedMap) {
                 
                 var info_array = key.name.split('-');
                 var currentWeek = key.week;
-                console.log(key);
+                //console.log(key);
                 var infArr = key.name.split(" ");
                 var name = infArr[0]
                 var prevWeek = name +" Week" +(currentWeek - 1);
@@ -899,6 +1058,10 @@ function loadCourses(){
 
 function loadGroup(course){
     getStudents('group', course);
+    
+}
+
+function testMethod(){
     
 }
 

@@ -34,9 +34,18 @@ html(lang='en')
                 label(for="weekSelector") Group: 
                 select(id='groupSelector')
                     option(value="null" selected="selected") All Groups
+                br
                 label(for="bookmarkInput") Bookmarked: 
                 input(type="checkbox" id="bookmarkInput" value="true")
-                button(onclick="filterForm()") Submit
+                br
+                label(for="sortSelector") Sort By: 
+                select(id='sortSelector')
+                    option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                    option(value="overallPos" ) Least Urgent (Overall)
+                    option(value="emotionNeg" ) Most Urgent (by emotion)
+                    option(value="experienceNeg" ) Most Urgent (by experience)
+                
+                button(onclick="filterForm(\"course\")") Submit
             //input(type="file" id="file-input")
             //div(id="file-content")
 
@@ -46,3 +55,5 @@ html(lang='en')
             
 
         include templates/footer.pug
+        script. 
+            course=null;
