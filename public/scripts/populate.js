@@ -31,7 +31,9 @@ emotionColours.set("Negative", "#D1603D");
 // emotionColours.set("Exhausted/Tired", "#8E0103");
 // emotionColours.set("Shamed/Apologetic", "#db6612");
 
-emotionColours.set("Other_emotion", "#a1a1a1");
+emotionColours.set("Other_emotion", "#FFE940");
+//#a1a1a1
+emotionColours.set("None_emotion", "#a1a1a1");
 
 /*
  *   positiveEmotions and negative Emotions are arrays used when
@@ -63,8 +65,20 @@ const negativeEmotions = new Array(
     "Exhausted/Tired",
     "Shamed/Apologetic"
 );
+
+const neutralEmotion = new Array(
+    "None_emotion"
+
+);
+
+const neutralExperience = new Array(
+    "None_positive",
+    "None_issue"
+    //Will this not count a neutral SENTENCE twice? 
+
+);
 const positiveExperience = new Array(
-    //"None_positive",
+    
     "ClearDirection",
     "EnoughKnowledge",
     "SenseofAchievements",
@@ -158,6 +172,7 @@ class GroupPerWeek {
         this.negativeEmotion = 0;
         this.positiveEmotion = 0;
         this.otherEmotion = 0;
+        this.neutralEmotion= 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
         this.bookmarked = false;
@@ -173,6 +188,10 @@ class GroupPerWeek {
     }
     addToOtherEmotion(percent) {
         this.otherEmotion += percent;
+        
+    }
+    addToNeutralEmotion(percent) {
+        this.neutralEmotion += percent;
         
     }
     addToPositiveExp(percent) {
@@ -220,6 +239,7 @@ class CoursePerWeek {
         this.negativeEmotion = 0;
         this.positiveEmotion = 0;
         this.otherEmotion = 0;
+        this.neutralEmotion= 0;
         this.negativeExp = 0;
         this.positiveExp = 0;
         this.bookmarked = false;
@@ -235,6 +255,10 @@ class CoursePerWeek {
     }
     addToOtherEmotion(percent) {
         this.otherEmotion += percent;
+        
+    }
+    addToNeutralEmotion(percent) {
+        this.neutralEmotion += percent;
         
     }
     addToPositiveExp(percent) {
@@ -507,7 +531,7 @@ function createGroupData(data) {
     if (groupMap.has(groupName)) {
 
         Object.entries(data).forEach((entry) => {
-            
+            console.log(data);
             if (positiveEmotions.includes(entry[0])) {
 
                 groupMap.get(groupName).addToPositiveEmotion(entry[1]);
@@ -518,10 +542,15 @@ function createGroupData(data) {
                 groupMap.get(groupName).addToNegativeEmotion(entry[1]);
                 courseMap.get(courseName).addToNegativeEmotion(entry[1]);
 
-            } else if (entry[0] == "Other_emotion") {
-
+            } else if (entry[0] == "Other_emotion" ) {
+                //entry[0] == "Other_emotion" || 
                 groupMap.get(groupName).addToOtherEmotion(entry[1]);
                 courseMap.get(courseName).addToOtherEmotion(entry[1]);
+
+            } else if (entry[0] == "None_emotion" ) {
+                
+                groupMap.get(groupName).addToNeutralEmotion(entry[1]);
+                courseMap.get(courseName).addToNeutralEmotion(entry[1]);
 
             } else if (negativeExperience.includes(entry[0])) {
                 
@@ -635,7 +664,7 @@ const getStudents = async (set, course) => {
         buildForm(groupMap, highestWeek);
         bookmarkEventListener(set);
     } else if(set == 'course'){
-        console.log(set);
+        
         var sortedMap = new Map(sortMapNegative(set));
         displayGroupGraph(course, sortedMap);
         buildForm(courseMap, highestWeek);
@@ -647,7 +676,7 @@ const getStudents = async (set, course) => {
 
 }
 function bookmarkEventListener(set){
-    //console.log(set);
+    
     const graphs = document.querySelector('#new').children;
     for(var i = 0; i < graphs.length; i++){
         var currentMark, newMark;
@@ -881,13 +910,15 @@ function displayGroupGraph(course, sortedMap) {
     sortedMap.forEach((key, value) => {
         
         if(key.course == course || course == 'all'){
-            var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion;
+            var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
             var exp_total = key.positiveExp + key.negativeExp;
             var dataG = new Array();
             makeCanva(key.name);
             dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
+            dataG.push(datasetMakerDuo("None_emotion", key.neutralEmotion/emotion_total));
             dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion/emotion_total), (key.negativeExp/exp_total)));
             dataG.push(datasetMakerDuo("Other_emotion", key.otherEmotion/emotion_total));
+            
             buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
             
             var emoChange = document.getElementById(key.name + " emo change");
@@ -895,7 +926,7 @@ function displayGroupGraph(course, sortedMap) {
             var expChange = document.getElementById(key.name + " exp change");
             if(key.week > 1){
                 
-                var info_array = key.name.split('-');
+                
                 var currentWeek = key.week;
                 //console.log(key);
                 var infArr = key.name.split(" ");
@@ -906,7 +937,7 @@ function displayGroupGraph(course, sortedMap) {
                     
                     var prev = sortedMap.get(prevWeek)
 
-                    var prevEmoTotal = prev.positiveEmotion + prev.negativeEmotion + prev.otherEmotion;
+                    var prevEmoTotal = prev.positiveEmotion + prev.negativeEmotion + prev.otherEmotion + prev.neutralEmotion;
                     
                     var ChangeInEmo = (key.positiveEmotion/emotion_total)-(prev.positiveEmotion/prevEmoTotal);
                     
@@ -915,10 +946,12 @@ function displayGroupGraph(course, sortedMap) {
                     
                     var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
                     
+                    
+
                     var em = Math.round(ChangeInEmo * 100 * 100)/100;
                     var ex = Math.round(ChangeInExp * 100 * 100)/100;
-                    emoChange.textContent = em
-                    expChange.textContent = ex
+                    emoChange.textContent = em;
+                    expChange.textContent = ex;
                     emoChange.textContent += "%";
                     expChange.textContent += "%";
 
