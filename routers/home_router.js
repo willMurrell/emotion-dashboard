@@ -36,6 +36,7 @@ module.exports = router; // export the router
 
 
 const emotions = [
+    "None_emotion",
     "Happy/Joyful", 
     "Engaged", 
     "Curious/Interested",
