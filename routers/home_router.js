@@ -148,22 +148,43 @@ const learning_experiences = [
             });
         //console.log("Parsed to JSON!");
     }
-    
+    function readHeader(filename){
+        let rawData = fs.readFile('SummerStudentCSV/' + filename, (err, data)=> {
+            
+            if(err){
+                console.log("there was an error! " + err);
+            } else {
+                if(data.byteLength == 0){
+                    console.log(" no file ot something");
+                    readHeader(filename)
+
+                } else {
+                    var JSONdata = JSON.parse(data);
+                    console.log(data);
+                    entries.push(JSON.stringify(JSONdata));
+                }
+                
+            }
+        });
+    }
     function iterateOverFiles(folder){
         const directory = fs.opendirSync(folder);
         let file;
+        let filename = "header.json"
+        readHeader(filename);
+        
         while((file = directory.readSync()) !== null){
             let info_array, name, group, week, out_name;
             if(file.name.substring(file.name.length-3) === 'csv'){
-                //console.log(file.name.substring(file.name.length-3));
-
+                
+                
                 info_array = file.name.split('-');
                 name = info_array[0];
                 group = info_array[1];
                 week = info_array[2].substring(4);
-                //console.log(info_array);
+                
                 out_name = file.name.substring(0, file.name.length-4) + '.json';
-                //console.log(info_array);
+                
                 parseCSV(file.name, out_name);
                 
     
@@ -172,6 +193,8 @@ const learning_experiences = [
                 //console.log(file.name+ out_name) ;
     
             }
+            
+            
             
         }
         directory.closeSync();
@@ -212,6 +235,7 @@ const learning_experiences = [
     
         }
         
+        //Divides each value by the number of sentences, EXECPT for name, group, course and week
         var x = 4;
         for (var [key, value]of entryMap){
             

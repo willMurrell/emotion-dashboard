@@ -58,6 +58,8 @@ app.listen(8080);
 var studentGroupMap = new Map();
 var startDateMap = new Map();
 
+var studentsInGroup = new Map();
+
 var weekArrayMap = new Map();
 
 
@@ -114,9 +116,32 @@ function loadJSONHeader(){
                 }
                 
                 var JSONdata = JSON.parse(data);
+                
                 //console.log(JSONdata);
                 for(var i = 0; i < JSONdata.length; i++){
                     
+                    if(studentsInGroup.has(JSONdata[i].Course)){
+                        
+                        if(!studentsInGroup.get(JSONdata[i].Course).includes(JSONdata[i].StudentName)){
+                            
+                            studentsInGroup.get(JSONdata[i].Course).push(JSONdata[i].StudentName);
+                        }
+                    } else {
+                        var studentArr = new Array();
+                        studentArr.push(JSONdata[i].StudentName);
+                        studentsInGroup.set(JSONdata[i].Course, studentArr);
+                    }
+
+                    if(studentsInGroup.has(JSONdata[i].GroupName)){
+                        if(!studentsInGroup.get(JSONdata[i].GroupName).includes(JSONdata[i].StudentName)){
+                            
+                            studentsInGroup.get(JSONdata[i].GroupName).push(JSONdata[i].StudentName);
+                        }
+                    } else {
+                        var studentArr = new Array();
+                        studentArr.push(JSONdata[i].StudentName);
+                        studentsInGroup.set(JSONdata[i].GroupName, studentArr);
+                    }
                     var course = JSONdata[i].Course;
                     //console.log(course);
                     if(startDateMap.has(course)){
@@ -139,6 +164,16 @@ function loadJSONHeader(){
                     }
                 }
                 
+                console.log(studentsInGroup);
+                const json = JSON.stringify(Object.fromEntries(studentsInGroup));
+                
+                    fs.writeFile("SummerStudentCSV/header.json", json, function(err) {
+                        if (err) {
+                            console.log("AHHH"+err);
+                        } else {
+                            console.log("wrote successfully");
+                        }
+                    });
                 xlsxToCSV();
             }
             
@@ -235,7 +270,7 @@ function xlsxToCSV(){
                 
                 group = studentGroupMap.get(name).get(courseName);
                 if(group == 'Team3'){
-                    console.log(month + " . " + day);
+                   
                 }
                 
                 if(studentMap.has(name)){

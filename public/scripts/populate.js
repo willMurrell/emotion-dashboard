@@ -5,7 +5,9 @@
  *   emotionColours is a map that containst the emotions and the colour associated with it
  */
 const emotionColours = new Map();
-
+var studentInGroup;
+var numEntriesPerGroup = new Map();
+var studentsEntryPerGroup = new Map();
 emotionColours.set("Positive", "#48A9A6");
 
 // emotionColours.set("Happy/Joyful", "#008000");
@@ -231,11 +233,11 @@ class GroupPerWeek {
         return percentExp;
     }
     bookmarkTrue(){
-        //console.log("bookmarked set to true");
+        
         this.bookmarked = true;
     }
     bookmarkFalse(){
-        //console.log("bookmarked set to false");
+        
         this.bookmarked = false;
     
     }
@@ -308,11 +310,11 @@ class CoursePerWeek {
         return percentExp;
     }
     bookmarkTrue(){
-        //console.log("bookmarked set to true");
+       
         this.bookmarked = true;
     }
     bookmarkFalse(){
-        //console.log("bookmarked set to false");
+        
         this.bookmarked = false;
     }
 }
@@ -440,8 +442,46 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
 
 function createGroupData(data) {
     
+    //studentsEntryPerGroup
     var groupName = (data.group + " " + data.week);
     var courseName = (data.course + " " + data.week);
+    //Counting the number of entries per group/ course per week
+    // if(numEntriesPerGroup.has(groupName)){
+    //     numEntriesPerGroup.set(groupName, (numEntriesPerGroup.get(groupName) + 1))
+    // } else {
+    //     numEntriesPerGroup.set(groupName, 0);
+    // }
+    // if(numEntriesPerGroup.has(courseName)){
+    //     numEntriesPerGroup.set(courseName, (numEntriesPerGroup.get(courseName) + 1))
+    // } else {
+    //     numEntriesPerGroup.set(courseName, 0);
+    // }
+    // if(data.week.substring(4) > highestWeek){
+    //     highestWeek = data.week.substring(4);
+    // }
+    //Listing who made entries per group/ course per week
+    if(studentsEntryPerGroup.has(groupName)){
+        if(!studentsEntryPerGroup.get(groupName).includes(data.name)){
+            studentsEntryPerGroup.get(groupName).push(data.name);
+        }
+        
+    } else {
+        var arr = new Array();
+        arr.push(data.name);
+        studentsEntryPerGroup.set(groupName, arr);
+    }
+    if(studentsEntryPerGroup.has(courseName)){
+        if(!studentsEntryPerGroup.get(courseName).includes(data.name)){
+            studentsEntryPerGroup.get(courseName).push(data.name);
+        }
+        
+    } else {
+        var arr = new Array();
+        arr.push(data.name);
+        studentsEntryPerGroup.set(courseName, arr);
+    }
+
+
 
     if(data.week.substring(4) > highestWeek){
         highestWeek = data.week.substring(4);
@@ -458,7 +498,7 @@ function createGroupData(data) {
         var hasNoneExp = 0;
 
         Object.entries(data).forEach((entry) => {
-            //console.log(hasNoneExp);
+            
             if (positiveEmotions.includes(entry[0])) {
 
                 groupMap.get(groupName).addToPositiveEmotion(entry[1]);
@@ -509,12 +549,12 @@ function createGroupData(data) {
                 
             } 
             if(entry[0] == "Other_issue"){
-                console.log("other issue");
+                
                 groupMap.get(groupName).addToOtherExp(entry[1]);
                 courseMap.get(courseName).addToOtherExp(entry[1]);
             }
 
-            //console.log("|"+entry[0]+"|");
+            
         });
 
     } else {
@@ -597,12 +637,20 @@ const getStudents = async (set, course) => {
 
 
     //iterating over each entry
-    Object.entries(students).forEach((student) => {
+    Object.entries(students).forEach((student, value) => {
         //turning data into JSON objects
         studentData = JSON.parse(student[1]);
+        if(value == 0){
+            
+            studentInGroup = new Map(Object.entries(studentData));
+            
+        } else {
+            //Not actually displaying the graphs!
+            processData(studentData, set);
+        }
         
-        //Not actually displaying the graphs!
-        processData(studentData, set);
+        
+        
 
     });
     if(course == undefined){
@@ -616,16 +664,22 @@ const getStudents = async (set, course) => {
         buildForm(groupMap, highestWeek);
         bookmarkEventListener(set);
     } else if(set == 'course'){
-        
+        responses(courseMap);
         var sortedMap = new Map(sortMapNegative(set));
+        
         displayGroupGraph(course, sortedMap);
         buildForm(courseMap, highestWeek);
         bookmarkEventListener(set);
+
     }
     
 
 
 
+}
+function responses(map){
+    
+    
 }
 function bookmarkEventListener(set){
     
@@ -644,12 +698,12 @@ function bookmarkEventListener(set){
             currentMark = groupMap.get(id).bookmarked;
             
             if(currentMark){
-                //console.log("currentMark true");
+                
                 groupMap.get(id).bookmarkTrue();
                 
                 document.getElementById(checkid).checked = true;
             } else {
-                //console.log("currentMark false");
+                
                 groupMap.get(id).bookmarkFalse();
                 document.getElementById(checkid).checked = false;
             }
@@ -696,14 +750,14 @@ const bookmarkClick = function (){
             
         }  
     } else {
-        //console.log(groupMap);
+        
         if(course == groupMap.get(id).course){
            if(currentMark){
-            //console.log("setting to true");
+            
             groupMap.get(id).bookmarkTrue();
             document.getElementById(checkid).checked = true;
            } else {
-            //console.log("setting to false");
+            
             groupMap.get(id).bookmarkFalse();
             document.getElementById(checkid).checked = false;
            } 
@@ -734,6 +788,14 @@ function makeAside(id){
     var emoDiv = document.createElement("div");
     var expDiv = document.createElement("div");
     var bookmarkDiv = document.createElement("div");
+
+    var infoDiv = document.createElement("div");
+    infoDiv.setAttribute("class", "infoDiv");
+
+    var numStudentsDiv = document.createElement("div");
+    numStudentsDiv.setAttribute("class", "numStudentsDiv");
+    numStudentsDiv.setAttribute("id",  id + " numStudents");
+
     bookmarkDiv.setAttribute("class", "bookmarkDiv");
 
     var checkbox = document.createElement("input");
@@ -764,7 +826,10 @@ function makeAside(id){
     expDiv.setAttribute("class", "changeValues");
     emoDiv.setAttribute("id", id + " emo change");
     expDiv.setAttribute("id", id + " exp change");
-    parentDiv.appendChild(bookmarkDiv);
+
+    infoDiv.appendChild(bookmarkDiv);
+    infoDiv.appendChild(numStudentsDiv);
+    parentDiv.appendChild(infoDiv);
     parentDiv.appendChild(emoDiv);
     parentDiv.appendChild(expDiv);
 
@@ -835,7 +900,7 @@ function sortMapExpNegative(set){
 
 
 function sortMapPositive(set){
-    console.log(set == 'course');
+    
     var unsortedArray;
     if(set == 'group'){
         unsortedArray = [...groupMap];
@@ -877,14 +942,48 @@ function displayGroupGraph(course, sortedMap) {
             var emoChange = document.getElementById(key.name + " emo change");
             
             var expChange = document.getElementById(key.name + " exp change");
+            var numStudentDiv = document.getElementById(key.name + " numStudents");
+
+            var currentWeek = key.week;
+                
+            var infArr = key.name.split(" ");
+            var name = infArr[0]
+            var set;
+            var completed = studentsEntryPerGroup.get(name + " Week" + key.week).length;
+           // var completed = numEntriesPerGroup.get(name + " Week" + key.week)
+            var total = studentInGroup.get(name).length;
+            //console.log(studentInGroup.get(name));
+
+            var elm = document.createElement("div");
+            elm.setAttribute("class", "missingStudents");
+
+            studentInGroup.get(name).forEach((value) =>{
+                
+                if(studentsEntryPerGroup.get(name + " Week" + key.week).includes(value)){
+                    console.log("Good boys: " + value);
+                } else {
+                    console.log("Bad boys: " + value);
+                    elm.textContent += value
+                    
+                }
+            });
+            
+
+            numStudentDiv.textContent =  completed + " / " + total;
+            numStudentDiv.appendChild(elm);
+            var ratio = completed/total;
+            if(ratio >=1){
+                numStudentDiv.setAttribute("ratio", "green");
+            } else if (ratio >=0.5 && ratio < 1){
+                numStudentDiv.setAttribute("ratio", "orange");
+            } else if(ratio < 0.5){
+                numStudentDiv.setAttribute("ratio", "red");
+            }
+            
             if(key.week > 1){
                 
-                
-                var currentWeek = key.week;
-                //console.log(key);
-                var infArr = key.name.split(" ");
-                var name = infArr[0]
                 var prevWeek = name +" Week" +(currentWeek - 1);
+                
                 
                 if(sortedMap.has(prevWeek)){
                     
@@ -939,6 +1038,8 @@ function displayGroupGraph(course, sortedMap) {
                         downArrow.setAttribute("class", "fa-solid fa-caret-down");
                         expChange.appendChild(downArrow);
                     }
+
+                    
                     
                 }
             }

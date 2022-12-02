@@ -193,6 +193,40 @@ canvas{
     padding-bottom: 30px;
 }
 
+.infoDiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+.numStudentsDiv{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.numStudentsDiv .missingStudents{
+    display: none;
+}
+
+
+.numStudentsDiv:hover .missingStudents{
+    display: inline-block;
+    position: absolute;
+    background-color: black;
+    width: 100px;
+    
+   
+}
+
+.numStudentsDiv[ratio="green"]{
+    color:#8ac926;
+}
+.numStudentsDiv[ratio="orange"]{
+    color:#fb8500;
+}
+.numStudentsDiv[ratio="red"]{
+    color:#ff595e;
+}
+
 .bookmarkDiv{
     display: block;
   position: relative;
