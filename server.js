@@ -164,7 +164,7 @@ function loadJSONHeader(){
                     }
                 }
                 
-                console.log(studentsInGroup);
+                
                 const json = JSON.stringify(Object.fromEntries(studentsInGroup));
                 
                     fs.writeFile("SummerStudentCSV/header.json", json, function(err) {

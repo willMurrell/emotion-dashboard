@@ -198,22 +198,62 @@ canvas{
     justify-content: space-between;
 }
 
+
+.missingStudents{
+    display: none;
+    color: black;
+    
+}
+
+.missingStudents i{
+    font-size: 10px;
+    display: inline-block;
+}
+.missingStudents span{
+    display: block;
+}
+
+
+
 .numStudentsDiv{
     font-size: 20px;
     font-weight: bold;
-}
-
-.numStudentsDiv .missingStudents{
-    display: none;
-}
-
-
-.numStudentsDiv:hover .missingStudents{
-    display: inline-block;
-    position: absolute;
-    background-color: black;
-    width: 100px;
     
+}
+.missingStudents i{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.goodBoy i{
+    color: #8ac926;
+}
+
+.badBoy i{
+    color: #ff595e;
+}
+
+.missingStudents:hover{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    width: auto;
+    min-width: 100px;
+    border: 1px solid black;
+    z-index: 10;
+   
+}
+
+.numStudentsDiv:hover + .missingStudents{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    width: auto;
+    min-width: 100px;
+    border: 1px solid black;
+    z-index: 10;
    
 }
 

@@ -36,7 +36,7 @@ emotionColours.set("Negative", "#D1603D");
 emotionColours.set("Other", "#E5E5E5");
 //#a1a1a1
 emotionColours.set("Neutral", "#a1a1a1");
-
+emotionColours.set("Missing", "#aaaaaa");
 /*
  *   positiveEmotions and negative Emotions are arrays used when
  *   creating the group data, to tell whether an individual entry
@@ -122,6 +122,7 @@ const negativeExperience = new Array(
 var courseMap = new Map();
 var groupMap = new Map();
 var studentMap = new Map();
+
 
 var highestWeek = 0;
 /*
@@ -445,44 +446,34 @@ function createGroupData(data) {
     //studentsEntryPerGroup
     var groupName = (data.group + " " + data.week);
     var courseName = (data.course + " " + data.week);
-    //Counting the number of entries per group/ course per week
-    // if(numEntriesPerGroup.has(groupName)){
-    //     numEntriesPerGroup.set(groupName, (numEntriesPerGroup.get(groupName) + 1))
-    // } else {
-    //     numEntriesPerGroup.set(groupName, 0);
-    // }
-    // if(numEntriesPerGroup.has(courseName)){
-    //     numEntriesPerGroup.set(courseName, (numEntriesPerGroup.get(courseName) + 1))
-    // } else {
-    //     numEntriesPerGroup.set(courseName, 0);
-    // }
-    // if(data.week.substring(4) > highestWeek){
-    //     highestWeek = data.week.substring(4);
-    // }
+
     //Listing who made entries per group/ course per week
     if(studentsEntryPerGroup.has(groupName)){
-        if(!studentsEntryPerGroup.get(groupName).includes(data.name)){
+        
             studentsEntryPerGroup.get(groupName).push(data.name);
-        }
+        
+            
         
     } else {
         var arr = new Array();
         arr.push(data.name);
+        
         studentsEntryPerGroup.set(groupName, arr);
     }
     if(studentsEntryPerGroup.has(courseName)){
-        if(!studentsEntryPerGroup.get(courseName).includes(data.name)){
+        
             studentsEntryPerGroup.get(courseName).push(data.name);
-        }
+        
         
     } else {
         var arr = new Array();
         arr.push(data.name);
+        
         studentsEntryPerGroup.set(courseName, arr);
     }
 
-
-
+    
+    
     if(data.week.substring(4) > highestWeek){
         highestWeek = data.week.substring(4);
     }
@@ -494,7 +485,13 @@ function createGroupData(data) {
         courseMap.set((data.course + " " + data.week), newCourse);
         
     }
-    if (groupMap.has(groupName)) {
+    if(!groupMap.has(groupName)){
+        //var newGroup = new Group(data.group);
+        var newGroup = new GroupPerWeek(data.group, data.week, data.course);
+        //groupMap.set(data.group, newGroup);
+        groupMap.set((data.group + " " + data.week), newGroup);
+        //createGroupData(data);
+    } 
         var hasNoneExp = 0;
 
         Object.entries(data).forEach((entry) => {
@@ -557,13 +554,7 @@ function createGroupData(data) {
             
         });
 
-    } else {
-        //var newGroup = new Group(data.group);
-        var newGroup = new GroupPerWeek(data.group, data.week, data.course);
-        //groupMap.set(data.group, newGroup);
-        groupMap.set((data.group + " " + data.week), newGroup);
-        createGroupData(data);
-    }
+    
 
 }
 
@@ -660,26 +651,74 @@ const getStudents = async (set, course) => {
         displayGroups();
     }else if(set == 'group'){
         var sortedMap = new Map(sortMapNegative(set));
-        displayGroupGraph(course, sortedMap);
+        displayGroupGraph(course, sortedMap, fillInMissingWeeks(sortedMap));
         buildForm(groupMap, highestWeek);
         bookmarkEventListener(set);
+        fillInMissingWeeks(sortedMap, set);
     } else if(set == 'course'){
-        responses(courseMap);
+        
         var sortedMap = new Map(sortMapNegative(set));
         
-        displayGroupGraph(course, sortedMap);
+        displayGroupGraph(course, sortedMap, fillInMissingWeeks(sortedMap));
         buildForm(courseMap, highestWeek);
         bookmarkEventListener(set);
-
+        fillInMissingWeeks(sortedMap, set);
     }
     
 
 
 
 }
-function responses(map){
+function fillInMissingWeeks(map){
+    var week = 0;
+    var groups = new Array();
+    var courseTitle = document.getElementById("courseTitle");
+    var missingEntries = new Array();
+    if(courseTitle != undefined){
+        
+        map.forEach((value, key)=>{
+            
+        
+
+            if(value.course == courseTitle.textContent){
+                var arr = key.split(" ");
+                if(!groups.includes(arr[0])) groups.push(arr[0]);
+                
+                if(value.week > week){
+                    week = value.week;
+                }
+            }
+        }); 
+        week = parseInt(week);
+    } 
+    if(courseTitle == undefined){
+        
+        map.forEach((value, key)=>{
+            var arr = key.split(" ");
+            if(!groups.includes(arr[0])) groups.push(arr[0]);
+
+            if(value.week > week){
+                week = value.week;
+            }
+        });
+        week = parseInt(week);
+    }
     
+    groups.forEach((value) => {
+        for(var i = 1; i < week + 1; i++){
+            if(!map.has(value + " Week"+i)){
+                missingEntries.push(value + " Week"+i);
+            }
+        }
+    });
     
+    return (missingEntries);
+}
+
+function buildEmptyGraphs(array){
+
+
+
 }
 function bookmarkEventListener(set){
     
@@ -692,34 +731,43 @@ function bookmarkEventListener(set){
 
         var checkid = infArr[0] + " " + infArr[1] + " checkbox";
         
+        if(groupMap.get(id) == undefined){
 
-      
-        if(set != 'course'){
-            currentMark = groupMap.get(id).bookmarked;
+        } else {
+
+            if(set != 'course'){
             
-            if(currentMark){
+                currentMark = groupMap.get(id).bookmarked;
+                if(currentMark){
                 
-                groupMap.get(id).bookmarkTrue();
-                
-                document.getElementById(checkid).checked = true;
-            } else {
-                
-                groupMap.get(id).bookmarkFalse();
-                document.getElementById(checkid).checked = false;
-            }
+                    groupMap.get(id).bookmarkTrue();
+                    
+                    document.getElementById(checkid).checked = true;
+                } else {
+                    
+                    groupMap.get(id).bookmarkFalse();
+                    document.getElementById(checkid).checked = false;
+                }
+            
+            
+        
+           
 
         } else if(set =='course'){
-            currentMark = courseMap.get(id).bookmarked;
-            if(currentMark){
+            
+                currentMark = groupMap.get(id).bookmarked;
+                if(currentMark){
                 
-                courseMap.get(id).bookmarkTrue();
-                
-                document.getElementById(checkid).checked = true;
-            } else {
-                
-                courseMap.get(id).bookmarkFalse();
-                document.getElementById(checkid).checked = false;
-            }
+                    courseMap.get(id).bookmarkTrue();
+                    
+                    document.getElementById(checkid).checked = true;
+                } else {
+                    
+                    courseMap.get(id).bookmarkFalse();
+                    document.getElementById(checkid).checked = false;
+                }
+            
+           
             
         }
 
@@ -728,6 +776,9 @@ function bookmarkEventListener(set){
         
         
         checkElm.addEventListener("click",bookmarkClick)
+        }
+      
+        
     }
 }
 
@@ -918,9 +969,9 @@ function sortMapPositive(set){
  *   will create graphs from the groupMap Map.
  */
 
-function displayGroupGraph(course, sortedMap) {
-
-
+function displayGroupGraph(course, sortedMap, deadMaps) {
+    
+    
     
     
     
@@ -930,6 +981,7 @@ function displayGroupGraph(course, sortedMap) {
             var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
             var exp_total = key.positiveExp + key.negativeExp+ key.neutralExp + key.otherExp;
             var dataG = new Array();
+            
             makeCanva(key.name);
             dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion/emotion_total), (key.positiveExp/exp_total)));
             dataG.push(datasetMakerDuo("Neutral", (key.neutralEmotion/emotion_total), (key.neutralExp/exp_total)));
@@ -943,12 +995,14 @@ function displayGroupGraph(course, sortedMap) {
             
             var expChange = document.getElementById(key.name + " exp change");
             var numStudentDiv = document.getElementById(key.name + " numStudents");
-
+            var infoDiv = numStudentDiv.parentElement.closest('div');
             var currentWeek = key.week;
-                
+            
             var infArr = key.name.split(" ");
             var name = infArr[0]
             var set;
+            //console.log(studentsEntryPerGroup);
+            //console.log(sortedMap);
             var completed = studentsEntryPerGroup.get(name + " Week" + key.week).length;
            // var completed = numEntriesPerGroup.get(name + " Week" + key.week)
             var total = studentInGroup.get(name).length;
@@ -956,21 +1010,44 @@ function displayGroupGraph(course, sortedMap) {
 
             var elm = document.createElement("div");
             elm.setAttribute("class", "missingStudents");
-
+            elm.setAttribute("id", name + " Week" + key.week + " missingStudents");
+            var order = 1;
             studentInGroup.get(name).forEach((value) =>{
                 
                 if(studentsEntryPerGroup.get(name + " Week" + key.week).includes(value)){
-                    console.log("Good boys: " + value);
+                    //console.log("Good boys: " + value);
+                    var goodBoy = document.createElement("span")
+                    goodBoy.setAttribute("class", "goodBoy");
+                    goodBoy.style.order = 1;
+                    
+
+                    goodBoy.textContent += value;
+                    elm.appendChild(goodBoy);
+
+                    var icon = document.createElement("i");
+                    icon.setAttribute("class", "fa-solid fa-circle-dot");
+                    goodBoy.appendChild(icon);
                 } else {
-                    console.log("Bad boys: " + value);
-                    elm.textContent += value
+                    //console.log("Bad boys: " + value);
+                    var badBoy = document.createElement("span");
+                    badBoy.setAttribute("class", "badBoy");
+                    badBoy.style.order = -1;
+                    
+
+                    badBoy.textContent += value;
+                    elm.appendChild(badBoy);
+                    var icon = document.createElement("i");
+                    icon.setAttribute("class", "fa-solid fa-circle-dot");
+                    badBoy.appendChild(icon);
                     
                 }
+                order++;
             });
             
 
             numStudentDiv.textContent =  completed + " / " + total;
-            numStudentDiv.appendChild(elm);
+            
+            infoDiv.appendChild(elm);
             var ratio = completed/total;
             if(ratio >=1){
                 numStudentDiv.setAttribute("ratio", "green");
@@ -1044,6 +1121,12 @@ function displayGroupGraph(course, sortedMap) {
                 }
             }
         }
+    });
+    deadMaps.forEach((value) =>{
+        makeCanva(value);
+        var dataG = new Array();
+        dataG.push(datasetMakerDuo("Missing", 1,1));    
+        buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
     });
 }
 

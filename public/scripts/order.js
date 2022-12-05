@@ -1,4 +1,6 @@
 
+
+
 function filterForm(arg){
     
     
@@ -41,7 +43,8 @@ function filterForm(arg){
             set = 'all';
         }
         
-        displayGroupGraph(set,sortedMap);
+        displayGroupGraph(set,sortedMap, fillInMissingWeeks(sortedMap));
+        
         bookmarkEventListener(arg);
     } 
 
@@ -98,4 +101,13 @@ function order(filterWeek, filterGroup, bookmark){
     }
     
 }
+
+
+
+    
+
+
+
+
+
 
