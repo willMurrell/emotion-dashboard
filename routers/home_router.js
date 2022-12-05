@@ -3,9 +3,12 @@ const { Router } = require('express');
 const express = require('express');
 const fs = require('fs');
 const csvToJson = require('convert-csv-to-json');
-csvToJson.fieldDelimiter(',')
+
+const Papa = require('papaparse');
+csvToJson.fieldDelimiter(',');
 const bodyParser = require('body-parser');
 const { fstat } = require('fs');
+const e = require('express');
 
 /* create a router (to export) */
 const router = express.Router();
@@ -24,15 +27,6 @@ router.get('/', async (req, res) => {
 
 
 module.exports = router; // export the router
-
-
-/* Server functions!
-* I'm not too sure if these are all in the right place but oh well
-*/
-
-
-
-//parseAllCSV();
 
 
 const emotions = [
@@ -129,25 +123,50 @@ const learning_experiences = [
     //console.log(readJSON(filename))
     var csvFolder = 'SummerStudentCSV';
     iterateOverFiles(csvFolder);
+
     router.get('/students', (req, res) =>{
         res.send(JSON.stringify(entries));
     })
 
+    function iterateOverFiles(folder){
+        const directory = fs.opendirSync(folder, 'utf8');
+        let file;
+        let filename = "header.json"
+        readHeader(filename);
+
+        while((file = directory.readSync()) !== null){
+        //while((file = directory.readSync()) !== null){
+            let info_array, name, group, week, out_name;
+            if(file.name.substring(file.name.length-3) === 'csv'){
+                
+                
+                info_array = file.name.split('-');
+                name = info_array[0];
+                group = info_array[1];
+                week = info_array[2].substring(4);
+                
+                out_name = file.name.substring(0, file.name.length-4) + '.json';
+                console.log(file.name);
+                parseCSV(file.name, out_name);
+                
+                
+                // var json = Papa.parse(file);
+                // console.log(json);
+                // let data = JSON.stringify(json);
+                // fs.writeFileSync(out_name, data);
+                // readJSON(out_name);
     
-    function parseCSV(input, output){
-        let fileInputName = csvFolder+'/' + input; 
-        let fileOutputName = 'JSON/' + output;
+                //console.log(file.name+ out_name) ;
     
-        const promise = new Promise((resolve, reject) =>{
-            csvToJson.formatValueByType().generateJsonFileFromCsv(fileInputName,fileOutputName);
-        });
-        promise
-            .then(readJSON(fileOutputName))
-            .catch((value) => {
-                console.log("Heres an error: " + value);
-            });
-        //console.log("Parsed to JSON!");
+            }
+            
+            
+            
+        }
+        directory.closeSync();
+
     }
+
     function readHeader(filename){
         let rawData = fs.readFile('SummerStudentCSV/' + filename, (err, data)=> {
             
@@ -167,39 +186,70 @@ const learning_experiences = [
             }
         });
     }
-    function iterateOverFiles(folder){
-        const directory = fs.opendirSync(folder);
-        let file;
-        let filename = "header.json"
-        readHeader(filename);
-        
-        while((file = directory.readSync()) !== null){
-            let info_array, name, group, week, out_name;
-            if(file.name.substring(file.name.length-3) === 'csv'){
-                
-                
-                info_array = file.name.split('-');
-                name = info_array[0];
-                group = info_array[1];
-                week = info_array[2].substring(4);
-                
-                out_name = file.name.substring(0, file.name.length-4) + '.json';
-                
-                parseCSV(file.name, out_name);
-                
+
+
+    function parseCSV(input, output){
+        let fileInputName = csvFolder+'/' + input; 
+        let fileOutputName = 'JSON/' + output;
+        let config = {
+            header: true
+        }
+        const promise = new Promise((resolve, reject) =>{
+            //csvToJson.formatValueByType().generateJsonFileFromCsv(fileInputName,fileOutputName);
+            fs.readFile(fileInputName, 'utf8', (err, data) =>{
+                if(err){
+                    console.log(err);
+                    return;
+                }
+
+                var json = Papa.parse(data, config);
+                //console.log(json);
+                let jsonString = JSON.stringify(json.data);
+                fs.writeFileSync(fileOutputName, jsonString);
+            });
+            
+        });
+        promise
+            .then(readJSON(fileOutputName))
+            .catch((value) => {
+                console.log("Heres an error: " + value);
+            });
+        //console.log("Parsed to JSON!");
+    }
+
+
+
+    async function readJSON (filename){
     
     
-    
-                //console.log(file.name+ out_name) ;
-    
+        let rawData = fs.readFile(filename, (err, data)=> {
+            if(err){
+                readJSON(filename);
+                return;
+            } else {
+                if(data.byteLength == 0){
+                    readJSON(filename);
+                    return;
+                }
+                
+                var weekData = JSON.parse(data);
+                
+                var info_array = filename.split('-');
+                var name = info_array[0].substring(5);
+                var group = info_array[1];
+                var week = info_array[2];
+                var course = info_array[3].substring(0, info_array[3].length - 5);
+                //console.log(weekData);
+                individualReport(weekData);
+                emotionCounter(weekData, name, group, week, course);
+                
             }
             
-            
-            
-        }
-        directory.closeSync();
-
+        });
+    
     }
+    
+    
     
     function emotionCounter(data, name, group, week, course){
         //console.log(name + group + week);
@@ -209,8 +259,9 @@ const learning_experiences = [
         entryMap.set("week", week);
         entryMap.set("course", course);
         const num_sentences = data.length - 1;
+        //console.log(data);
         for(let i = 0; i < num_sentences; i++){
-            //console.log(data[i].Text);
+            
             let entry = data[i];
             
     
@@ -219,11 +270,14 @@ const learning_experiences = [
             // })
     
             emotions.forEach(emotion => {
+                //console.log(data[i][emotion]);
                 if(data[i][emotion] == 1){
                     
                    
                     if(entryMap.has(emotion)){
                         entryMap.set(emotion, entryMap.get(emotion) + 1)
+                        
+                        
                     } else {
                         entryMap.set(emotion, 1);
                     }
@@ -253,35 +307,11 @@ const learning_experiences = [
         
         
         //console.log("\n\n");
+        
         entries.push(jsonString);
  
     }
-    
-    async function readJSON (filename){
-    
-    
-        let rawData = fs.readFile(filename, (err, data)=> {
-            if(err){
-                readJSON(filename);
-                return;
-            } else {
-                if(data.byteLength == 0){
-                    readJSON(filename);
-                    return;
-                }
-                
-                var weekData = JSON.parse(data);
-                
-                var info_array = filename.split('-');
-                var name = info_array[0].substring(5);
-                var group = info_array[1];
-                var week = info_array[2];
-                var course = info_array[3].substring(0, info_array[3].length - 5);
-                //console.log(course);
-                emotionCounter(weekData, name, group, week, course);
-                
-            }
-            
-        });
-    
+    function individualReport(weekData){
+        //console.log((weekData.data));
     }
+    

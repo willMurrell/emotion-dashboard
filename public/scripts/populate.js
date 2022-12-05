@@ -663,6 +663,7 @@ const getStudents = async (set, course) => {
         buildForm(courseMap, highestWeek);
         bookmarkEventListener(set);
         fillInMissingWeeks(sortedMap, set);
+        displayGroups();
     }
     
 
@@ -823,14 +824,14 @@ const bookmarkClick = function (){
 */
 function clearGraphs(){
     document.querySelector('#new').remove();
-    document.querySelector('#groupButtonDiv').remove();
+   // document.querySelector('#groupButtonDiv').remove();
     var newDiv = document.createElement("div");
     newDiv.setAttribute("id", "new");
     var newDiv2 = document.createElement("div");
     newDiv2.setAttribute("id", "groupButtonDiv");
     var parent = document.querySelector('main');
     parent.appendChild(newDiv);
-    parent.appendChild(newDiv2);
+    //parent.appendChild(newDiv2);
 }
 
 function makeAside(id){
@@ -1148,7 +1149,7 @@ function displayGroups(){
         groupButton.setAttribute("id", key);
         //var link = '/home/:'+ key;
         
-        groupButton.setAttribute("href", "papers/"+key);
+        groupButton.setAttribute("href", "../papers/"+key);
         groupButton.textContent = key;
         
         element.appendChild(groupButton);

@@ -69,6 +69,8 @@ main{
     margin-bottom: 100px;
 }
 
+
+/*
 .filters{
     height: 100px;
     font-size: 20px;
@@ -91,31 +93,35 @@ main{
     background-color: #8ecae6;
 }
 
-
+*/
 #new{
     display: flex;
     flex-wrap: wrap;
     
 }
 
-.canvaContainer{
+
+
+
+.controls{
     display: flex;
-    height: 400px;
+}
+
+#groupButtonDiv{
+    font-size: 20px;
+    border: #8ecae6;
+    border-style: solid;
+    padding: 10px;
+    margin-left: 5px;
+    margin-top: 5px;
+    width: auto;
     
 }
 
-
-
-.groupButtonDiv{
-    padding-top: 40px;
-    margin-top: 40px;
-    background-color: #8ecae6;
-    display: flex;
-    
-    
-    
+#groupButtonDiv h1{
+    font-size: 30px;
+    margin-top: 0px;
 }
-
 .groupButton{
    
     text-align: center;
@@ -127,12 +133,14 @@ main{
     padding: 20px 5px;
     border-radius: 5px;
     background-color: #8ecae6;
+    color: black;
     
 }
 
 .groupButton:hover{
     padding: 18px 4px;
     text-decoration: underline;
+    color: black;
     background-color: white;
     border: 1px solid #8ecae6;
 }
@@ -144,6 +152,11 @@ main{
 canvas{
     width: 500px;
     height: 400px;
+}
+.canvaContainer{
+    display: flex;
+    height: 400px;
+    
 }
 
 .form{
