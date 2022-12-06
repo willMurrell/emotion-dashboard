@@ -810,7 +810,8 @@ const getStudents = async (set, course) => {
         displayGroups();
     } else if(set == 'individuals'){
         console.log("displaying individual data..." + course);
-        displayIndividualGraphs(course)
+        displayIndividualGraphs(course);
+        displayStudents(course);
     }
     
 
@@ -1351,6 +1352,45 @@ function displayGroups(){
             sillyGroup.set(key.course, key.course);
         });
     }
+    
+    console.log(sillyGroup);
+    sillyGroup.forEach((key, value) => {
+        
+        var groupButton = document.createElement('a');
+        var element = document.querySelector('#groupButtonDiv');
+        groupButton.setAttribute("class", "groupButton");
+        groupButton.setAttribute("id", key);
+        //var link = '/home/:'+ key;
+        
+        groupButton.setAttribute("href", path+key);
+        groupButton.textContent = key;
+        
+        element.appendChild(groupButton);
+        //var parent = document.querySelector('main');
+        //parent.appendChild(element);
+        
+    });
+}
+
+function displayStudents(group){
+    console.log(studentMap);
+    
+    var courseTitle = document.getElementById("courseTitle");
+    var sillyGroup = new Map();
+    var path;
+    if(courseTitle != null){
+        
+        console.log(courseTitle.textContent);
+        studentMap.forEach((key, value) =>{
+            if(key.group == courseTitle.textContent){
+                console.log(key);
+                sillyGroup.set(key.name, key.name);
+                path = ("../"+ key.course + "/" + courseTitle.textContent + "/");
+            }
+            
+        });
+        
+    } 
     
     console.log(sillyGroup);
     sillyGroup.forEach((key, value) => {
