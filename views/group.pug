@@ -22,32 +22,34 @@ html(lang='en')
 
         include templates/header.pug
         main
-            a(href='/papers' id='backButton') 
+            a(href='/home' id='backButton') 
                 i(class="fa-solid fa-caret-left")
             h1(id='courseTitle') #{course}
-            div(class="form") 
+            div(class="controls")
+                div(class="form") 
+                    
+                    span Filter:
+                    label(for="weekSelector") Week: 
+                    select(id='weekSelector')
+                        option(value="null" selected="selected") All Weeks
+                    br
+                    label(for="weekSelector") Group: 
+                    select(id='groupSelector')
+                        option(value="null" selected="selected") All Groups
+                    br
+                    label(for="bookmarkInput") Bookmarked: 
+                    input(type="checkbox" id="bookmarkInput" value="true")
+                    br
+                    label(for="sortSelector") Sort By: 
+                    select(id='sortSelector')
+                        option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                        option(value="overallPos" ) Least Urgent (Overall)
+                        option(value="emotionNeg" ) Most Urgent (by emotion)
+                        option(value="experienceNeg" ) Most Urgent (by experience) 
+                    button(onclick="filterForm(course)") Submit
                 
-                span Filter:
-                label(for="weekSelector") Week: 
-                select(id='weekSelector')
-                    option(value="null" selected="selected") All Weeks
-                br
-                label(for="weekSelector") Group: 
-                select(id='groupSelector')
-                    option(value="null" selected="selected") All Groups
-                br
-                label(for="bookmarkInput") Bookmarked: 
-                input(type="checkbox" id="bookmarkInput" value="true")
-                br
-                label(for="sortSelector") Sort By: 
-                select(id='sortSelector')
-                    option(value="overallNeg" selected="selected") Most Urgent (Overall)
-                    option(value="overallPos" ) Least Urgent (Overall)
-                    option(value="emotionNeg" ) Most Urgent (by emotion)
-                    option(value="experienceNeg" ) Most Urgent (by experience) 
-                button(onclick="filterForm(course)") Submit
-            div(id='groupButtonDiv')  
-
+                div(id='groupButtonDiv')  
+                    h1 Teams:
             div(id='new')
             
             

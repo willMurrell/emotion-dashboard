@@ -1,2 +1,60 @@
-div(id='team')
+doctype html
+html(lang='en')
+    head
+        title Emotion Dashboard!
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+        link(href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet')
+        link(rel='stylesheet',type="text/css" , href='../../static/styles/home.css')
+        
+        script(src="https://kit.fontawesome.com/04e87abddd.js" crossorigin="anonymous")
+        script(defer, src='../../static/scripts/populate.js')
+        script(src='../../static/scripts/order.js')
+        script(src='https://cdn.jsdelivr.net/npm/chart.js')
+        
+        
+        
+    body(onload="loadIndividuals(group)")
+        
+            
 
+        include templates/header.pug
+        main
+            a(href='/papers/' + course id='backButton') 
+                i(class="fa-solid fa-caret-left")
+            h1(id='courseTitle') #{group}
+            div(class="controls")
+                div(class="form") 
+                    
+                    span Filter:
+                    label(for="weekSelector") Week: 
+                    select(id='weekSelector')
+                        option(value="null" selected="selected") All Weeks
+                    br
+                    label(for="weekSelector") Group: 
+                    select(id='groupSelector')
+                        option(value="null" selected="selected") All Groups
+                    br
+                    label(for="bookmarkInput") Bookmarked: 
+                    input(type="checkbox" id="bookmarkInput" value="true")
+                    br
+                    label(for="sortSelector") Sort By: 
+                    select(id='sortSelector')
+                        option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                        option(value="overallPos" ) Least Urgent (Overall)
+                        option(value="emotionNeg" ) Most Urgent (by emotion)
+                        option(value="experienceNeg" ) Most Urgent (by experience) 
+                    button(onclick="filterForm(course)") Submit
+                
+                div(id='groupButtonDiv')  
+                    h1 Students:
+            div(id='new')
+            
+            
+
+        include templates/footer.pug
+        script. 
+            course='#{course}';
+            group='#{group}';

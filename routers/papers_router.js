@@ -22,5 +22,12 @@ router.get('/:param/', async (req, res) => {
     res.render('group', {course: course} );
 })
 
+router.get('/:course/:group', async (req, res) => {
+    var course = req.params.course;
+    var group = req.params.group;
+    console.log(group);
+    res.render('team', {course: course, group: group} );
+})
+
 module.exports = router; // export the router
 
