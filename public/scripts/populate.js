@@ -1380,31 +1380,8 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
                 
                 if(studentsEntryPerGroup.get(name + " Week" + key.week).includes(value)){
                     goodArr.push(value);
-                    
-                    // var goodBoy = document.createElement("span")
-                    // goodBoy.setAttribute("class", "goodBoy");
-                    // goodBoy.style.order = 1;
-                    
-
-                    // goodBoy.textContent += value;
-                    // elm.appendChild(goodBoy);
-
-                    // var icon = document.createElement("i");
-                    // icon.setAttribute("class", "fa-solid fa-circle-dot");
-                    // goodBoy.appendChild(icon);
                 } else {
-                    
-                    // var badBoy = document.createElement("span");
-                    // badBoy.setAttribute("class", "badBoy");
-                    // badBoy.style.order = -1;
-                    
                     badArr.push(value);
-                    // badBoy.textContent += value;
-                    // elm.appendChild(badBoy);
-                    // var icon = document.createElement("i");
-                    // icon.setAttribute("class", "fa-solid fa-circle-dot");
-                    // badBoy.appendChild(icon);
-                    
                 }
                 order++;
             });
@@ -1508,7 +1485,13 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
 
                     
                     
+                } else {
+                    emoChange.textContent += "0%";
+                    expChange.textContent += "0%";
                 }
+            } else {
+                emoChange.textContent += "0%";
+                expChange.textContent += "0%";
             }
         }
     });
