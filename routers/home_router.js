@@ -52,39 +52,37 @@ const emotions = [
     "Shamed/Apologetic",
     "Other_emotion",
     //seeing if i can lump it all into one
-    "None_issue",
-    "LackofDirection",
-    "LimitedKnowledge",
-    "TechnicalIssues",
-    "LackofAchievements",
-    "TimePressure",
-    "ProjectScope-toobig",
-    "ProjectScope-toosmall",
-    "TeamCommunication",
-    "TeamCollaboration",
-    "ProjectMonitoring ",
-    "ClientCommunication",
-    "AcademicStaffCommunication",
-    "PersonalityClash",
-    "Hindsights",
-    "AdditionalCommitments",
-    "Other_issue",
-    "None_positive",
-    "ClearDirection",
-    "EnoughKnowledge",
-    "SenseofAchievements",
-    "GoodTiming",
-    "AdequateProjectScope",
-    "GoodTeamCommunication",
-    "GoodTeamCollaboration",
-    "GoodProjectMonitoring ",
-    "GoodClientCommunication",
-    "GoodAcademicStaffCommunication",
-    "PersonalityMatch",
-    "Discovery",
-    "Other_positive",
-    ]
-const learning_experiences = [
+    // "None_issue",
+    // "LackofDirection",
+    // "LimitedKnowledge",
+    // "TechnicalIssues",
+    // "LackofAchievements",
+    // "TimePressure",
+    // "ProjectScope-toobig",
+    // "ProjectScope-toosmall",
+    // "TeamCommunication",
+    // "TeamCollaboration",
+    // "ProjectMonitoring ",
+    // "ClientCommunication",
+    // "AcademicStaffCommunication",
+    // "PersonalityClash",
+    // "Hindsights",
+    // "AdditionalCommitments",
+    // "Other_issue",
+    // "None_positive",
+    // "ClearDirection",
+    // "EnoughKnowledge",
+    // "SenseofAchievements",
+    // "GoodTiming",
+    // "AdequateProjectScope",
+    // "GoodTeamCommunication",
+    // "GoodTeamCollaboration",
+    // "GoodProjectMonitoring ",
+    // "GoodClientCommunication",
+    // "GoodAcademicStaffCommunication",
+    // "PersonalityMatch",
+    // "Discovery",
+    // "Other_positive",
     "None_positive",
     "Lack of Direction",
     "Limited Knowledge",
@@ -115,10 +113,48 @@ const learning_experiences = [
     "Personality Match",
     "Discovery",
     "Other_issue",
+    "Other_positive"
+    ]
+const learning_experiences = [
+    "None_positive",
+    "Lack of Direction",
+    "Limited Knowledge",
+    "Technical Issues",
+    "Lack of Achievements",
+    "Time Pressure",
+    "Project Scope - too big",
+    "Project Scope - too small",
+    "Team Communication",
+    "Team Collaboration",
+    "Project Monitoring ",
+    "Client Communication",
+    "Academic Staff Communication",
+    "Personality Clash",
+    "Hindsights",
+    "Additional Commitments",
+    "None_issue",
+    "Other_positive",
+    "Clear Direction",
+    "Enough Knowledge",
+    "Sense of Achievements",
+    "Good Timing",
+    "Adequate Project Scope",
+    "Good Team Communication",
+    "Good Team Collaboration",
+    "Good Project Monitoring ",
+    "Good Client Communication",
+    "Good Academic Staff Communication",
+    "Personality Match",
+    "Discovery",
+    "Other_issue",
 ]
 
 
-   var entries = new Array();
+    var entries = new Array();
+
+    
+    var individualMap = new Map();
+    var textEntries = new Array();
     
     //console.log(readJSON(filename))
     var csvFolder = 'SummerStudentCSV';
@@ -126,6 +162,10 @@ const learning_experiences = [
 
     router.get('/students', (req, res) =>{
         res.send(JSON.stringify(entries));
+    })
+    
+    router.get('/students/individuals', (req, res) =>{
+        res.send(JSON.stringify(textEntries));
     })
 
     function iterateOverFiles(folder){
@@ -239,8 +279,8 @@ const learning_experiences = [
                 var group = info_array[1];
                 var week = info_array[2];
                 var course = info_array[3].substring(0, info_array[3].length - 5);
-                //console.log(weekData);
-                individualReport(weekData);
+                
+                individualReport(weekData, name, group, week, course);
                 emotionCounter(weekData, name, group, week, course);
                 
             }
@@ -311,7 +351,45 @@ const learning_experiences = [
         entries.push(jsonString);
  
     }
-    function individualReport(weekData){
-        //console.log((weekData.data));
+    function individualReport(weekData, name, group, week, course){
+        
+        const num_sentences = weekData.length - 1;
+        // entryMap.set("name", name);
+        // entryMap.set("group", group);
+        // entryMap.set("week", week);
+        // entryMap.set("course", course);
+        
+        var sentences = new Array();
+        var id = name + " " + group + " " + course + " " + week;
+        sentences.push(id);
+        //console.log(id);
+        
+       
+        for(let i = 0; i < num_sentences; i++){
+            let entry = weekData[i];
+            var singleEntry = new Array();
+            singleEntry.push(entry["Text"])
+            
+
+
+            emotions.forEach(emotion => {
+                //console.log(weekData[i]);
+                //console.log(weekData[i]["ClearDirection"]);
+                if(weekData[i][emotion] == 1){
+                    //if(emotion != "None_issue" && emotion != "None_positive" && emotion != "None_emotion")
+                    //console.log(emotion);
+                    singleEntry.push(emotion);
+                }
+            });
+            //console.log(singleEntry.length);
+            sentences.push(singleEntry);
+        } 
+        
+        
+       //var obj = Object.fromEntries(sentences);
+        var jsonString = JSON.stringify(sentences);
+
+        textEntries.push(jsonString);  
+        //console.log(textEntries);
     }
     

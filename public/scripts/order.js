@@ -103,7 +103,10 @@ function order(filterWeek, filterGroup, bookmark){
 }
 
 
-
+function textHoverFunction(){
+    console.log("AHHH YES");
+  
+}
     
 
 

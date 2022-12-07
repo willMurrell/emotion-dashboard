@@ -1,0 +1,44 @@
+doctype html
+html(lang='en')
+    head
+        title Emotion Dashboard!
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+        link(href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet')
+        link(rel='stylesheet',type="text/css" , href='../../../static/styles/home.css')
+        
+        script(src="https://kit.fontawesome.com/04e87abddd.js" crossorigin="anonymous")
+        script(defer, src='../../../static/scripts/populate.js')
+        script(src='../../../static/scripts/order.js')
+        script(src='https://cdn.jsdelivr.net/npm/chart.js')
+        
+        
+        
+    body(onload="processIndividuals()")
+        include templates/header.pug
+        main
+            a(href='/papers/' + course + '/' + group id='backButton') 
+                i(class="fa-solid fa-caret-left")
+            h1(id='studentName') #{student}
+            
+            h2(id='courseName') #{course}
+            h2(id='groupName') #{group}
+            div(id="reportArea")
+                div(id="testDiv") TEST TEST TEST
+                div(id="textArea")
+                    
+                        
+                div(class="tools") 
+                    span(class="primaryEmotion") Toolbar?? 
+                    
+            div(id='new')
+            
+            
+
+        include templates/footer.pug
+        script. 
+            course='#{course}';
+            group='#{group}';
+            student='#{student}';

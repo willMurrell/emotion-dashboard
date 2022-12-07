@@ -81,37 +81,65 @@ const neutralExperience = new Array(
 );
 const positiveExperience = new Array(
     
-    "ClearDirection",
-    "EnoughKnowledge",
-    "SenseofAchievements",
-    "GoodTiming",
-    "AdequateProjectScope",
-    "GoodTeamCommunication",
-    "GoodTeamCollaboration",
-    "GoodProjectMonitoring ",
-    "GoodClientCommunication",
-    "GoodAcademicStaffCommunication",
-    "PersonalityMatch",
+    // "ClearDirection",
+    // "EnoughKnowledge",
+    // "SenseofAchievements",
+    // "GoodTiming",
+    // "AdequateProjectScope",
+    // "GoodTeamCommunication",
+    // "GoodTeamCollaboration",
+    // "GoodProjectMonitoring ",
+    // "GoodClientCommunication",
+    // "GoodAcademicStaffCommunication",
+    // "PersonalityMatch",
+    // "Discovery",
+    // "Other_positive",
+    "Clear Direction",
+    "Enough Knowledge",
+    "Sense of Achievements",
+    "Good Timing",
+    "Adequate Project Scope",
+    "Good Team Communication",
+    "Good Team Collaboration",
+    "Good Project Monitoring ",
+    "Good Client Communication",
+    "Good Academic Staff Communication",
+    "Personality Match",
     "Discovery",
-    "Other_positive",
+    "Other_positive"
 );
 const negativeExperience = new Array(
-    "LackofDirection",
-    "LimitedKnowledge",
-    "TechnicalIssues",
-    "LackofAchievements",
-    "TimePressure",
-    "ProjectScope-toobig",
-    "ProjectScope-toosmall",
-    "TeamCommunication",
-    "TeamCollaboration",
-    "ProjectMonitoring ",
-    "ClientCommunication",
-    "AcademicStaffCommunication",
-    "PersonalityClash",
-    "Hindsights",
-    "AdditionalCommitments",
+    // "LackofDirection",
+    // "LimitedKnowledge",
+    // "TechnicalIssues",
+    // "LackofAchievements",
+    // "TimePressure",
+    // "ProjectScope-toobig",
+    // "ProjectScope-toosmall",
+    // "TeamCommunication",
+    // "TeamCollaboration",
+    // "ProjectMonitoring ",
+    // "ClientCommunication",
+    // "AcademicStaffCommunication",
+    // "PersonalityClash",
+    // "Hindsights",
+    // "AdditionalCommitments",
     "Other_issue",
+    "Lack of Direction",
+    "Limited Knowledge",
+    "Technical Issues",
+    "Lack of Achievements",
+    "Time Pressure",
+    "Project Scope - too big",
+    "Project Scope - too small",
+    "Team Communication",
+    "Team Collaboration",
+    "Project Monitoring ",
+    "Client Communication",
+    "Academic Staff Communication",
+    "Personality Clash",
+    "Hindsights",
+    "Additional Commitments"
 );
 
 
@@ -526,7 +554,7 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
  */
 
 function createGroupData(data) {
-    //console.log(data);
+    
     //studentsEntryPerGroup
     var groupName = (data.group + " " + data.week);
     var courseName = (data.course + " " + data.week);
@@ -752,7 +780,7 @@ function processData(data, filter) {
         createGroupData(data);
         
     } if(filter == 'individuals'){
-        console.log("creating individual data");
+        
         createIndividualData(data);
     }
     
@@ -809,7 +837,7 @@ const getStudents = async (set, course) => {
         fillInMissingWeeks(sortedMap, set);
         displayGroups();
     } else if(set == 'individuals'){
-        console.log("displaying individual data..." + course);
+        
         displayIndividualGraphs(course);
         displayStudents(course);
     }
@@ -819,7 +847,170 @@ const getStudents = async (set, course) => {
 
 }
 
+const processIndividuals = async (set, course) => {
+    
+    //fetching data from server
 
+    const res = await fetch("../../../home/students/individuals");
+    const students = await res.json()
+    
+
+    
+    //iterating over each entry
+
+    students.forEach((title, data) =>{
+        var studentData = JSON.parse(title);
+        displayReports(studentData);
+    });
+        //Things that are run more than once
+        
+        
+        //turning data into JSON objects
+       // var studentTextData = JSON.parse(student[1]);
+        
+        //displayReports(studentTextData);
+
+    //Things that are run once
+    
+
+
+}
+
+function displayReports(data){
+    var name = document.getElementById('studentName').textContent;
+    var group = document.getElementById('groupName').textContent;
+    var course = document.getElementById('courseName').textContent;
+    
+
+    var infArr = data[0].split(" ");
+    
+    if(infArr[0] == name && infArr[1] == group && infArr[2] == course){
+        buildReportHTML(data, infArr[3]);
+        
+    }
+    
+    
+}
+
+function buildReportHTML(data, week){
+   
+    var textArea = document.getElementById('textArea');
+    var textEntry = document.createElement('div');
+    var paragraph = document.createElement('p');
+    var textHeader = document.createElement('div');
+    var weekTitle = document.createElement('h3');
+    var commonLearning = document.createElement('div');
+    commonLearning.setAttribute("class", "commonLearning");
+    
+    textHeader.setAttribute("class", "textHeader");
+
+    weekTitle.textContent = week.substring(0,4) + " "+week.substring(4);
+    textHeader.appendChild(weekTitle);
+    textHeader.appendChild(commonLearning);
+    textEntry.setAttribute("id", week);
+    textEntry.setAttribute("class", "textEntry");
+    textEntry.style.order = week.substring(4);
+    textEntry.appendChild(textHeader)
+    textEntry.appendChild(paragraph);
+
+    //console.log(data);
+
+    var learnExpMap = new Map();
+
+    var x = 0;
+    
+    data.forEach((value) => {
+        var posArr = new Array();
+        var negArr = new Array();
+        //console.log(value);
+        if(x ==0 ){
+            x++;
+        } else {
+            var span = document.createElement('span');
+            span.textContent =  " " + value[0] ;
+            
+            for(var i = 1; i < value.length; i++){
+                var used = false;
+                if(positiveEmotions.includes(value[i])){
+                    posArr.push(value[i]);
+                    
+                    //span.setAttribute("emotion", value[i]);
+                    span.addEventListener("mousemove", emotionHover);
+                    used = true;
+                }
+                if(negativeEmotions.includes(value[i])){
+                    negArr.push(value[i]);
+                    if(used){
+                        console.log("used");
+                    }
+                    
+                    // span.setAttribute("emotion", value[i]);
+                    span.addEventListener("mousemove", emotionHover);
+                }
+            }
+            paragraph.appendChild(span);
+        }
+        console.log("-------")
+        if(posArr.length ==0 && negArr.length ==0){
+            
+        } else if(posArr == 0){
+            span.setAttribute("class", "negativeSpan");
+            
+            var string = "";
+            negArr.forEach((entry) =>  {
+                string += " " +entry+",";
+            }); 
+            span.setAttribute("emotion", string.substring(0,string.length-1));
+
+        } else if(negArr == 0){
+            
+            span.setAttribute("class", "positiveSpan");
+            var string = "";
+            posArr.forEach((entry) =>  {
+                string += " " +entry+",";
+            }); 
+            span.setAttribute("emotion", string.substring(0,string.length-1));
+        } else {
+            console.log("mixed");
+            span.setAttribute("class", "mixedSpan");
+            var string = "";
+            posArr.forEach((entry) =>  {
+                string += " " +entry+",";
+            }); 
+            negArr.forEach((entry) =>  {
+                string += " " +entry+",";
+            });
+            span.setAttribute("emotion", string.substring(0,string.length-1));
+        }
+        var ratio = posArr.length - negArr.length;
+    });
+    
+    textArea.appendChild(textEntry);
+}
+
+const emotionHover = function (event){
+    var test = document.getElementById('testDiv');
+    if(event.path[0].getAttribute("class") == "negativeSpan"){
+        test.style.border = "1px solid rgba(255, 89, 94, 1)";
+    } else if(event.path[0].getAttribute("class") == "positiveSpan"){
+        test.style.border = "1px solid rgba(138, 201, 38, 1)";
+    } else if(event.path[0].getAttribute("class") == "mixedSpan"){
+        test.style.border = "1px solid rgba(255, 184, 30, 1)";
+    }
+    var emotion = event.path[0].getAttribute("emotion");
+     //console.log(event.pageX + " " + event.pageY);
+     
+     test.textContent = emotion
+     test.style.display = "block";
+     test.style.top = event.pageY + -70 + "px";
+     test.style.left = event.pageX + 5+"px";
+     //test.style.display = "none";
+    // document.onmousemove = handleMouseMove;
+    
+}
+// function handleMouseMove(event) {
+//     console.log(event.pageX);
+// }
 function fillInMissingWeeks(map){
     var week = 0;
     var groups = new Array();
@@ -1173,12 +1364,11 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             var infArr = key.name.split(" ");
             var name = infArr[0]
             var set;
-            //console.log(studentsEntryPerGroup);
-            //console.log(sortedMap);
+            
             var completed = studentsEntryPerGroup.get(name + " Week" + key.week).length;
            // var completed = numEntriesPerGroup.get(name + " Week" + key.week)
             var total = studentInGroup.get(name).length;
-            //console.log(studentInGroup.get(name));
+            
 
             var elm = document.createElement("div");
             elm.setAttribute("class", "missingStudents");
@@ -1190,7 +1380,7 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
                 
                 if(studentsEntryPerGroup.get(name + " Week" + key.week).includes(value)){
                     goodArr.push(value);
-                    //console.log("Good boys: " + value);
+                    
                     // var goodBoy = document.createElement("span")
                     // goodBoy.setAttribute("class", "goodBoy");
                     // goodBoy.style.order = 1;
@@ -1203,7 +1393,7 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
                     // icon.setAttribute("class", "fa-solid fa-circle-dot");
                     // goodBoy.appendChild(icon);
                 } else {
-                    //console.log("Bad boys: " + value);
+                    
                     // var badBoy = document.createElement("span");
                     // badBoy.setAttribute("class", "badBoy");
                     // badBoy.style.order = -1;
@@ -1338,10 +1528,10 @@ function displayGroups(){
     var path;
     if(courseTitle != null){
         path = ("../papers/" + courseTitle.textContent + "/");
-        console.log(courseTitle.textContent);
+        
         groupMap.forEach((key, value) =>{
             if(key.course == courseTitle.textContent){
-                console.log(key);
+                
                 sillyGroup.set(key.group, key.group);
             }
             
@@ -1353,7 +1543,7 @@ function displayGroups(){
         });
     }
     
-    console.log(sillyGroup);
+    
     sillyGroup.forEach((key, value) => {
         
         var groupButton = document.createElement('a');
@@ -1373,17 +1563,17 @@ function displayGroups(){
 }
 
 function displayStudents(group){
-    console.log(studentMap);
+    
     
     var courseTitle = document.getElementById("courseTitle");
     var sillyGroup = new Map();
     var path;
     if(courseTitle != null){
         
-        console.log(courseTitle.textContent);
+        
         studentMap.forEach((key, value) =>{
             if(key.group == courseTitle.textContent){
-                console.log(key);
+                
                 sillyGroup.set(key.name, key.name);
                 path = ("../"+ key.course + "/" + courseTitle.textContent + "/");
             }
@@ -1392,7 +1582,7 @@ function displayStudents(group){
         
     } 
     
-    console.log(sillyGroup);
+    
     sillyGroup.forEach((key, value) => {
         
         var groupButton = document.createElement('a');
