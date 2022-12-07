@@ -155,7 +155,13 @@ canvas{
 }
 .canvaContainer{
     display: flex;
-    height: 400px;
+    height: auto;
+    margin-right: 150px;
+    margin-left: 10px;
+    margin-top:50px;
+    margin-bottom: 50px;
+    padding: 20px;
+    border: 1px solid black;
     
 }
 
