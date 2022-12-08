@@ -455,9 +455,11 @@ canvas{
     position: sticky;
     position: -webkit-sticky; /* Safari */
     width: 30%;
+    padding-left: 5px;
     top: 20px;
     
-    background-color: #8ecae6;
+    
+    border-left: 1px solid black;
 }
 
 #commentEntry{
@@ -469,14 +471,16 @@ canvas{
     margin-bottom: 5px;
     margin-left: 5px;
     background-color: white;
-    border: none;
+    border: 1px solid black;
 }
 #commentSubmit:hover{
-    border: 1px solid black;
+    
     cursor: pointer;
 }
-#button:active {
-    
+#commentSubmit:active {
+    background-color: rgba(138, 201, 38, 0.4);
+    box-shadow: 0 1px #666;
+    transform: translateY(2px);
   }
 
 .textEntry{
