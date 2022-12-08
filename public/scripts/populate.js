@@ -1180,11 +1180,7 @@ function fillInMissingWeeks(map){
     return (missingEntries);
 }
 
-function buildEmptyGraphs(array){
 
-
-
-}
 function bookmarkEventListener(set){
     
     const graphs = document.querySelector('#new').children;
@@ -1429,7 +1425,9 @@ function sortMapPositive(set){
 }
 
 function displayIndividualGraphs(group){
+    console.log(studentMap);
         studentMap.forEach((key) =>{
+            
             if(key.group == group){
                 var id = (key.name + " Week" + key.week);
                 makeCanva(id);
@@ -1444,11 +1442,96 @@ function displayIndividualGraphs(group){
                 dataG.push(datasetMakerDuo("Other", (key.otherEmotion/emotion_total), (key.otherExp/exp_total)));
             
                 buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], id, id);
+                displayAside(key, group);
+            
             }
+
+            
         });
         
     
     
+}
+
+function displayAside(key){
+    var emoChange = document.getElementById(key.name + " Week"+key.week+   " emo change");
+            
+    var expChange = document.getElementById(key.name + " Week"+key.week+   " exp change");
+    console.log(key.name + " Week"+key.week+   " emo change");
+    
+    var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
+    var exp_total = key.positiveExp + key.negativeExp+ key.neutralExp + key.otherExp;
+
+    var currentWeek = key.week;
+    if(key.week > 1){
+        
+        var prevWeek = key.name + " " + group+" Week" +(currentWeek - 1);
+        
+        console.log(studentMap.has(prevWeek));
+        if(studentMap.has(prevWeek)){
+            
+            var prev = studentMap.get(prevWeek)
+
+            var prevEmoTotal = prev.positiveEmotion + prev.negativeEmotion + prev.otherEmotion + prev.neutralEmotion;
+            
+            var ChangeInEmo = (key.positiveEmotion/emotion_total)-(prev.positiveEmotion/prevEmoTotal);
+            
+
+            var prevExpTotal = prev.positiveExp + prev.negativeExp + prev.neutralExp + prev.otherExp;
+            
+            var ChangeInExp = (key.positiveExp/exp_total)-(prev.positiveExp/prevExpTotal);
+            
+            
+            
+            var em = Math.round(ChangeInEmo * 100 * 100)/100;
+            var ex = Math.round(ChangeInExp * 100 * 100)/100;
+            emoChange.textContent = em;
+            expChange.textContent = ex;
+            emoChange.textContent += "%";
+            expChange.textContent += "%";
+
+
+            
+           
+            if(em == 0){
+                var flatIcon = document.createElement("i");
+                flatIcon.setAttribute("class", "fa-solid fa-minus");
+                emoChange.appendChild(flatIcon);
+            } else if(em > 0){
+                var upArrow = document.createElement('i');
+                upArrow.setAttribute("class", "fa-solid fa-caret-up");
+                emoChange.appendChild(upArrow);
+            } else if (em < 0){
+                var downArrow = document.createElement("i");
+                downArrow.setAttribute("class", "fa-solid fa-caret-down");
+                var flatIcon = document.createElement("i");
+                flatIcon.setAttribute("class", "fa-solid fa-minus");
+                emoChange.appendChild(downArrow);
+            }
+            if(ex == 0){
+                var flatIcon = document.createElement("i");
+                flatIcon.setAttribute("class", "fa-solid fa-minus");
+                expChange.appendChild(flatIcon);
+            } else if(ex > 0){
+                var upArrow = document.createElement('i');
+                upArrow.setAttribute("class", "fa-solid fa-caret-up");
+                expChange.appendChild(upArrow);
+            } else if (ex < 0){
+                var downArrow = document.createElement("i");
+                downArrow.setAttribute("class", "fa-solid fa-caret-down");
+                expChange.appendChild(downArrow);
+            }
+
+            
+            
+        } else {
+            emoChange.textContent = "0%";
+            expChange.textContent = "0%";
+        }
+    } else {
+        emoChange.textContent = "0%";
+        expChange.textContent = "0%";
+    }
 }
 /*
  *   displayGroupGraph is a function that, when called
