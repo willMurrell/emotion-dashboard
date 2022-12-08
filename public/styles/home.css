@@ -414,8 +414,26 @@ canvas{
     
 }
 
+.textHeader{
+    display: flex;
+    align-items: center;
+}
+
 .textHeader h3{
     font-size: 30px;
+    
+}
+
+.textHeader button{
+    background-color: white;
+    border: 2px solid black;
+    margin: 15px;
+    height: 40px;
+}
+
+.textHeader button:hover{
+    color: white;
+    background-color: black;
 }
 
 #testDiv{
@@ -436,9 +454,30 @@ canvas{
 .tools{
     position: sticky;
     position: -webkit-sticky; /* Safari */
-    top:0;
+    width: 30%;
+    top: 20px;
+    
     background-color: #8ecae6;
 }
+
+#commentEntry{
+    width: 80%;
+    height: 300px;
+    margin: 10px;
+}
+#commentSubmit{
+    margin-bottom: 5px;
+    margin-left: 5px;
+    background-color: white;
+    border: none;
+}
+#commentSubmit:hover{
+    border: 1px solid black;
+    cursor: pointer;
+}
+#button:active {
+    
+  }
 
 .textEntry{
     border-bottom: 2px solid black;
@@ -450,27 +489,37 @@ canvas{
     line-height: 40px;
     font-size: 20px;
 }
+
+
  
 .positiveSpan{
-    background-color: rgba(138, 201, 38, 0.4)
+    background-color: rgba(138, 201, 38, 0.4);
+    border: none;
 }
 
 .negativeSpan{
     /*background-color: rgba(255, 82, 88, 0.4);*/
     background-color: rgba(255, 0, 8, 0.4);
+    border: none;
 }
 .mixedSpan{
     background-color: rgba(255, 184, 30, 0.4);
+    border: none;
 }
 
 
+
 footer{
-    position: fixed;
+   /* position: fixed;*/
     bottom: 0;
     width: 100%;
-    height: 100px;
+    height: 200px;
     background: #8ecae6;
     text-align: center;
+}
+
+footer p{
+    padding-top: 80px;
 }
 
 

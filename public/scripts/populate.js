@@ -862,6 +862,10 @@ const processIndividuals = async (set, course) => {
         var studentData = JSON.parse(title);
         displayReports(studentData);
     });
+    var reportArea = document.getElementById('reportArea');
+    reportArea.addEventListener("mouseover", hideEmotionHover);
+
+    addMissingWeeks();
         //Things that are run more than once
         
         
@@ -874,6 +878,30 @@ const processIndividuals = async (set, course) => {
     
 
 
+}
+
+function addMissingWeeks(){
+    var name = document.getElementById('studentName').textContent;
+    var group = document.getElementById('groupName').textContent;
+    var course = document.getElementById('courseName').textContent;
+    var weeks = document.getElementById('textArea').children;
+
+    var topWeek = 0; 
+    for(var i = 0; i < weeks.length; i++){
+        
+        var weekNumber = parseInt(weeks[i].id.substring(4));
+        if(weekNumber > topWeek){
+            topWeek = weekNumber;
+        }
+    }
+    for(var i = 1; i < weekNumber + 1; i++){
+        var elm = document.getElementById("Week"+i);
+        if(elm == null){
+            console.log(i);
+            buildReportHTML(null, ("Week"+i));
+        }
+    }
+    
 }
 
 function displayReports(data){
@@ -893,7 +921,7 @@ function displayReports(data){
 }
 
 function buildReportHTML(data, week){
-   
+    var weekNumber = parseInt(week.substring(4));
     var textArea = document.getElementById('textArea');
     var textEntry = document.createElement('div');
     var paragraph = document.createElement('p');
@@ -905,89 +933,168 @@ function buildReportHTML(data, week){
     textHeader.setAttribute("class", "textHeader");
 
     weekTitle.textContent = week.substring(0,4) + " "+week.substring(4);
+    var backButtonButton = document.createElement('button');
+    backButtonButton.setAttribute("class", "backButtonButton");
+    backButtonButton.setAttribute("id", "backButton " + weekNumber);
+    backButtonButton.setAttribute("onclick", "previousWeek(this.id)");
+
+    var nextButtonButton = document.createElement('button');
+    nextButtonButton.setAttribute("class", "nextButtonButton");
+    nextButtonButton.setAttribute("id", "nextButton " + weekNumber);
+    nextButtonButton.setAttribute("onclick", "nextWeek(this.id)");
+
+    var backButton = document.createElement('i');
+    backButton.setAttribute("class", "fa-solid fa-caret-left");
+    backButtonButton.appendChild(backButton);
+    var nextButton = document.createElement('i');
+    nextButton.setAttribute("class", "fa-solid fa-caret-right");
+    nextButtonButton.appendChild(nextButton);
+
+    textHeader.appendChild(backButtonButton);
     textHeader.appendChild(weekTitle);
+    textHeader.appendChild(nextButtonButton);
     textHeader.appendChild(commonLearning);
+
+
     textEntry.setAttribute("id", week);
     textEntry.setAttribute("class", "textEntry");
     textEntry.style.order = week.substring(4);
     textEntry.appendChild(textHeader)
     textEntry.appendChild(paragraph);
 
-    //console.log(data);
+    
 
     var learnExpMap = new Map();
 
     var x = 0;
-    
-    data.forEach((value) => {
-        var posArr = new Array();
-        var negArr = new Array();
-        //console.log(value);
-        if(x ==0 ){
-            x++;
-        } else {
-            var span = document.createElement('span');
-            span.textContent =  " " + value[0] ;
+    if(data != null){
+        data.forEach((value) => {
+            var posArr = new Array();
+            var negArr = new Array();
             
-            for(var i = 1; i < value.length; i++){
-                var used = false;
-                if(positiveEmotions.includes(value[i])){
-                    posArr.push(value[i]);
-                    
-                    //span.setAttribute("emotion", value[i]);
-                    span.addEventListener("mousemove", emotionHover);
-                    used = true;
-                }
-                if(negativeEmotions.includes(value[i])){
-                    negArr.push(value[i]);
-                    if(used){
-                        console.log("used");
+            if(x ==0 ){
+                x++;
+            } else {
+                var span = document.createElement('span');
+                span.textContent =  " " + value[0] ;
+                
+                for(var i = 1; i < value.length; i++){
+                    var used = false;
+                    span.addEventListener("click", sentenceClick);
+                    if(positiveEmotions.includes(value[i])){
+                        posArr.push(value[i]);
+                        span.addEventListener("mousemove", emotionHover);
+                        
+                        //span.setAttribute("emotion", value[i]);
+                        
+                        used = true;
                     }
-                    
-                    // span.setAttribute("emotion", value[i]);
-                    span.addEventListener("mousemove", emotionHover);
+                    if(negativeEmotions.includes(value[i])){
+                        negArr.push(value[i]);
+                        
+                        span.addEventListener("mousemove", emotionHover);
+                        
+                        // span.setAttribute("emotion", value[i]);
+                        
+                    }
                 }
+                paragraph.appendChild(span);
             }
-            paragraph.appendChild(span);
-        }
-        console.log("-------")
-        if(posArr.length ==0 && negArr.length ==0){
             
-        } else if(posArr == 0){
-            span.setAttribute("class", "negativeSpan");
-            
-            var string = "";
-            negArr.forEach((entry) =>  {
-                string += " " +entry+",";
-            }); 
-            span.setAttribute("emotion", string.substring(0,string.length-1));
-
-        } else if(negArr == 0){
-            
-            span.setAttribute("class", "positiveSpan");
-            var string = "";
-            posArr.forEach((entry) =>  {
-                string += " " +entry+",";
-            }); 
-            span.setAttribute("emotion", string.substring(0,string.length-1));
-        } else {
-            console.log("mixed");
-            span.setAttribute("class", "mixedSpan");
-            var string = "";
-            posArr.forEach((entry) =>  {
-                string += " " +entry+",";
-            }); 
-            negArr.forEach((entry) =>  {
-                string += " " +entry+",";
-            });
-            span.setAttribute("emotion", string.substring(0,string.length-1));
-        }
-        var ratio = posArr.length - negArr.length;
-    });
+            if(posArr.length ==0 && negArr.length ==0){
+                
+            } else if(posArr == 0){
+                span.setAttribute("class", "negativeSpan");
+                
+                var string = "";
+                negArr.forEach((entry) =>  {
+                    string += " " +entry+",";
+                }); 
+                span.setAttribute("emotion", string.substring(0,string.length-1));
     
-    textArea.appendChild(textEntry);
+            } else if(negArr == 0){
+                
+                span.setAttribute("class", "positiveSpan");
+                var string = "";
+                posArr.forEach((entry) =>  {
+                    string += " " +entry+",";
+                }); 
+                span.setAttribute("emotion", string.substring(0,string.length-1));
+            } else {
+                
+                span.setAttribute("class", "mixedSpan");
+                var string = "";
+                posArr.forEach((entry) =>  {
+                    string += " " +entry+",";
+                }); 
+                negArr.forEach((entry) =>  {
+                    string += " " +entry+",";
+                });
+                span.setAttribute("emotion", string.substring(0,string.length-1));
+            }
+            var ratio = posArr.length - negArr.length;
+        });
+    }
+    
+    
+    
+    if(weekNumber != 1){
+        textEntry.style.display = "none";
+    }
+    textArea.appendChild(textEntry);    
 }
 
+function previousWeek(id){
+    var weeks = document.getElementById("textArea").children;
+    var infArr = id.split(" ");
+    var nextWeek = (parseInt(infArr[1]) - 1)
+   
+    var currentEntry = document.getElementById('Week' + infArr[1]);
+   
+    var nextEntry =  document.getElementById('Week' + nextWeek);
+    while(nextEntry == null){
+        nextWeek--;
+        
+        if(nextWeek < 1){
+            nextEntry =  document.getElementById('Week' + weeks.length);
+            
+        } else {
+            nextEntry =  document.getElementById('Week' + nextWeek);
+        }
+        
+    }
+    currentEntry.style.display = "none";
+    nextEntry.style.display = "block";
+}
+
+function nextWeek(id){
+    var weeks = document.getElementById("textArea").children;
+    var infArr = id.split(" ");
+    var nextWeek = (parseInt(infArr[1]) + 1)
+   
+    var currentEntry = document.getElementById('Week' + infArr[1]);
+    
+    var nextEntry =  document.getElementById('Week' + nextWeek);
+    while(nextEntry == null){
+        nextWeek++;
+        
+        if(nextWeek > weeks.length){
+            nextEntry =  document.getElementById('Week1');
+            
+        } else {
+            nextEntry =  document.getElementById('Week' + nextWeek);
+        }
+        
+    }
+    currentEntry.style.display = "none";
+    nextEntry.style.display = "block";
+
+}
+
+const hideEmotionHover = function(event){
+    var test = document.getElementById('testDiv');
+    test.style.display = "none"
+}
 const emotionHover = function (event){
     var test = document.getElementById('testDiv');
     if(event.path[0].getAttribute("class") == "negativeSpan"){
@@ -998,7 +1105,7 @@ const emotionHover = function (event){
         test.style.border = "1px solid rgba(255, 184, 30, 1)";
     }
     var emotion = event.path[0].getAttribute("emotion");
-     //console.log(event.pageX + " " + event.pageY);
+    
      
      test.textContent = emotion
      test.style.display = "block";
@@ -1008,9 +1115,25 @@ const emotionHover = function (event){
     // document.onmousemove = handleMouseMove;
     
 }
-// function handleMouseMove(event) {
-//     console.log(event.pageX);
-// }
+const sentenceClick = function (event){
+    var graphs = document.querySelector('#textArea').children
+    
+    for(var i = 0; i < graphs.length; i++){
+        
+        var spans = graphs[i].children[1].children;
+        
+        
+        for(var j = 0; j < spans.length; j++){
+            spans[j].style.border = "none";
+          
+        }
+    }
+    event.path[0].style.border = "1px solid black";
+    var selectedText = document.getElementById('selectedText');
+    selectedText.textContent = event.path[0].textContent;
+
+}
+
 function fillInMissingWeeks(map){
     var week = 0;
     var groups = new Array();

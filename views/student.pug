@@ -26,12 +26,18 @@ html(lang='en')
             h2(id='courseName') #{course}
             h2(id='groupName') #{group}
             div(id="reportArea")
-                div(id="testDiv") TEST TEST TEST
+                div(id="testDiv") 
                 div(id="textArea")
                     
                         
                 div(class="tools") 
-                    span(class="primaryEmotion") Toolbar?? 
+                    label Add Comment:
+                    br
+                    br
+                    //span(id="selectedText") 
+                    textarea(id="commentEntry")
+                    button(id="commentSubmit") Add
+
                     
             div(id='new')
             
