@@ -33,9 +33,9 @@ html(lang='en')
                     select(id='weekSelector')
                         option(value="null" selected="selected") All Weeks
                     br
-                    label(for="weekSelector") Group: 
+                    label(for="weekSelector") Student: 
                     select(id='groupSelector')
-                        option(value="null" selected="selected") All Groups
+                        option(value="null" selected="selected") All Students
                     br
                     label(for="bookmarkInput") Bookmarked: 
                     input(type="checkbox" id="bookmarkInput" value="true")
@@ -46,10 +46,10 @@ html(lang='en')
                         option(value="overallPos" ) Least Urgent (Overall)
                         option(value="emotionNeg" ) Most Urgent (by emotion)
                         option(value="experienceNeg" ) Most Urgent (by experience) 
-                    button(onclick="filterForm(course)") Submit
+                    button(onclick="filterForm(group, set)") Submit
                 
                 div(id='groupButtonDiv')  
-                    h1 Students:
+                    h1 View Report of:
             div(id='new')
             
             
@@ -58,3 +58,4 @@ html(lang='en')
         script. 
             course='#{course}';
             group='#{group}';
+            set = 'individuals';

@@ -33,9 +33,9 @@ html(lang='en')
                     select(id='weekSelector')
                         option(value="null" selected="selected") All Weeks
                     br
-                    label(for="weekSelector") Group: 
+                    label(for="weekSelector") Team: 
                     select(id='groupSelector')
-                        option(value="null" selected="selected") All Groups
+                        option(value="null" selected="selected") All Teams
                     br
                     label(for="bookmarkInput") Bookmarked: 
                     input(type="checkbox" id="bookmarkInput" value="true")
@@ -46,10 +46,10 @@ html(lang='en')
                         option(value="overallPos" ) Least Urgent (Overall)
                         option(value="emotionNeg" ) Most Urgent (by emotion)
                         option(value="experienceNeg" ) Most Urgent (by experience) 
-                    button(onclick="filterForm(course)") Submit
+                    button(onclick="filterForm(course, set)") Submit
                 
                 div(id='groupButtonDiv')  
-                    h1 Teams:
+                    h1 View Students of:
             div(id='new')
             
             
@@ -57,3 +57,5 @@ html(lang='en')
         include templates/footer.pug
         script. 
             course='#{course}';
+            set = 'group';
+            

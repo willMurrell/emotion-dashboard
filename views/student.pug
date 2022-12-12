@@ -31,18 +31,15 @@ html(lang='en')
                     
                         
                 div(class="tools") 
-                    label Portrayed Emotion: 
-                    br
-                    br
-                    label Portrayed Experience: 
-                    br
-                    br
-                    label Add Comment:
-                    br
-                    br
+                    
+                    label Comment:
+                  
+                    
                     //span(id="selectedText") 
-                    textarea(id="commentEntry")
-                    button(id="commentSubmit") Add
+                    div(id="toolButtons")
+                        button(id="commentEdit" onclick="editComment()") edit
+                        button(id="commentSave" onclick="addComment()") save
+                    textarea(id="commentEntry" placeholder="No Comment" readOnly autofocus="autofocus")
 
                     
             div(id='new')

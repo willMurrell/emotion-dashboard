@@ -1,9 +1,9 @@
 
 
 
-function filterForm(arg){
-    
-    
+function filterForm(arg, set){
+    console.log("SET: " + set);
+    console.log("ARG: " + arg);
 
     var week = document.querySelector('#weekSelector').value;
     var group = document.querySelector('#groupSelector').value;
@@ -11,41 +11,46 @@ function filterForm(arg){
     var sort = document.querySelector('#sortSelector').value;
     var set;
     
+   
     
     if(arg != undefined){
         if(arg == 'course'){
             
             set = 'course';
-        } else {
-            set = arg;
         }
-        console.log(set);
+        
         clearGraphs();
         switch (sort){
             case 'overallPos':
                 
-                var sortedMap = new Map(sortMapPositive(arg));
+                var sortedMap = new Map(sortMapPositive(set));
                 break;
             case 'overallNeg':
                 
-                var sortedMap = new Map(sortMapNegative(arg));
+                var sortedMap = new Map(sortMapNegative(set));
                 break;
             case 'emotionNeg':
                 
-                var sortedMap = new Map(sortMapEmoNegative(arg));
+                var sortedMap = new Map(sortMapEmoNegative(set));
                 break;
             case 'experienceNeg':
                 
-                var sortedMap = new Map(sortMapExpNegative(arg));
+                var sortedMap = new Map(sortMapExpNegative(set));
                 break;
         }
-        if(set == 'course'){
-            set = 'all';
+        
+        
+        if(set == "individuals"){
+            displayIndividualGraphs(arg, sortedMap ,fillInMissingWeeks(sortedMap, set));
+        } else if(set == "group"){
+            
+            displayGroupGraph(arg,sortedMap, fillInMissingWeeks(sortedMap, set));
+        } else {
+            displayGroupGraph(set,sortedMap, fillInMissingWeeks(sortedMap, set));
         }
         
-        displayGroupGraph(set,sortedMap, fillInMissingWeeks(sortedMap));
         
-        bookmarkEventListener(arg);
+        bookmarkEventListener(set); 
     } 
 
 

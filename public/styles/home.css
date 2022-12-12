@@ -441,6 +441,7 @@ canvas{
     position: absolute;
     padding: 10px;
     background-color: white;
+    z-index: 20;
     
 }
 
@@ -455,30 +456,50 @@ canvas{
     position: sticky;
     position: -webkit-sticky; /* Safari */
     width: 30%;
-    padding-left: 5px;
+    padding-left: 15px;
     top: 20px;
-    
-    
+    display: flex;
+    flex-direction: column;
     border-left: 1px solid black;
 }
 
 #commentEntry{
     width: 80%;
     height: 300px;
-    margin: 10px;
+    margin-top: 20px;
 }
-#commentSubmit{
+#commentSave{
+    width: 60px;
+    height: 30px;
     margin-bottom: 5px;
     margin-left: 5px;
     background-color: white;
     border: 1px solid black;
 }
-#commentSubmit:hover{
+#commentSave:hover{
     
     cursor: pointer;
 }
-#commentSubmit:active {
-    background-color: rgba(138, 201, 38, 0.4);
+#commentSave:active {
+    background-color: rgba(173, 255, 42, 0.4);
+    box-shadow: 0 1px #666;
+    transform: translateY(2px);
+  }
+
+  #commentEdit{
+    width: 60px;
+    height: 30px;
+    margin-top: 15px;
+    
+    background-color: white;
+    border: 1px solid black;
+}
+#commentEdit:hover{
+    
+    cursor: pointer;
+}
+#commentEdit:active {
+    background-color: rgba(226, 203, 27, 0.4);
     box-shadow: 0 1px #666;
     transform: translateY(2px);
   }

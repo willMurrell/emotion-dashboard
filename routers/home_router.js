@@ -273,12 +273,18 @@ const learning_experiences = [
                 }
                 
                 var weekData = JSON.parse(data);
+                for(var i = 0; i < weekData.length - 1; i++){
+                    weekData[i].comment = "";
+                    //weekData[i].bookmarked = false;
+
+                }
                 
                 var info_array = filename.split('-');
                 var name = info_array[0].substring(5);
                 var group = info_array[1];
                 var week = info_array[2];
                 var course = info_array[3].substring(0, info_array[3].length - 5);
+                
                 
                 individualReport(weekData, name, group, week, course);
                 emotionCounter(weekData, name, group, week, course);
@@ -298,7 +304,7 @@ const learning_experiences = [
         entryMap.set("group", group);
         entryMap.set("week", week);
         entryMap.set("course", course);
-        const num_sentences = data.length - 1;
+        const num_sentences = data.length -1 ;  // - 1 because the last entry is the "Overall"
         //console.log(data);
         for(let i = 0; i < num_sentences; i++){
             
@@ -353,18 +359,12 @@ const learning_experiences = [
     }
     function individualReport(weekData, name, group, week, course){
         
-        const num_sentences = weekData.length - 1;
-        // entryMap.set("name", name);
-        // entryMap.set("group", group);
-        // entryMap.set("week", week);
-        // entryMap.set("course", course);
-        
+        const num_sentences = weekData.length -1 ;  // - 1 because the last entry is the "Overall"
+ 
         var sentences = new Array();
         var id = name + " " + group + " " + course + " " + week;
         sentences.push(id);
-        //console.log(id);
-        
-       
+
         for(let i = 0; i < num_sentences; i++){
             let entry = weekData[i];
             var singleEntry = new Array();
@@ -373,23 +373,19 @@ const learning_experiences = [
 
 
             emotions.forEach(emotion => {
-                //console.log(weekData[i]);
-                //console.log(weekData[i]["ClearDirection"]);
                 if(weekData[i][emotion] == 1){
-                    //if(emotion != "None_issue" && emotion != "None_positive" && emotion != "None_emotion")
-                    //console.log(emotion);
                     singleEntry.push(emotion);
                 }
             });
-            //console.log(singleEntry.length);
+            singleEntry.push(weekData[i]["comment"]);
             sentences.push(singleEntry);
         } 
         
         
-       //var obj = Object.fromEntries(sentences);
+       
         var jsonString = JSON.stringify(sentences);
 
         textEntries.push(jsonString);  
-        //console.log(textEntries);
+        
     }
     

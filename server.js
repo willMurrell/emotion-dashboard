@@ -169,7 +169,7 @@ function loadJSONHeader(){
                 
                     fs.writeFile("SummerStudentCSV/header.json", json, function(err) {
                         if (err) {
-                            console.log("AHHH"+err);
+                            console.log("ERROR: "+err);
                         } else {
                             console.log("wrote successfully");
                         }

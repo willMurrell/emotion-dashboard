@@ -32,9 +32,9 @@ html(lang='en')
                     select(id='weekSelector')
                         option(value="null" selected="selected") All Weeks
                     br
-                    label(for="weekSelector") Group: 
+                    label(for="weekSelector") Course: 
                     select(id='groupSelector')
-                        option(value="null" selected="selected") All Groups
+                        option(value="null" selected="selected") All Courses
                     br
                     label(for="bookmarkInput") Bookmarked: 
                     input(type="checkbox" id="bookmarkInput" value="true")
@@ -48,7 +48,7 @@ html(lang='en')
                     
                     button(onclick="filterForm(\"course\")") Submit
                 div(id='groupButtonDiv')
-                    h1 Courses:
+                    h1 View Teams of:
                 //button(onclick="orderMissingStudents()") Submit
             //input(type="file" id="file-input")
             //div(id="file-content")
@@ -61,4 +61,5 @@ html(lang='en')
         include templates/footer.pug
         script. 
             course=null;
+            set = 'course';
             //orderMissingStudents();
