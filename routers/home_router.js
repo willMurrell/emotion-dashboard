@@ -382,8 +382,8 @@ const learning_experiences = [
             });
             //singleEntry.push(weekData[i]["comment"]);
 
-            //let x = Math.floor(Math.random() * 3);
-            let x = 1;
+            let x = Math.floor(Math.random() * 3);
+            //let x = 1;
             let y = Math.floor(Math.random() * 6);
             const arr = ["Hmm sure whatever", "Eggs on toast", "not cool", "you smell", "try be better", "have you tried no being bad?", "You really woke up and decided to wear that?"];
             if(x == 1){

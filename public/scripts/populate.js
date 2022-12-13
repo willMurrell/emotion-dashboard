@@ -1009,6 +1009,9 @@ function clearSelectedElements(){
             spans[j].setAttribute("selected", "false");
         }
     }
+    var newCommentDiv = document.getElementById('newCommentDiv');
+    newCommentDiv.firstChild.value = "";
+    newCommentDiv.style.display = "none";
 }
 
 const commentDoubleClick = function(event){
@@ -1031,12 +1034,12 @@ const commentDoubleClick = function(event){
         var commentDelete = document.createElement('button');
         commentDelete.setAttribute("id", "commentDelete");
         
-        commentDelete.setAttribute("onclick", "addComment(false)");
+        commentDelete.setAttribute("onclick", "saveComment(false)");
         commentDelete.textContent = "Delete"
 
         var commentSave = document.createElement('button');
         commentSave.setAttribute("id", "commentSave");
-        commentSave.setAttribute("onclick", "addComment(true)");
+        commentSave.setAttribute("onclick", "saveComment(true)");
         commentSave.textContent = "Save"
 
         toolButtons.appendChild(commentDelete);
@@ -1047,6 +1050,7 @@ const commentDoubleClick = function(event){
     
 }
 const commentClick = function(event){
+
     var editing = false;
     var comments = document.querySelector('#allComments').children;
     for (var i = 0; i < comments.length; i++) {
@@ -1094,14 +1098,17 @@ function previousWeek(id) {
 
         if (nextWeek < 1) {
             nextEntry = document.getElementById('Week' + weeks.length);
-
+            nextWeek = weeks.length;
         } else {
             nextEntry = document.getElementById('Week' + nextWeek);
         }
 
     }
+    console.log(nextWeek);
     currentEntry.style.display = "none";
     nextEntry.style.display = "block";
+
+
 }
 /*
  * nextWeek is a function called by the the "next" button on the individual students page
@@ -1120,7 +1127,7 @@ function nextWeek(id) {
 
         if (nextWeek > weeks.length) {
             nextEntry = document.getElementById('Week1');
-
+            nextWeek = 1;
         } else {
             nextEntry = document.getElementById('Week' + nextWeek);
         }
@@ -1130,6 +1137,17 @@ function nextWeek(id) {
     nextEntry.style.display = "block";
     // var commentEntry = document.getElementById("commentEntry");
     // commentEntry.value = "";
+    console.log(nextWeek);
+    var comments = document.querySelector('#allComments').children
+    for (var i = 0; i < comments.length; i++) {
+        var infarr = comments[i].getAttribute("id").split(" ");
+        var week = infarr[1].substring(4);
+        if(week == nextWeek){
+            comments[i].style.display="block";
+        } else {
+            comments[i].style.display="none";
+        }
+    }
 }
 /*
  *  hideEmotionHover is an event listener that hides the moving emotion overlay
@@ -1165,8 +1183,14 @@ const sentenceClick = function(event) {
     clearSelectedElements();
     event.path[0].setAttribute("selected", "true");
     //event.path[0].style.border = "1px solid black";
-   //var commentEntry = document.getElementById("commentEntry");
-    
+    var commentEntry = document.getElementById("newCommentDiv");
+    console.log(event.path[0].getAttribute("hascomment"));
+    if(event.path[0].getAttribute("hascomment") == "true"){
+        
+        commentEntry.style.display = "none";
+    } else {
+        commentEntry.style.display = "block";
+    }
 
     //commentEntry.value = event.path[0].getAttribute("comment");
 
@@ -1178,10 +1202,10 @@ const sentenceClick = function(event) {
    // selectedText.textContent = event.path[0].textContent;
 }
 /*
- *  addComment is a function that will take what is in the text entry element and
+ *  saveComment is a function that will take what is in the text entry element and
  *  set the sentence's comment attribute to it.
 */
-function addComment(arg){
+function saveComment(arg){
     
     var comments = document.querySelector('#allComments').children;
     var comment;
@@ -1224,12 +1248,51 @@ function addComment(arg){
     commentDiv.setAttribute("editing", "false");
     commentDiv.setAttribute("selected", "false");
 
-    //
+    
     commentDiv.addEventListener("dblclick", commentDoubleClick);
     commentDiv.addEventListener("click", commentClick);
     
 }
 
+function addComment(){
+
+    var newComment = document.getElementById('commentEntry').value;
+    var hasComment = true;
+    if(newComment == ""){
+        hasComment = false;
+    }
+    var sentences = document.querySelector('#textArea').children
+    for (var i = 0; i < sentences.length; i++) {
+        var spans = sentences[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            
+            if(spans[j].getAttribute("selected") == "true"){
+                var commentDiv = document.getElementById("comment "+  spans[j].getAttribute("id"));
+                
+                if(!hasComment){
+                    spans[j].setAttribute("hasComment", "false");
+                    commentDiv.style.display = "none";
+                } else {
+                    spans[j].setAttribute("hasComment", "true");
+                    commentDiv.style.display = "block";
+                    commentDiv.textContent = newComment;
+                }
+                spans[j].setAttribute("comment", newComment);
+                
+            }
+        }
+    }
+
+    commentDiv.setAttribute("editing", "false");
+    commentDiv.setAttribute("selected", "false");
+
+    
+    commentDiv.addEventListener("dblclick", commentDoubleClick);
+    commentDiv.addEventListener("click", commentClick);
+
+    document.getElementById('commentEntry').value = "";
+    document.getElementById('newCommentDiv').style.display = "none";
+}
 
 /*
  *  fillInMissingWeeks is a function used to find missing entries

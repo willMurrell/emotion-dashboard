@@ -33,14 +33,19 @@ html(lang='en')
                 div(class="tools") 
                     
                     h2 Comments:
-                    br
+                 
                   
                     
                     //span(id="selectedText") 
-                    //div(id="toolButtons")
+                    div(id="newCommentContainer")
+                        div(id="newCommentDiv")
+                            textarea(id="commentEntry" placeholder="No Comment" autofocus="autofocus")
+                            button(id="commentAdd" onclick="addComment()") Add Comment
+                    br
+                    //
                         button(id="commentEdit" onclick="editComment()") edit
                         button(id="commentSave" onclick="addComment()") save
-                    //textarea(id="commentEntry" placeholder="No Comment" readOnly autofocus="autofocus")
+                    
                     div(id="allComments")
 
                     

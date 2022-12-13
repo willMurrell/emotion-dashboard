@@ -465,7 +465,7 @@ canvas{
 
 #commentEntry{
     width: 80%;
-    height: 300px;
+    height: 200px;
     margin-top: 20px;
 }
 #commentSave{
@@ -540,6 +540,19 @@ span[selected = false]{
 }
 .commentDiv[selected = true]{
     text-decoration: underline;
+}
+
+/* The animation code 
+@keyframes example {
+    0%   {top: -400px}
+    25%  {}
+    50%  {}
+    75%  {}
+    100% {top: 0px}
+  }
+*/
+#newCommentDiv{
+    display: none;
 }
 footer{
    /* position: fixed;*/
