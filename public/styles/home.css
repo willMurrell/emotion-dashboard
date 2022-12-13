@@ -156,8 +156,8 @@ canvas{
 .canvaContainer{
     display: flex;
     height: auto;
-    margin-right: 150px;
-    margin-left: 10px;
+    margin-right: 90px;
+    margin-left: 90px;
     margin-top:50px;
     margin-bottom: 50px;
     padding: 20px;
@@ -532,8 +532,15 @@ canvas{
     border: none;
 }
 
-
-
+span[selected = true]{
+    border: 1px solid black;
+}
+span[selected = false]{
+    border: none;
+}
+.commentDiv[selected = true]{
+    text-decoration: underline;
+}
 footer{
    /* position: fixed;*/
     bottom: 0;

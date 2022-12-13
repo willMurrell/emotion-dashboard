@@ -8,7 +8,7 @@ emotionColours.set("Positive", "#48A9A6");
 emotionColours.set("Negative", "#D1603D");
 emotionColours.set("Other", "#E5E5E5");
 emotionColours.set("Neutral", "#a1a1a1");
-emotionColours.set("Missing", "#aaaaaa");
+emotionColours.set("Missing", "rgba(0, 0, 0, 0.09)");
 /*
  *   positiveEmotions and negative Emotions are arrays used when
  *   creating the group data, to tell whether an individual entry
@@ -518,7 +518,7 @@ function createGroupData(data) {
     Object.entries(data).forEach((entry) => {
 
         if (positiveEmotions.includes(entry[0])) {
-
+            
             groupMap.get(groupName).addToPositiveEmotion(entry[1]);
             courseMap.get(courseName).addToPositiveEmotion(entry[1]);
 
@@ -889,17 +889,19 @@ function buildReportHTML(data, week) {
     textEntry.appendChild(textHeader)
     textEntry.appendChild(paragraph);
 
-
+    var allComments = document.getElementById("allComments");
 
     var learnExpMap = new Map();
 
     var x = 0;
     if (data != null) {
-        
+        var sentenceNumber = 0;
         data.forEach((value) => {
             var posArr = new Array();
             var negArr = new Array();
             var span = document.createElement('span');
+            span.setAttribute("id", week + " " + sentenceNumber);
+        
             if (x == 0) {
                 x++;
             } else {
@@ -926,6 +928,25 @@ function buildReportHTML(data, week) {
                 }
                 
                 span.setAttribute("comment", value[value.length-1]);
+                if(span.getAttribute("comment") == ""){
+                    span.setAttribute("hasComment", "false");
+                } else {
+                    span.setAttribute("hasComment", "true");
+                }
+                var comment = document.createElement("div");
+                comment.setAttribute("id", "comment " +week + " " + sentenceNumber);
+                comment.setAttribute("class", "commentDiv");
+                comment.setAttribute("selected", "false");
+                comment.setAttribute("editing", "false");
+                if(week != "Week1"){
+                    comment.style.display = "none";
+                }
+                comment.textContent += span.getAttribute("comment");
+
+                comment.addEventListener("click", commentClick);
+                comment.addEventListener("dblclick", commentDoubleClick);
+                allComments.appendChild(comment);
+                
                 paragraph.appendChild(span);
             }
 
@@ -960,7 +981,7 @@ function buildReportHTML(data, week) {
                 });
                 span.setAttribute("emotion", string.substring(0, string.length - 1));
             }
-            
+            sentenceNumber++;
         });
         
     }
@@ -972,6 +993,90 @@ function buildReportHTML(data, week) {
     textArea.appendChild(textEntry);
 }
 
+function clearSelectedElements(){
+    var comments = document.querySelector('#allComments').children;
+    for (var i = 0; i < comments.length; i++) {
+        comments[i].setAttribute("selected", "false");
+        if(comments[i].getAttribute("editing") == "true"){
+        
+        }
+
+    }
+    var graphs = document.querySelector('#textArea').children
+    for (var i = 0; i < graphs.length; i++) {
+        var spans = graphs[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            spans[j].setAttribute("selected", "false");
+        }
+    }
+}
+
+const commentDoubleClick = function(event){
+
+    const comment =  event.path[0]
+    if(comment.getAttribute("selected") == "false"){
+
+    } else {
+        comment.setAttribute("editing", "true");
+        comment.removeEventListener("click", commentClick);
+        comment.removeEventListener("dblclick", commentDoubleClick);
+        var textEntry = document.createElement('textarea');
+        textEntry.value = comment.textContent;
+        comment.textContent = "";
+        comment.appendChild(textEntry);
+
+        var toolButtons = document.createElement('div');
+        toolButtons.setAttribute("id", "toolButtons");
+
+        var commentDelete = document.createElement('button');
+        commentDelete.setAttribute("id", "commentDelete");
+        
+        commentDelete.setAttribute("onclick", "addComment(false)");
+        commentDelete.textContent = "Delete"
+
+        var commentSave = document.createElement('button');
+        commentSave.setAttribute("id", "commentSave");
+        commentSave.setAttribute("onclick", "addComment(true)");
+        commentSave.textContent = "Save"
+
+        toolButtons.appendChild(commentDelete);
+        toolButtons.appendChild(commentSave);
+
+        comment.appendChild(toolButtons);
+    }
+    
+}
+const commentClick = function(event){
+    var editing = false;
+    var comments = document.querySelector('#allComments').children;
+    for (var i = 0; i < comments.length; i++) {
+        
+        if(comments[i].getAttribute("editing") == "true"){
+            
+           editing = true;
+        }
+
+    }
+    
+    if(editing){
+        
+        
+    } else if(event.path[0].getAttribute("id") == "commentSave" || event.path[0].getAttribute("id") == "commentDelete"){
+    
+    } else {
+        
+        clearSelectedElements();
+        event.path[0].setAttribute("selected", "true");
+
+        event.path[0].getAttribute("id");
+        
+        var sentence = document.getElementById(event.path[0].getAttribute("id").substring(8));
+        sentence.setAttribute("selected", "true");
+        sentence.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    
+    }
+    
+}
 /*
  * previousWeek is a function called by the the "back" button on the individual students page
  * it hides the current entry and displays the previous one
@@ -1057,19 +1162,18 @@ const emotionHover = function(event) {
  *  sentenceClick is an event listener is used to select a sentence to add a comment to it
  */
 const sentenceClick = function(event) {
-    var graphs = document.querySelector('#textArea').children
-    for (var i = 0; i < graphs.length; i++) {
-        var spans = graphs[i].children[1].children;
-        for (var j = 0; j < spans.length; j++) {
-            spans[j].style.border = "none";
-        }
-    }
-    event.path[0].style.border = "1px solid black";
-    var commentEntry = document.getElementById("commentEntry");
+    clearSelectedElements();
+    event.path[0].setAttribute("selected", "true");
+    //event.path[0].style.border = "1px solid black";
+   //var commentEntry = document.getElementById("commentEntry");
     
 
-    commentEntry.value = event.path[0].getAttribute("comment");
+    //commentEntry.value = event.path[0].getAttribute("comment");
 
+    event.path[0].getAttribute("id");
+    var comment = document.getElementById("comment " + event.path[0].getAttribute("id"));
+    
+    comment.setAttribute("selected", "true");
    // var selectedText = document.getElementById('selectedText');
    // selectedText.textContent = event.path[0].textContent;
 }
@@ -1077,29 +1181,56 @@ const sentenceClick = function(event) {
  *  addComment is a function that will take what is in the text entry element and
  *  set the sentence's comment attribute to it.
 */
-function addComment(){
-    var commentEntry = document.getElementById("commentEntry");
-    var comment = commentEntry.value;
+function addComment(arg){
     
-    var graphs = document.querySelector('#textArea').children
-    for (var i = 0; i < graphs.length; i++) {
-        var spans = graphs[i].children[1].children;
+    var comments = document.querySelector('#allComments').children;
+    var comment;
+    var commentDiv;
+    for (var i = 0; i < comments.length; i++) {
+        
+        if(comments[i].getAttribute("editing") == "true"){
+            commentDiv = comments[i];
+           comment = comments[i].firstChild.value;
+           commentDiv.setAttribute("editing", "false");
+        }
+
+    }
+    
+    var hasComment = true;
+    if(comment == "" || arg == false){
+        hasComment = false;
+    }
+    var sentences = document.querySelector('#textArea').children
+    for (var i = 0; i < sentences.length; i++) {
+        var spans = sentences[i].children[1].children;
         for (var j = 0; j < spans.length; j++) {
             
-            if(spans[j].style.border != "none"){
+            if(spans[j].getAttribute("selected") == "true"){
+                var commentDiv = document.getElementById("comment "+  spans[j].getAttribute("id"));
+                
+                if(!hasComment){
+                    spans[j].setAttribute("hasComment", "false");
+                    commentDiv.style.display = "none";
+                } else {
+                    spans[j].setAttribute("hasComment", "true");
+                    commentDiv.style.display = "block";
+                    commentDiv.textContent = comment;
+                }
                 spans[j].setAttribute("comment", comment);
+                
             }
         }
     }
-    commentEntry.setAttribute("readOnly" , "true");
+    commentDiv.setAttribute("editing", "false");
+    commentDiv.setAttribute("selected", "false");
+
+    //
+    commentDiv.addEventListener("dblclick", commentDoubleClick);
+    commentDiv.addEventListener("click", commentClick);
+    
 }
 
-function editComment(){
-    
-    var commentEntry = document.getElementById("commentEntry");
-    commentEntry.removeAttribute("readOnly")
-    commentEntry.focus();
-}
+
 /*
  *  fillInMissingWeeks is a function used to find missing entries
  *
@@ -1218,12 +1349,12 @@ function bookmarkEventListener(set) {
  * bookmarkClick is actually an event listener. Updates object and page when a bookmark is clicked
  */
 const bookmarkClick = function() {
-    console.log("click");
+    
     var currentMark = this.checked;
     var infArr = this.id.split(" ");
     var id = infArr[0] + " " + infArr[1];
     var checkid = this.id;
-    console.log(set);
+    
     var map;
     if ( set == "course") { //COURSE LEVEL
         map = courseMap;
@@ -1238,7 +1369,7 @@ const bookmarkClick = function() {
     }
 
 
-        console.log(map.get(id));
+        
         if (currentMark) {
 
             map.get(id).bookmarkTrue();
@@ -1354,7 +1485,7 @@ function makeCanva(id) {
  * sortMapNegative is a function that returns the correct map, sorted by the most negative first
  */
 function sortMapNegative(set) {
-    console.log("SET: " + set);
+    
     var unsortedArray;
     if (set == 'group') {
         unsortedArray = [...groupMap];
@@ -1417,7 +1548,7 @@ function sortMapPositive(set) {
  * displayIndividualGraphs is a function that will create and display the graphs of individual students
  */
 function displayIndividualGraphs(group, map, deadMaps) {
-    console.log(deadMaps);
+    
     map.forEach((key) => {
 
         if (key.group == group) {
@@ -1485,8 +1616,8 @@ function displayAside(key) {
 
 
 
-            var em = Math.round(ChangeInEmo * 100 * 100) / 100;
-            var ex = Math.round(ChangeInExp * 100 * 100) / 100;
+            var em = Math.round(ChangeInEmo * 100) ;
+            var ex = Math.round(ChangeInExp * 100 ) ;
             emoChange.textContent = em;
             expChange.textContent = ex;
             emoChange.textContent += "%";
@@ -1547,16 +1678,33 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
     sortedMap.forEach((key, value) => {
 
         if (key.course == course || course == 'course') {
+           
+            var infArr = key.name.split(" ");
+            var name = infArr[0]
+            
+
+            var completed = studentsEntryPerGroup.get(name + " Week" + key.week).length;
+
+            var total = studentInGroup.get(name).length;
+
+            var ratioOfCompleted = completed / total;
+
             var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
             var exp_total = key.positiveExp + key.negativeExp + key.neutralExp + key.otherExp;
+
+            //var emotion_total = 1
+            //var exp_total = 1;
+
             var dataG = new Array();
 
             makeCanva(key.name);
-            dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion / emotion_total), (key.positiveExp / exp_total)));
-            dataG.push(datasetMakerDuo("Neutral", (key.neutralEmotion / emotion_total), (key.neutralExp / exp_total)));
+            dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion / emotion_total) * ratioOfCompleted, (key.positiveExp / exp_total)* ratioOfCompleted));
+            dataG.push(datasetMakerDuo("Neutral", (key.neutralEmotion / emotion_total)* ratioOfCompleted, (key.neutralExp / exp_total)* ratioOfCompleted));
 
-            dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion / emotion_total), (key.negativeExp / exp_total)));
-            dataG.push(datasetMakerDuo("Other", (key.otherEmotion / emotion_total), (key.otherExp / exp_total)));
+            dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion / emotion_total)* ratioOfCompleted, (key.negativeExp / exp_total)* ratioOfCompleted));
+            dataG.push(datasetMakerDuo("Other", (key.otherEmotion / emotion_total)* ratioOfCompleted, (key.otherExp / exp_total)* ratioOfCompleted));
+
+            dataG.push(datasetMakerDuo("Missing", 1 - ratioOfCompleted, 1 - ratioOfCompleted));
 
             buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
 
@@ -1567,13 +1715,7 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             var infoDiv = numStudentDiv.parentElement.closest('div');
             var currentWeek = key.week;
 
-            var infArr = key.name.split(" ");
-            var name = infArr[0]
-            var set;
-
-            var completed = studentsEntryPerGroup.get(name + " Week" + key.week).length;
-
-            var total = studentInGroup.get(name).length;
+            
 
 
             var elm = document.createElement("div");
@@ -1646,8 +1788,8 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
                     var prevExpTotal = prev.positiveExp + prev.negativeExp + prev.neutralExp + prev.otherExp;
                     var ChangeInExp = (key.positiveExp / exp_total) - (prev.positiveExp / prevExpTotal);
 
-                    var em = Math.round(ChangeInEmo * 100 * 100) / 100;
-                    var ex = Math.round(ChangeInExp * 100 * 100) / 100;
+                    var em = Math.round(ChangeInEmo * 100);
+                    var ex = Math.round(ChangeInExp * 100);
                     emoChange.textContent = em;
                     expChange.textContent = ex;
                     emoChange.textContent += "%";
@@ -1824,7 +1966,7 @@ function buildForm(map, highestWeek, set) {
             week = parseInt(week);
         }
     } 
-    console.log(week);
+   
 
 
 

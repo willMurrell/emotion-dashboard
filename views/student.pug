@@ -32,14 +32,16 @@ html(lang='en')
                         
                 div(class="tools") 
                     
-                    label Comment:
+                    h2 Comments:
+                    br
                   
                     
                     //span(id="selectedText") 
-                    div(id="toolButtons")
+                    //div(id="toolButtons")
                         button(id="commentEdit" onclick="editComment()") edit
                         button(id="commentSave" onclick="addComment()") save
-                    textarea(id="commentEntry" placeholder="No Comment" readOnly autofocus="autofocus")
+                    //textarea(id="commentEntry" placeholder="No Comment" readOnly autofocus="autofocus")
+                    div(id="allComments")
 
                     
             div(id='new')

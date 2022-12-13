@@ -305,7 +305,7 @@ const learning_experiences = [
         entryMap.set("week", week);
         entryMap.set("course", course);
         const num_sentences = data.length -1 ;  // - 1 because the last entry is the "Overall"
-        //console.log(data);
+        
         for(let i = 0; i < num_sentences; i++){
             
             let entry = data[i];
@@ -337,20 +337,23 @@ const learning_experiences = [
         
         //Divides each value by the number of sentences, EXECPT for name, group, course and week
         var x = 4;
+        var total = 0;
         for (var [key, value]of entryMap){
             
             if(x != 0){
-
+                
                 x--;
             } else {
                 
-                entryMap.set(key, value/num_sentences);
+               entryMap.set(key, value/num_sentences);
+               total += value/num_sentences;
             }
             
         }
+        console.log(total);
         var obj = Object.fromEntries(entryMap);
         var jsonString = JSON.stringify(obj);
-        
+        //console.log(jsonString);
         
         //console.log("\n\n");
         
@@ -377,7 +380,19 @@ const learning_experiences = [
                     singleEntry.push(emotion);
                 }
             });
-            singleEntry.push(weekData[i]["comment"]);
+            //singleEntry.push(weekData[i]["comment"]);
+
+            //let x = Math.floor(Math.random() * 3);
+            let x = 1;
+            let y = Math.floor(Math.random() * 6);
+            const arr = ["Hmm sure whatever", "Eggs on toast", "not cool", "you smell", "try be better", "have you tried no being bad?", "You really woke up and decided to wear that?"];
+            if(x == 1){
+
+                singleEntry.push(arr[y]);
+            } else {
+                singleEntry.push(weekData[i]["comment"]);
+            }
+            //singleEntry.push("This is a really cool comment!");
             sentences.push(singleEntry);
         } 
         
