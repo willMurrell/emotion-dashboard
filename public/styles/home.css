@@ -475,18 +475,19 @@ canvas{
     margin-left: 5px;
     background-color: white;
     border: 1px solid black;
+    
 }
 #commentSave:hover{
-    
+    background-color: rgba(157, 255, 0, 0.4);
     cursor: pointer;
 }
 #commentSave:active {
-    background-color: rgba(173, 255, 42, 0.4);
+    
     box-shadow: 0 1px #666;
     transform: translateY(2px);
   }
 
-  #commentEdit{
+  #commentDelete{
     width: 60px;
     height: 30px;
     margin-top: 15px;
@@ -494,16 +495,20 @@ canvas{
     background-color: white;
     border: 1px solid black;
 }
-#commentEdit:hover{
-    
+#commentDelete:hover{
+    background-color: rgba(255, 48, 48, 0.4);
     cursor: pointer;
 }
-#commentEdit:active {
+#commentDelete:active {
     background-color: rgba(226, 203, 27, 0.4);
     box-shadow: 0 1px #666;
     transform: translateY(2px);
   }
 
+textarea{
+    font-family: 'Poppins', sans-serif;
+    width: 90%;
+}
 .textEntry{
     border-bottom: 2px solid black;
 }
@@ -541,7 +546,17 @@ span[selected = false]{
 .commentDiv[selected = true]{
     text-decoration: underline;
 }
-
+.commentDiv:hover{
+    cursor: pointer;
+}
+ 
+h2{
+    margin-bottom: 10px;
+}
+.commentDiv {
+    border-bottom: 1px solid #666;
+    margin-top: 15px;
+}
 /* The animation code 
 @keyframes example {
     0%   {top: -400px}
@@ -553,6 +568,10 @@ span[selected = false]{
 */
 #newCommentDiv{
     display: none;
+}
+
+#topInfo{
+    display: flex;
 }
 footer{
    /* position: fixed;*/

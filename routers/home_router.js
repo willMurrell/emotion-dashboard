@@ -14,7 +14,7 @@ const e = require('express');
 const router = express.Router();
 
 
-//console.log("This is where i am");
+
 
 router.get('/', async (req, res) => {
 
@@ -350,12 +350,10 @@ const learning_experiences = [
             }
             
         }
-        console.log(total);
+        
         var obj = Object.fromEntries(entryMap);
         var jsonString = JSON.stringify(obj);
-        //console.log(jsonString);
         
-        //console.log("\n\n");
         
         entries.push(jsonString);
  

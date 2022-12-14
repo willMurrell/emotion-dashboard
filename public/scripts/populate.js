@@ -691,9 +691,12 @@ function processData(data, filter) {
 
         createIndividualData(data);
     }
-
+    createTrendData();
 }
 
+function createTrendData() {
+   
+}
 /*
  *   getStudents is a function that is immediately called when the page loads.
  *   Its job is to get the data from the web server and pass it on
@@ -752,6 +755,8 @@ const getStudents = async (set, course) => {
         fillInMissingWeeks(sortedMap, set);
         //creates the buttons that let you go into a team
         displayGroups();
+        //shows the trendline graph
+        displayTrends();
     } else if (set == 'course') {
         var sortedMap = new Map(sortMapNegative(set));
         //This method builds the graphs
@@ -779,6 +784,67 @@ const getStudents = async (set, course) => {
 
 
 
+}
+
+function displayTrends(){
+    //buildTrendHTML();
+    //var data = getTrendData()
+   //buildTrendGraph(data)
+
+}
+
+function buildTrendGraph(data){
+    var currentGraph = document.getElementById('trend');
+    currentGraph.remove();
+    var trend = document.createElement('canvas');
+    trend.setAttribute("id", "trend");
+    
+    document.getElementById('trendsDiv').appendChild(trend);
+    const config = {
+        type: 'line',
+        data: data,
+      };
+
+    const myChart1 = new Chart(
+        document.getElementById('trend'),
+        config
+    );
+   
+
+
+}
+function getTrendData(positiveArray, negativeArray, neutralArray){
+    var labels = new Array();
+    for(let i = 1; i < positiveArray.length +1; i++){
+        labels.push("Week " + (i-1 ));
+    }
+    
+
+
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'Positive',
+        data: positiveArray,
+        fill: false,
+        borderColor: '#48A9A6',
+        tension: 0.1
+      }, {
+        label: 'Negative',
+        data: negativeArray,
+        fill: false,
+        borderColor: '#D1603D',
+        tension: 0.1
+      }, {
+        label: 'Neutral',
+        data: neutralArray,
+        fill: false,
+        borderColor: '#a1a1a1',
+        tension: 0.1
+      }]
+    };
+
+    return data;
 }
 /*
  *   processIndividuals is a function that is immediately called when the page loads.
@@ -940,6 +1006,10 @@ function buildReportHTML(data, week) {
                 comment.setAttribute("editing", "false");
                 if(week != "Week1"){
                     comment.style.display = "none";
+                } 
+                
+                if(span.getAttribute("comment") == ""){
+                    comment.style.display = "none";
                 }
                 comment.textContent += span.getAttribute("comment");
 
@@ -1020,9 +1090,22 @@ const commentDoubleClick = function(event){
     if(comment.getAttribute("selected") == "false"){
 
     } else {
+
+        var graphs = document.querySelector('#textArea').children
+        for (var i = 0; i < graphs.length; i++) {
+            var spans = graphs[i].children[1].children;
+            for (var j = 0; j < spans.length; j++) {
+                spans[j].removeEventListener("click", sentenceClick);
+            }
+        }
         comment.setAttribute("editing", "true");
         comment.removeEventListener("click", commentClick);
         comment.removeEventListener("dblclick", commentDoubleClick);
+
+
+
+
+
         var textEntry = document.createElement('textarea');
         textEntry.value = comment.textContent;
         comment.textContent = "";
@@ -1104,9 +1187,24 @@ function previousWeek(id) {
         }
 
     }
-    console.log(nextWeek);
     currentEntry.style.display = "none";
     nextEntry.style.display = "block";
+    
+    var graphs = document.querySelector('#textArea').children
+    for (var i = 0; i < graphs.length; i++) {
+        var spans = graphs[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            var infarr = spans[j].getAttribute('id').split(' ');
+            var comment = document.getElementById("comment " + spans[j].getAttribute('id'));
+            if(infarr[0] == ("Week"+nextWeek) && spans[j].getAttribute('hascomment') == "true"){
+                
+                comment.style.display = "block";
+            } else {
+                comment.style.display = "none";
+            }
+
+        }
+    }
 
 
 }
@@ -1135,19 +1233,25 @@ function nextWeek(id) {
     }
     currentEntry.style.display = "none";
     nextEntry.style.display = "block";
-    // var commentEntry = document.getElementById("commentEntry");
-    // commentEntry.value = "";
-    console.log(nextWeek);
-    var comments = document.querySelector('#allComments').children
-    for (var i = 0; i < comments.length; i++) {
-        var infarr = comments[i].getAttribute("id").split(" ");
-        var week = infarr[1].substring(4);
-        if(week == nextWeek){
-            comments[i].style.display="block";
-        } else {
-            comments[i].style.display="none";
+   
+   
+    var graphs = document.querySelector('#textArea').children
+    for (var i = 0; i < graphs.length; i++) {
+        var spans = graphs[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            var infarr = spans[j].getAttribute('id').split(' ');
+            var comment = document.getElementById("comment " + spans[j].getAttribute('id'));
+            if(infarr[0] == ("Week"+nextWeek) && spans[j].getAttribute('hascomment') == "true"){
+                
+                comment.style.display = "block";
+            } else {
+                comment.style.display = "none";
+            }
+
         }
     }
+       
+    
 }
 /*
  *  hideEmotionHover is an event listener that hides the moving emotion overlay
@@ -1184,7 +1288,7 @@ const sentenceClick = function(event) {
     event.path[0].setAttribute("selected", "true");
     //event.path[0].style.border = "1px solid black";
     var commentEntry = document.getElementById("newCommentDiv");
-    console.log(event.path[0].getAttribute("hascomment"));
+    
     if(event.path[0].getAttribute("hascomment") == "true"){
         
         commentEntry.style.display = "none";
@@ -1251,7 +1355,16 @@ function saveComment(arg){
     
     commentDiv.addEventListener("dblclick", commentDoubleClick);
     commentDiv.addEventListener("click", commentClick);
-    
+
+
+    var graphs = document.querySelector('#textArea').children
+    for (var i = 0; i < graphs.length; i++) {
+        var spans = graphs[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            
+            spans[j].addEventListener("click", sentenceClick);
+        }
+    }
 }
 
 function addComment(){
@@ -1461,6 +1574,8 @@ function clearGraphs() {
     newDiv2.setAttribute("id", "groupButtonDiv");
     var parent = document.querySelector('main');
     parent.appendChild(newDiv);
+
+    
     //parent.appendChild(newDiv2);
 }
 /*
@@ -1611,15 +1726,39 @@ function sortMapPositive(set) {
  * displayIndividualGraphs is a function that will create and display the graphs of individual students
  */
 function displayIndividualGraphs(group, map, deadMaps) {
+    var selectedGroup =  document.getElementById('groupSelector').value;
     
+    var highestWeek = 0;
+    var positive = new Array();
+    var negative = new Array();
+    var neutral = new Array();
+    var highestWeek = 0;
     map.forEach((key) => {
 
         if (key.group == group) {
             var id = (key.name + " Week" + key.week);
+            if(key.week > highestWeek){
+                highestWeek = key.week;
+            }
+    
+        
+        
             makeCanva(id);
             var dataG = new Array();
             var emotion_total = key.getTotalEmo();
             var exp_total = key.getTotalExp();
+
+            
+            if(selectedGroup == "null") {
+                positive[key.week] = key.positiveEmotion / emotion_total;
+                negative[key.week] = key.negativeEmotion / emotion_total;
+                neutral[key.week] = key.neutralEmotion / emotion_total;
+            } else if(selectedGroup == key.name){
+                
+                positive[key.week] = key.positiveEmotion / emotion_total;
+                negative[key.week] = key.negativeEmotion / emotion_total;
+                neutral[key.week] = key.neutralEmotion / emotion_total;
+            }
 
             dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion / emotion_total), (key.positiveExp / exp_total)));
             dataG.push(datasetMakerDuo("Neutral", (key.neutralEmotion / emotion_total), (key.neutralExp / exp_total)));
@@ -1632,7 +1771,7 @@ function displayIndividualGraphs(group, map, deadMaps) {
 
         }
 
-
+    
     });
     
     deadMaps.forEach((value) => {
@@ -1643,7 +1782,9 @@ function displayIndividualGraphs(group, map, deadMaps) {
         dataG.push(datasetMakerDuo("Missing", 1, 1));
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
     });
-
+    
+    var trendData = getTrendData(positive, negative, neutral);
+    buildTrendGraph(trendData);
 
 }
 /*
@@ -1737,11 +1878,18 @@ function displayAside(key) {
  */
 
 function displayGroupGraph(course, sortedMap, deadMaps) {
-
+    var selectedGroup =  document.getElementById('groupSelector').value;
+    
+    var highestWeek = 0;
+    var positive = new Array();
+    var negative = new Array();
+    var neutral = new Array();
     sortedMap.forEach((key, value) => {
 
         if (key.course == course || course == 'course') {
-           
+            if(key.week > highestWeek){
+                highestWeek = key.week;
+            }
             var infArr = key.name.split(" ");
             var name = infArr[0]
             
@@ -1759,7 +1907,46 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             //var exp_total = 1;
 
             var dataG = new Array();
+            //Trendline things
+           
+            if(course == 'course'){
+                
+                if(positive[key.week] == undefined){
+                    positive[key.week] = 0;
+                }
+                if(negative[key.week] == undefined){
+                    negative[key.week] = 0;
+                }
+                if(neutral[key.week] == undefined){
+                    neutral[key.week] = 0;
+                }
+                
+                if(selectedGroup == "null"){
+                    positive[key.week] = positive[key.week] + (key.positiveEmotion / emotion_total);
+                    negative[key.week] = negative[key.week] + (key.negativeEmotion / emotion_total);
+                    neutral[key.week] = neutral[key.week] + (key.neutralEmotion / emotion_total);
+                } else if (selectedGroup == key.course){
+                    positive[key.week] = positive[key.week] + (key.positiveEmotion / emotion_total);
+                    negative[key.week] = negative[key.week] + (key.negativeEmotion / emotion_total);
+                    neutral[key.week] = neutral[key.week] + (key.neutralEmotion / emotion_total);
+                }
+                
+                
+            } else if(selectedGroup == "null") {
+                positive[key.week] = key.positiveEmotion / emotion_total;
+                negative[key.week] = key.negativeEmotion / emotion_total;
+                neutral[key.week] = key.neutralEmotion / emotion_total;
+            } else if(selectedGroup == key.group){
+                
+                positive[key.week] = key.positiveEmotion / emotion_total;
+                negative[key.week] = key.negativeEmotion / emotion_total;
+                neutral[key.week] = key.neutralEmotion / emotion_total;
+            } else {
+                
+            }
+            
 
+            //Regular graphs things
             makeCanva(key.name);
             dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion / emotion_total) * ratioOfCompleted, (key.positiveExp / exp_total)* ratioOfCompleted));
             dataG.push(datasetMakerDuo("Neutral", (key.neutralEmotion / emotion_total)* ratioOfCompleted, (key.neutralExp / exp_total)* ratioOfCompleted));
@@ -1897,12 +2084,20 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             }
         }
     });
+
+
+   
+
     deadMaps.forEach((value) => {
         makeCanva(value);
         var dataG = new Array();
         dataG.push(datasetMakerDuo("Missing", 1, 1));
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
     });
+
+    var trendData = getTrendData(positive, negative, neutral);
+    buildTrendGraph(trendData)
+
 }
 /*
  * displayGroups is a function that adds buttons that take you into their course/group

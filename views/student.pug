@@ -19,12 +19,17 @@ html(lang='en')
     body(onload="processIndividuals()")
         include templates/header.pug
         main
-            a(href='/papers/' + course + '/' + group id='backButton') 
-                i(class="fa-solid fa-caret-left")
-            h1(id='studentName') #{student}
-            
-            h2(id='courseName') #{course}
-            h2(id='groupName') #{group}
+            div(id="topInfo")
+                div(id="pageInfo")
+                    a(href='/papers/' + course + '/' + group id='backButton') 
+                        i(class="fa-solid fa-caret-left")
+                    h1(id='studentName') #{student}
+                    
+                    h2(id='courseName') #{course}
+                    h2(id='groupName') #{group}
+                div(id="filterDiv" class="form") Filter stuff here
+                    
+                div(id="graphArea") graph here
             div(id="reportArea")
                 div(id="testDiv") 
                 div(id="textArea")
@@ -41,7 +46,7 @@ html(lang='en')
                         div(id="newCommentDiv")
                             textarea(id="commentEntry" placeholder="No Comment" autofocus="autofocus")
                             button(id="commentAdd" onclick="addComment()") Add Comment
-                    br
+                    
                     //
                         button(id="commentEdit" onclick="editComment()") edit
                         button(id="commentSave" onclick="addComment()") save
