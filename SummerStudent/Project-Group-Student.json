@@ -1,0 +1,254 @@
+[
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Cook",
+  "StudentName": "Kuku",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Cook",
+  "StudentName": "Gogo",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Gf",
+  "StudentName": "Kiki",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Gf",
+  "StudentName": "Koko",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Gf",
+  "StudentName": "Rara",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Gf",
+  "StudentName": "Susu",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Museum",
+  "StudentName": "Nene",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Museum",
+  "StudentName": "Ruru",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "Museum",
+  "StudentName": "Bibi",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "OB3",
+  "StudentName": "Roro",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "OB3",
+  "StudentName": "Toto",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 1,
+  "StartDate": "11/05/20",
+  "GroupName": "OB3",
+  "StudentName": "Riri",
+  "Course": "COMP371"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Greyhound",
+  "StudentName": "Riri",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Greyhound",
+  "StudentName": "Nene",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Greyhound",
+  "StudentName": "Susu",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "MC",
+  "StudentName": "Ruru",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "MC",
+  "StudentName": "Rara",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Soil",
+  "StudentName": "Kuku",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Soil",
+  "StudentName": "Bibi",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Soil",
+  "StudentName": "Koko",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Soil",
+  "StudentName": "Roro",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Wy",
+  "StudentName": "Kiki",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Wy",
+  "StudentName": "Gogo",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 2,
+  "StartDate": "6/07/20",
+  "GroupName": "Wy",
+  "StudentName": "Toto",
+  "Course": "COMP372"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team1",
+  "StudentName": "Koko",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team1",
+  "StudentName": "Nene",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team1",
+  "StudentName": "Rara",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team1",
+  "StudentName": "Toto",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team2",
+  "StudentName": "Bibi",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team2",
+  "StudentName": "Gogo",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team2",
+  "StudentName": "Roro",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team2",
+  "StudentName": "Susu",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team3",
+  "StudentName": "Kiki",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team3",
+  "StudentName": "Riri",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team3",
+  "StudentName": "Ruru",
+  "Course": "COMP373"
+ },
+ {
+  "ProjectNumber": 3,
+  "StartDate": "17/08/20",
+  "GroupName": "Team3",
+  "StudentName": "Kuku",
+  "Course": "COMP373"
+ }
+]
