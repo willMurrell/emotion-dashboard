@@ -172,8 +172,9 @@ const learning_experiences = [
         const directory = fs.opendirSync(folder, 'utf8');
         let file;
         let filename = "header.json"
+        
         readHeader(filename);
-
+        
         while((file = directory.readSync()) !== null){
         //while((file = directory.readSync()) !== null){
             let info_array, name, group, week, out_name;
@@ -196,7 +197,7 @@ const learning_experiences = [
                 // fs.writeFileSync(out_name, data);
                 // readJSON(out_name);
     
-                //console.log(file.name+ out_name) ;
+                //console.log(file.name+ out_name) ;s
     
             }
             
@@ -207,7 +208,7 @@ const learning_experiences = [
 
     }
 
-    function readHeader(filename){
+    async function readHeader(filename){
         let rawData = fs.readFile('SummerStudentCSV/' + filename, (err, data)=> {
             
             if(err){
@@ -216,11 +217,12 @@ const learning_experiences = [
                 if(data.byteLength == 0){
                     console.log(" no file ot something");
                     readHeader(filename)
-
+                    
                 } else {
                     var JSONdata = JSON.parse(data);
                     console.log(data);
                     entries.push(JSON.stringify(JSONdata));
+                    
                 }
                 
             }
