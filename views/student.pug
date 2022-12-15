@@ -27,15 +27,23 @@ html(lang='en')
                     
                     h2(id='courseName') #{course}
                     h2(id='groupName') #{group}
-                div(id="filterDiv" class="form") Filter stuff here
+                
                     
-                div(id="graphArea") graph here
+                div(id="graphArea") 
             div(id="reportArea")
                 div(id="testDiv") 
                 div(id="textArea")
                     
                         
                 div(class="tools") 
+                    div(id="filterDiv" ) 
+                    form
+                        p Display: 
+                        input(type="radio" name="filter" value="emotion" id="emotionRadio" checked="checked")
+                        label(for="emotionRadio") Emotions
+                        br
+                        input(type="radio" name="filter" value="experience" id="experienceRadio")
+                        label(for="experienceRadio") Experiences
                     
                     h2 Comments:
                  

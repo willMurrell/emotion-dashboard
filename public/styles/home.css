@@ -94,6 +94,12 @@ main{
 }
 
 */
+
+#trendsDiv{
+    display: flex;
+    height: 500px;
+    width: 30%;
+}
 #new{
     display: flex;
     flex-wrap: wrap;
@@ -114,7 +120,7 @@ main{
     padding: 10px;
     margin-left: 5px;
     margin-top: 5px;
-    width: auto;
+    width: 400px;
     
 }
 
@@ -411,6 +417,7 @@ canvas{
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-around;
+    margin-right: 5px;
     
 }
 
@@ -521,26 +528,39 @@ textarea{
 }
 
 
- 
-.positiveSpan{
-    background-color: rgba(138, 201, 38, 0.4);
-    border: none;
-}
-
-.negativeSpan{
-    /*background-color: rgba(255, 82, 88, 0.4);*/
+.sentence[display = "emotion"][emotionType = "negative"]{
     background-color: rgba(255, 0, 8, 0.4);
-    border: none;
+    
 }
-.mixedSpan{
+.sentence[display = "emotion"][emotionType = "positive"]{
+    background-color: rgba(138, 201, 38, 0.4);
+   
+}
+.sentence[display = "emotion"][emotionType = "mixed"]{
     background-color: rgba(255, 184, 30, 0.4);
-    border: none;
+    
 }
 
-span[selected = true]{
+.sentence[display = "experience"][experiencetype = "negative"]{
+    background-color: rgba(255, 0, 8, 0.4);
+    
+}
+.sentence[display = "experience"][experiencetype = "positive"]{
+    background-color: rgba(138, 201, 38, 0.4);
+   
+}
+.sentence[display = "experience"][experiencetype = "mixed"]{
+    background-color: rgba(255, 184, 30, 0.4);
+    
+}
+ 
+
+
+
+.sentence[selected = "true"]{
     border: 1px solid black;
 }
-span[selected = false]{
+.sentence[selected = "false"]{
     border: none;
 }
 .commentDiv[selected = true]{
@@ -572,7 +592,22 @@ h2{
 
 #topInfo{
     display: flex;
+    height: 500px;
 }
+
+#graphArea{
+    margin-top: 50px;
+    margin-left: 15%;
+}
+
+#graphArea canvas{
+    height: 350px !important;
+    width: 700px !important;
+    padding: 20px;
+    border: 1px solid black;
+}
+
+
 footer{
    /* position: fixed;*/
     bottom: 0;
