@@ -753,8 +753,7 @@ const getStudents = async (set, course) => {
         fillInMissingWeeks(sortedMap, set);
         //creates the buttons that let you go into a team
         displayGroups();
-        //shows the trendline graph
-        displayTrends();
+        
     } else if (set == 'course') {
         var sortedMap = new Map(sortMapNegative(set));
         //This method builds the graphs
