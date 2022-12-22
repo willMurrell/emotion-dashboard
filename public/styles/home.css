@@ -47,6 +47,7 @@ nav li a{
     text-decoration: none;
     display: block;
     width: 100px;
+    color: black;
 
 }
 nav li a:hover{
@@ -622,3 +623,38 @@ footer p{
 }
 
 
+/* For Laptop Screens*/  
+@media only screen   
+and (min-width: 1px)   
+and (max-width: 1550px)  
+{
+
+
+.controls{
+    flex-wrap: wrap;
+    flex-direction: column;
+   
+}
+
+#trendsDiv{
+    width: 49%;
+}
+
+#groupButtonDiv{
+   width: auto;
+}
+
+.form{
+    width: auto;
+}
+
+.canvaContainer{
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 10px;
+}
+
+
+} 
