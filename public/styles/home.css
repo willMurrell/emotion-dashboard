@@ -7,6 +7,7 @@
 
 main{
     margin-left: 5px;
+    margin-right: 5px;
     margin-top: 5px;
 }
 
@@ -25,7 +26,13 @@ header h1{
     margin-top: 0px;
     margin-bottom: 0px;
 }
-
+header a{
+    text-decoration: none;
+}
+header a:visited{
+    color: black;
+    text-decoration: none;
+}
 nav{
     padding-left: 15px;
     background-color: #8ecae6;
@@ -98,12 +105,14 @@ main{
 
 #trendsDiv{
     display: flex;
-    height: 500px;
-    width: 30%;
+    flex-direction: row;
+    height: 20vw;
+    justify-content: center;
 }
 #new{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-evenly;
     
 }
 
@@ -112,7 +121,11 @@ main{
 
 .controls{
     display: flex;
+    justify-content: space-around;
 }
+
+
+
 
 #groupButtonDiv{
     font-size: 20px;
@@ -121,7 +134,7 @@ main{
     padding: 10px;
     margin-left: 5px;
     margin-top: 5px;
-    width: 400px;
+    width: 46%;
     
 }
 
@@ -137,7 +150,7 @@ main{
     margin-bottom: 10px;
     text-decoration: none;
     width: 150px;
-    padding: 20px 5px;
+    padding: 20px 20px;
     border-radius: 5px;
     background-color: #8ecae6;
     color: black;
@@ -163,10 +176,7 @@ canvas{
 .canvaContainer{
     display: flex;
     height: auto;
-    margin-right: 90px;
-    margin-left: 90px;
-    margin-top:50px;
-    margin-bottom: 50px;
+    margin: 40px 20px;
     padding: 20px;
     border: 1px solid black;
     
@@ -179,7 +189,7 @@ canvas{
     padding: 10px;
     margin-left: 5px;
     margin-top: 5px;
-    width: 400px;
+    width: 46%;
 }
 
 .form span{
@@ -625,7 +635,7 @@ footer p{
 
 /* For Laptop Screens*/  
 @media only screen   
-and (min-width: 1px)   
+and (min-width: 768px)   
 and (max-width: 1550px)  
 {
 
@@ -636,9 +646,7 @@ and (max-width: 1550px)
    
 }
 
-#trendsDiv{
-    width: 49%;
-}
+
 
 #groupButtonDiv{
    width: auto;
@@ -648,13 +656,45 @@ and (max-width: 1550px)
     width: auto;
 }
 
+#trendsDiv{
+    height: 24vw;
+    
+}
+
 .canvaContainer{
-    margin-right: 50px;
-    margin-left: 50px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    padding: 10px;
+  
+    padding: 20px;
 }
 
 
 } 
+
+/* For Laptop Screens*/  
+@media only screen   
+and (min-width: 0px)   
+and (max-width: 768px)  
+{
+
+    .controls{
+        flex-wrap: wrap;
+        flex-direction: column;
+       
+    }
+    
+    #trendsDiv{
+        flex-direction: column;
+        height: 45vw;
+        margin: 20vw 10vw;
+    }
+    #groupButtonDiv{
+        width: auto;
+     }
+     
+     .form{
+         width: auto;
+     }
+
+
+}
+
+/* 512 */

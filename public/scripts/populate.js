@@ -789,11 +789,23 @@ function buildTrendGraph(data, id){
     currentGraph.remove();
     var trend = document.createElement('canvas');
     trend.setAttribute("id", id);
+    var title = "Experience";
+    if(id == "emoTrend"){
+        title = "Emotions";
+    }
     
     document.getElementById('trendsDiv').appendChild(trend);
     const config = {
         type: 'line',
         data: data,
+        options: {
+            plugins: {
+                title:{
+                    display: true,
+                    text: title
+                }
+            }
+        }
       };
 
     const myChart1 = new Chart(
