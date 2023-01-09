@@ -420,6 +420,7 @@ canvas{
 
 #reportArea{
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
 }
 #textArea{
@@ -479,6 +480,8 @@ canvas{
     display: flex;
     flex-direction: column;
     border-left: 1px solid black;
+    /*background-color: #C2e0f9;*/
+    background-color: rgb(142, 202, 230, 0.5);
 }
 
 #commentEntry{
@@ -518,7 +521,7 @@ canvas{
     cursor: pointer;
 }
 #commentDelete:active {
-    background-color: rgba(226, 203, 27, 0.4);
+    
     box-shadow: 0 1px #666;
     transform: translateY(2px);
   }
@@ -603,6 +606,7 @@ h2{
 
 #topInfo{
     display: flex;
+    flex-direction: row ;
     height: 500px;
 }
 
@@ -666,6 +670,16 @@ and (max-width: 1550px)
     padding: 20px;
 }
 
+#textArea{
+    width: 90%;
+    
+    
+}
+
+#textArea p{
+    width: 90%;
+}
+
 
 } 
 
@@ -694,7 +708,38 @@ and (max-width: 768px)
          width: auto;
      }
 
+     #topInfo{
+        display: flex;
+        flex-direction: column ;
+        height: auto;
+    }
 
+    #graphArea{
+        margin-top: 50px;
+        margin-bottom: 50px;
+        margin-left: 5px;
+    }
+    
+    #reportArea{
+        display: flex;
+        flex-direction:column-reverse;
+       
+        align-items: flex-start;
+    }
+
+    .tools{
+        top: 0px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        border: none;
+        /*background-color: #C2e0f9;*/
+        background-color: #8ecae6;
+    }
+    #textArea{
+        width: 100%;
+    }
+     
 }
 
 /* 512 */
