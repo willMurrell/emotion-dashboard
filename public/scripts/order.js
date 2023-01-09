@@ -8,10 +8,11 @@ function filterForm(arg, set){
     var week = document.querySelector('#weekSelector').value;
     var group = document.querySelector('#groupSelector').value;
     var bookmark = document.querySelector('#bookmarkInput').checked;
+    var missing = document.querySelector('#missingInput').checked;
     var sort = document.querySelector('#sortSelector').value;
     var set;
     
-   
+   console.log(missing);
     
     if(arg != undefined){
         if(arg == 'course'){
@@ -54,12 +55,12 @@ function filterForm(arg, set){
     } 
 
 
-    order(week, group, bookmark);
+    order(week, group, bookmark, missing);
     
     
 }
 
-function order(filterWeek, filterGroup, bookmark){
+function order(filterWeek, filterGroup, bookmark, missing){
     
     const graphs = document.querySelector('#new').children
     for(var i = 0; i < graphs.length; i++){
@@ -90,11 +91,30 @@ function order(filterWeek, filterGroup, bookmark){
             }
         }
         
+
         if(bookmark){
             var bookmarkElement = document.getElementById(group+ " " +fullWeek + " checkbox");
-            
+            console.log(bookmarkElement);
+
             if(!bookmarkElement.checked){
+                    container.style.display = "none";
+              
+                
+            }
+
+            // if(container.getAttribute("missing")){
+            //     var arr = container.getAttribute("id").split(" ");
+            //    document.getElementById(arr[0]+ " " +arr[1] + " checkbox").checked = true;
+            //    console.log(document.getElementById(arr[0]+ " " +arr[1] + " checkbox").checked);
+                
+            // }
+        }
+
+        if(!missing){
+            
+            if(container.getAttribute("missing")){
                 container.style.display = "none";
+                
             }
         }
         

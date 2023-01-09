@@ -344,13 +344,10 @@ class Student {
         return percentExp;
     }
     bookmarkTrue() {
-
         this.bookmarked = true;
     }
     bookmarkFalse() {
-
         this.bookmarked = false;
-
     }
 
     getTotalEmo() {
@@ -358,6 +355,18 @@ class Student {
     }
     getTotalExp() {
         return this.positiveExp + this.negativeExp + this.otherExp + this.neutralExp;
+    }
+}
+
+class Missing {
+    constructor() {
+        this.bookmarked = false;
+    }
+    bookmarkTrue() {
+        this.bookmarked = true;
+    }
+    bookmarkFalse() {
+        this.bookmarked = false;
     }
 }
 
@@ -1839,9 +1848,10 @@ function fillInMissingWeeks(map, set) {
 function bookmarkEventListener(set) {
 
     const graphs = document.querySelector('#new').children;
+    var deadMaps;
     for (var i = 0; i < graphs.length; i++) {
         var currentMark, newMark;
-
+        
         var infArr = graphs[i].id.split(" ");
         
         var id = infArr[0] + " " + infArr[1];
@@ -1859,7 +1869,7 @@ function bookmarkEventListener(set) {
             map = studentMap;
         }
         
-            
+        deadMaps = fillInMissingWeeks(map, set);
         
         if(map.get(id) != undefined){
             currentMark = map.get(id).bookmarked;
@@ -1874,7 +1884,13 @@ function bookmarkEventListener(set) {
             checkElm.addEventListener("click", bookmarkClick)
         }
     }
-        
+
+    deadMaps.forEach((value) => {
+        console.log(value);
+
+        var checkElm = document.getElementById(value + " checkbox");
+        checkElm.addEventListener("click", bookmarkClick)
+    }) 
     
 }
 /*
@@ -1901,8 +1917,21 @@ const bookmarkClick = function() {
     }
 
 
-        
+    
+
+    if(document.getElementById(id + " container").getAttribute("missing") == "true"){
         if (currentMark) {
+
+            
+            document.getElementById(checkid).checked = true;
+
+        } else {
+            
+            document.getElementById(checkid).checked = false;
+
+        }
+    } else {
+       if (currentMark) {
 
             map.get(id).bookmarkTrue();
             document.getElementById(checkid).checked = true;
@@ -1911,7 +1940,12 @@ const bookmarkClick = function() {
             map.get(id).bookmarkFalse();
             document.getElementById(checkid).checked = false;
 
-        }
+        } 
+    }
+
+
+       
+        
     
     
 
@@ -2149,6 +2183,9 @@ function displayIndividualGraphs(group, map, deadMaps) {
 
         
         makeCanva(value);
+        var missingContainer = document.getElementById(value + " container");
+        missingContainer.setAttribute("Missing", "true");
+        
         var dataG = new Array();
         dataG.push(datasetMakerDuo("Missing", 1, 1));
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
@@ -2489,6 +2526,8 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
 
     deadMaps.forEach((value) => {
         makeCanva(value);
+        var missingContainer = document.getElementById(value + " container");
+        missingContainer.setAttribute("Missing", "true");
         var dataG = new Array();
         dataG.push(datasetMakerDuo("Missing", 1, 1));
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
