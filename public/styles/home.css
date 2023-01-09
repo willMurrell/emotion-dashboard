@@ -636,6 +636,20 @@ footer p{
     padding-top: 80px;
 }
 
+#pageInfo{
+    
+}
+
+#pageInfo label{
+    display: inline;
+    font-weight: 900;
+    font-size: 20px;
+    text-decoration: underline;
+}
+
+#pageInfo h2{
+    display: inline-block;
+}
 
 /* For Laptop Screens*/  
 @media only screen   
