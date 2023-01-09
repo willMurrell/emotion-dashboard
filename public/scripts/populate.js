@@ -2113,6 +2113,35 @@ function sortMapPositive(set) {
     return unsortedArray.sort((a, b) => (a[1].getOverallNegative() > b[1].getOverallNegative()) ? 1 : -1);
 }
 
+/*
+ * sortMapMostRecent is a function that returns the correct map, sorted by the most recent week
+ */
+function sortMapMostRecent(set) {
+    var unsortedArray;
+    if (set == 'group') {
+        unsortedArray = [...groupMap];
+    } else if (set == 'course') {
+        unsortedArray = [...courseMap];
+    } else if (set =='individuals'){
+        unsortedArray = [...studentMap];
+    }
+    return unsortedArray.sort((a, b) => (a[1].week < b[1].week) ? 1 : -1);
+}
+
+/*
+ * sortMapLeastRecent is a function that returns the correct map, sorted by the least recent week
+ */
+function sortMapLeastRecent(set) {
+    var unsortedArray;
+    if (set == 'group') {
+        unsortedArray = [...groupMap];
+    } else if (set == 'course') {
+        unsortedArray = [...courseMap];
+    } else if (set =='individuals'){
+        unsortedArray = [...studentMap];
+    }
+    return unsortedArray.sort((a, b) => (a[1].week > b[1].week) ? 1 : -1);
+}
 
 /*
  * displayIndividualGraphs is a function that will create and display the graphs of individual students

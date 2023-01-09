@@ -38,6 +38,16 @@ function filterForm(arg, set){
                 
                 var sortedMap = new Map(sortMapExpNegative(set));
                 break;
+            case 'mostRecent':
+                
+                var sortedMap = new Map(sortMapMostRecent(set));
+                break;
+            case 'leastRecent':
+                
+                var sortedMap = new Map(sortMapLeastRecent(set));
+                break;
+            
+            
         }
         
         

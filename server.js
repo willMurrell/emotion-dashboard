@@ -113,6 +113,7 @@ function loadJSONHeader(){
             } else {
                 if(data.byteLength == 0){
                     console.log("or an error here or something")
+                    console.log("THIS IS THE BIG SCARY ERROR THAT I DO NOT KNOW HOW TO FIX");
                 }
                 
                 var JSONdata = JSON.parse(data);

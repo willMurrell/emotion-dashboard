@@ -24,18 +24,25 @@ html(lang='en')
                     a(href='/papers/' + course + '/' + group id='backButton') 
                         i(class="fa-solid fa-caret-left")
                     h1(id='studentName') #{student}
-                    
-                    h2(id='courseName') #{course}
+                    br
+                    label(for="groupName") Team:  
                     h2(id='groupName') #{group}
+                    br
+                    br
+                    br
+                    label(for="courseName") Course:  
+                    h2(id='courseName') #{course}
+                    
                 
                     
-                div(id="graphArea") 
+                div(id="graphArea")  
             div(id="reportArea")
                 div(id="testDiv") 
                 div(id="textArea")
                     
-                        
+                       
                 div(class="tools") 
+                    
                     div(id="filterDiv" ) 
                     form
                         p Display: 
@@ -53,7 +60,7 @@ html(lang='en')
                     div(id="newCommentContainer")
                     h2 Comments:
                         div(id="newCommentDiv")
-                            textarea(id="commentEntry" placeholder="No Comment" autofocus="autofocus")
+                            textarea(id="commentEntry" placeholder="New Comment!" autofocus="autofocus")
                             button(id="commentAdd" onclick="addComment()") Add Comment
                     
                     //
