@@ -20,9 +20,11 @@ html(lang='en')
         main
             npm
             div(class="controls")
+                div(id='groupButtonDiv')
+                    h1 View Teams of:
                 div(class="form") 
                     
-                    span Filter:
+                    h2 Filter:
                     label(for="weekSelector") Week: 
                     select(id='weekSelector')
                         option(value="null" selected="selected") All Weeks
@@ -48,8 +50,7 @@ html(lang='en')
                         option(value="leastRecent" ) Least Recent
                     
                     button(onclick="filterForm(\"course\")") Submit
-                div(id='groupButtonDiv')
-                    h1 View Teams of:
+                
             div(id='trendsDiv')
                 canvas(id = "expTrend")
                 canvas(id = "emoTrend")

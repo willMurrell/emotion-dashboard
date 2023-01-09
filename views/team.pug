@@ -26,6 +26,8 @@ html(lang='en')
                 i(class="fa-solid fa-caret-left")
             h1(id='courseTitle') #{group}
             div(class="controls")
+                div(id='groupButtonDiv')  
+                    h1 View Report of:
                 div(class="form") 
                     
                     span Filter:
@@ -49,10 +51,11 @@ html(lang='en')
                         option(value="overallPos" ) Least Urgent (Overall)
                         option(value="emotionNeg" ) Most Urgent (by emotion)
                         option(value="experienceNeg" ) Most Urgent (by experience) 
+                        option(value="mostRecent" ) Most Recent
+                        option(value="leastRecent" ) Least Recent
                     button(onclick="filterForm(group, set)") Submit
                 
-                div(id='groupButtonDiv')  
-                    h1 View Report of:
+                
             div(id='trendsDiv')
                 canvas(id = "expTrend")
                 canvas(id = "emoTrend")
