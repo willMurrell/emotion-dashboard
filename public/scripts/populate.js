@@ -410,6 +410,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
                         lineHeight: 1.2,
                         family: 'Poppins'
                     },
+                    color: "black",
                     text: group + " Week " + week,
 
                 }
@@ -811,7 +812,30 @@ function buildTrendGraph(data, id){
             plugins: {
                 title:{
                     display: true,
-                    text: title
+                    text: title,
+                    font: {
+                        size: 25,
+                        family: 'Poppins'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    },
+                    color: "black"
+
+                },
+                labels: {
+                    font: {
+                        color: "black"
+                    }
+                }
+            },
+            scales:{
+                x:{
+                    ticks: { color: "black"}
+                },
+                y:{
+                    ticks: { color: "black"}
                 }
             }
         }
@@ -1184,8 +1208,10 @@ function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
                             weight: 'bold',
                             lineHeight: 1.2,
                             family: 'Poppins'
+                            
                         },
-                        text: "Emotions",
+                        color: "black",
+                        text: "Emotions"
     
                     }
                     
@@ -1229,6 +1255,7 @@ function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
                         lineHeight: 1.2,
                         family: 'Poppins'
                     },
+                    color: "black",
                     text: "Learning Experience",
 
                 }

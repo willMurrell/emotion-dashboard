@@ -3,6 +3,7 @@ html(lang='en')
     head
         title Emotion Dashboard!
         meta(charset='utf-8')
+        link(rel="icon" type="image/x-icon" href="favicon.ico")
         meta(name='viewport', content='width=device-width, initial-scale=1')
         link(rel='preconnect' href='https://fonts.googleapis.com')
         link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
@@ -22,38 +23,40 @@ html(lang='en')
 
         include templates/header.pug
         main
-            a(href='/papers/' + course id='backButton') 
-                i(class="fa-solid fa-caret-left")
-            h1(id='courseTitle') #{group}
-            div(class="controls")
-                div(id='groupButtonDiv')  
-                    h1 View Report of:
-                div(class="form") 
-                    
-                    span Filter:
-                    label(for="weekSelector") Week: 
-                    select(id='weekSelector')
-                        option(value="null" selected="selected") All Weeks
-                    br
-                    label(for="weekSelector") Student: 
-                    select(id='groupSelector')
-                        option(value="null" selected="selected") All Students
-                    br
-                    label(for="bookmarkInput") Bookmarked: 
-                    input(type="checkbox" id="bookmarkInput" value="true")
-                    br
-                    label(for="missingInput") Missing: 
-                    input(type="checkbox" id="missingInput" value="true" checked="true")
-                    br
-                    label(for="sortSelector") Sort By: 
-                    select(id='sortSelector')
-                        option(value="overallNeg" selected="selected") Most Urgent (Overall)
-                        option(value="overallPos" ) Least Urgent (Overall)
-                        option(value="emotionNeg" ) Most Urgent (by emotion)
-                        option(value="experienceNeg" ) Most Urgent (by experience) 
-                        option(value="mostRecent" ) Most Recent
-                        option(value="leastRecent" ) Least Recent
-                    button(onclick="filterForm(group, set)") Submit
+            div(id="menus")
+                div(id="backButtonDiv")
+                    a(href='/papers/' + course id='backButton') 
+                        i(class="fa-solid fa-caret-left")
+                    h1(id='courseTitle') #{group}
+                div(class="controls")
+                    div(id='groupButtonDiv')  
+                        h1 View Report of:
+                    div(class="form") 
+                        
+                        span Filter:
+                        label(for="weekSelector") Week: 
+                        select(id='weekSelector')
+                            option(value="null" selected="selected") All Weeks
+                        br
+                        label(for="weekSelector") Student: 
+                        select(id='groupSelector')
+                            option(value="null" selected="selected") All Students
+                        br
+                        label(for="bookmarkInput") Bookmarked: 
+                        input(type="checkbox" id="bookmarkInput" value="true")
+                        br
+                        label(for="missingInput") Missing: 
+                        input(type="checkbox" id="missingInput" value="true" checked="true")
+                        br
+                        label(for="sortSelector") Sort By: 
+                        select(id='sortSelector')
+                            option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                            option(value="overallPos" ) Least Urgent (Overall)
+                            option(value="emotionNeg" ) Most Urgent (by emotion)
+                            option(value="experienceNeg" ) Most Urgent (by experience) 
+                            option(value="mostRecent" ) Most Recent
+                            option(value="leastRecent" ) Least Recent
+                        button(onclick="filterForm(group, set)") Submit
                 
                 
             div(id='trendsDiv')

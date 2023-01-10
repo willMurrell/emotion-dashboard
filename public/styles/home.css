@@ -138,6 +138,7 @@ main{
     flex-direction: row;
     height: 20vw;
     justify-content: center;
+    margin-bottom: 50px;
 }
 #new{
     display: flex;
@@ -430,6 +431,22 @@ canvas{
     
 }
 
+#menus{
+    margin-top: -50px;
+    margin-bottom: 50px;
+    margin-left: -90px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 900;
+    
+    
+
+}
+#backButtonDiv{
+    
+    display:block;
+}
 #backButton{
     font-size: 30px;
     border-style: solid;
@@ -756,6 +773,15 @@ and (max-width: 1550px)
     width: 90%;
 }
 
+#menus{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+    
+    
+
+}
+
 
 } 
 
@@ -765,6 +791,13 @@ and (min-width: 0px)
 and (max-width: 768px)  
 {
 
+    #menus{
+        display: flex;
+        flex-direction: column;
+        
+        margin-left: 0px;
+    
+    }
     .controls{
         flex-wrap: wrap;
         flex-direction: column;
