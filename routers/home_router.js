@@ -1,3 +1,7 @@
+/* home_router.js
+ *
+ * @author Will Murrell
+*/
 
 const { Router } = require('express');
 const express = require('express');
@@ -15,7 +19,7 @@ const router = express.Router();
 
 
 
-
+//Render the 'home' pug template
 router.get('/', async (req, res) => {
 
     res.render('home');
@@ -28,6 +32,7 @@ router.get('/', async (req, res) => {
 
 module.exports = router; // export the router
 
+//Arrays of emotions and learning experiences
 
 const emotions = [
     "None_emotion",
@@ -51,38 +56,6 @@ const emotions = [
     "Exhausted/Tired",
     "Shamed/Apologetic",
     "Other_emotion",
-    //seeing if i can lump it all into one
-    // "None_issue",
-    // "LackofDirection",
-    // "LimitedKnowledge",
-    // "TechnicalIssues",
-    // "LackofAchievements",
-    // "TimePressure",
-    // "ProjectScope-toobig",
-    // "ProjectScope-toosmall",
-    // "TeamCommunication",
-    // "TeamCollaboration",
-    // "ProjectMonitoring ",
-    // "ClientCommunication",
-    // "AcademicStaffCommunication",
-    // "PersonalityClash",
-    // "Hindsights",
-    // "AdditionalCommitments",
-    // "Other_issue",
-    // "None_positive",
-    // "ClearDirection",
-    // "EnoughKnowledge",
-    // "SenseofAchievements",
-    // "GoodTiming",
-    // "AdequateProjectScope",
-    // "GoodTeamCommunication",
-    // "GoodTeamCollaboration",
-    // "GoodProjectMonitoring ",
-    // "GoodClientCommunication",
-    // "GoodAcademicStaffCommunication",
-    // "PersonalityMatch",
-    // "Discovery",
-    // "Other_positive",
     "None_positive",
     "Lack of Direction",
     "Limited Knowledge",
@@ -151,13 +124,9 @@ const learning_experiences = [
 
 
     var entries = new Array();
-
-    
-    var individualMap = new Map();
     var textEntries = new Array();
-    
-    //console.log(readJSON(filename))
     var csvFolder = 'SummerStudentCSV';
+    //Start of function calls
     iterateOverFiles(csvFolder);
 
     router.get('/students', (req, res) =>{
@@ -167,7 +136,11 @@ const learning_experiences = [
     router.get('/students/individuals', (req, res) =>{
         res.send(JSON.stringify(textEntries));
     })
-
+    /*
+     * iterateOverFiles will iterate over the folder passed to it and 
+     * then call the parseCSV method on each one
+     * 
+    */
     function iterateOverFiles(folder){
         const directory = fs.opendirSync(folder, 'utf8');
         let file;
@@ -185,51 +158,38 @@ const learning_experiences = [
                 name = info_array[0];
                 group = info_array[1];
                 week = info_array[2].substring(4);
-                
                 out_name = file.name.substring(0, file.name.length-4) + '.json';
-                console.log(file.name);
+                //turns csv into json
                 parseCSV(file.name, out_name);
-                
-                
-                // var json = Papa.parse(file);
-                // console.log(json);
-                // let data = JSON.stringify(json);
-                // fs.writeFileSync(out_name, data);
-                // readJSON(out_name);
-    
-                //console.log(file.name+ out_name) ;s
-    
-            }
-            
-            
-            
+            }  
         }
         directory.closeSync();
 
     }
 
+    /*
+     * readHeader reads the csv header and turns it into json and adds it to entries array
+    */
     async function readHeader(filename){
-        let rawData = fs.readFile('SummerStudentCSV/' + filename, (err, data)=> {
-            
+        let rawData = fs.readFile('SummerStudentCSV/' + filename, (err, data)=> {            
             if(err){
                 console.log("there was an error! " + err);
             } else {
                 if(data.byteLength == 0){
                     console.log(" no file ot something");
-                    readHeader(filename)
-                    
+                    readHeader(filename)                   
                 } else {
-                    var JSONdata = JSON.parse(data);
-                    console.log(data);
-                    entries.push(JSON.stringify(JSONdata));
-                    
-                }
-                
+                    var JSONdata = JSON.parse(data);                   
+                    entries.push(JSON.stringify(JSONdata));                    
+                }               
             }
         });
     }
 
-
+    /*
+     * parseCSV uses Papa.js to turn the csv files into json files
+     * It will call readJSON on each file if converted properly
+    */
     function parseCSV(input, output){
         let fileInputName = csvFolder+'/' + input; 
         let fileOutputName = 'JSON/' + output;
@@ -237,7 +197,6 @@ const learning_experiences = [
             header: true
         }
         const promise = new Promise((resolve, reject) =>{
-            //csvToJson.formatValueByType().generateJsonFileFromCsv(fileInputName,fileOutputName);
             fs.readFile(fileInputName, 'utf8', (err, data) =>{
                 if(err){
                     console.log(err);
@@ -245,25 +204,25 @@ const learning_experiences = [
                 }
 
                 var json = Papa.parse(data, config);
-                //console.log(json);
                 let jsonString = JSON.stringify(json.data);
                 fs.writeFileSync(fileOutputName, jsonString);
             });
             
         });
         promise
+            //readJSON will read the newly converted file
             .then(readJSON(fileOutputName))
             .catch((value) => {
                 console.log("Heres an error: " + value);
             });
-        //console.log("Parsed to JSON!");
     }
 
 
-
+    /*
+     *  readJSON is a method that reads a JSON file and passes its information to 
+     * the individualReport and emotionCounter method
+    */
     async function readJSON (filename){
-    
-    
         let rawData = fs.readFile(filename, (err, data)=> {
             if(err){
                 readJSON(filename);
@@ -289,18 +248,16 @@ const learning_experiences = [
                 
                 
                 individualReport(weekData, name, group, week, course);
-                emotionCounter(weekData, name, group, week, course);
-                
-            }
-            
+                emotionCounter(weekData, name, group, week, course);              
+            }   
         });
-    
     }
     
     
-    
+    /*
+     * emotionCounter is a method that counts which emotions and their frequency per entry
+    */
     function emotionCounter(data, name, group, week, course){
-        //console.log(name + group + week);
         const entryMap = new Map();
         entryMap.set("name", name);
         entryMap.set("group", group);
@@ -311,27 +268,17 @@ const learning_experiences = [
         for(let i = 0; i < num_sentences; i++){
             
             let entry = data[i];
-            
-    
-            // emotions.forEach(emotion => {
-            //     entryMap.set(emotion, 0);
-            // })
-    
             emotions.forEach(emotion => {
-                //console.log(data[i][emotion]);
+               
                 if(data[i][emotion] == 1){
-                    
-                   
+  
                     if(entryMap.has(emotion)){
                         entryMap.set(emotion, entryMap.get(emotion) + 1)
-                        
-                        
+    
                     } else {
                         entryMap.set(emotion, 1);
-                    }
-                    
-                }
-                
+                    }                   
+                } 
             });
             
     
@@ -360,6 +307,11 @@ const learning_experiences = [
         entries.push(jsonString);
  
     }
+
+    /*
+     * IndividualReport creates arrays of sentences to be used for the pages that 
+     * view what the students have written
+    */
     function individualReport(weekData, name, group, week, course){
         
         const num_sentences = weekData.length -1 ;  // - 1 because the last entry is the "Overall"
@@ -380,10 +332,9 @@ const learning_experiences = [
                     singleEntry.push(emotion);
                 }
             });
-            //singleEntry.push(weekData[i]["comment"]);
-
+           
+            //Randomly generated comments for testing
             let x = Math.floor(Math.random() * 3);
-            //let x = 1;
             let y = Math.floor(Math.random() * 6);
             const arr = ["Hmm sure whatever", "Eggs on toast", "not cool", "you smell", "try be better", "have you tried no being bad?", "You really woke up and decided to wear that?"];
             if(x == 1){
@@ -392,14 +343,14 @@ const learning_experiences = [
             } else {
                 singleEntry.push(weekData[i]["comment"]);
             }
-            //singleEntry.push("This is a really cool comment!");
+            //pushes enttry to array of sentences
             sentences.push(singleEntry);
         } 
         
         
        
         var jsonString = JSON.stringify(sentences);
-
+        //pushes array of sentences to an array of entries
         textEntries.push(jsonString);  
         
     }
