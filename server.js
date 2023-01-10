@@ -54,7 +54,7 @@ loadCSVHeader();
 
 
 /*
-*   makeObject() creates and returns an object from the given parameters
+*  makeObject() creates and returns an object from the given parameters
 */
 function makeObject(name, year, month, day, filename, course, group){
     var obj = new Object({

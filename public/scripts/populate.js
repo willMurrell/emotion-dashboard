@@ -358,17 +358,6 @@ class Student {
     }
 }
 
-class Missing {
-    constructor() {
-        this.bookmarked = false;
-    }
-    bookmarkTrue() {
-        this.bookmarked = true;
-    }
-    bookmarkFalse() {
-        this.bookmarked = false;
-    }
-}
 
 
 /*
@@ -519,9 +508,9 @@ function createGroupData(data) {
     if (!groupMap.has(groupName)) {
 
         var newGroup = new GroupPerWeek(data.group, data.week, data.course);
-        //groupMap.set(data.group, newGroup);
+        
         groupMap.set((data.group + " " + data.week), newGroup);
-        //createGroupData(data);
+        
     }
     var hasNoneExp = 0;
 
@@ -635,7 +624,7 @@ function createIndividualData(student) {
 
 
             } else if (entry[0] == "Other_emotion") {
-                //entry[0] == "Other_emotion" || 
+                
                 studentMap.get(id).addToOtherEmotion(entry[1]);
 
 
@@ -741,9 +730,6 @@ const getStudents = async (set, course) => {
             processData(studentData, set);
         }
 
-
-
-
     });
     if (course == undefined) {
         course = 'course';
@@ -793,7 +779,9 @@ const getStudents = async (set, course) => {
 
 }
 
-
+/*
+*   buildTrendGraph takes a dataset and an id and builds and displays the chart
+*/
 function buildTrendGraph(data, id){
     var currentGraph = document.getElementById(id);
     currentGraph.remove();
@@ -849,6 +837,10 @@ function buildTrendGraph(data, id){
 
 
 }
+/*
+*   getTrendData takes a positive, negative and neutral emotion/experience array and returns a dataset
+*   for a Chartly.js chart
+*/
 function getTrendData(positiveArray, negativeArray, neutralArray){
     var labels = new Array();
     for(let i = 1; i < positiveArray.length +1; i++){
@@ -909,9 +901,7 @@ const processIndividuals = async (set, course) => {
     
     //Adds empty weeks
     addMissingWeeks();
-    
 }
-
 
 /*
  * addMissingWeeks is a fucntion that finds the highest week and fills in empty
@@ -1172,7 +1162,9 @@ function buildReportHTML(data, week) {
 
     buildBarGraphs(week, posEmoMap, negEmoMap, posExpMap, negExpMap);
 }
-
+/*
+*   addToMap takes a value and a map and increments the value associated with it
+*/
 function addToMap(value, map){
     if(!map.has(value)){
         map.set(value, 1);
@@ -1181,12 +1173,12 @@ function addToMap(value, map){
     }
 
 }
-
+/*
+* buildBarGraphs will build and display the trend graphs
+*/
 function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
-   
-        
-        const data = getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap);
 
+        const data = getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap);
         const emoConfig = {
             type: 'bar',
             data: data[0],
@@ -1280,6 +1272,10 @@ function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
 
 }
 
+/*
+*   getBarGraphDatasets takes the positive/negative emotion/learning experience maps and returns the datasets
+*   for the Chartly.js charts
+*/
 function getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap){
     var emotionsLabels = new Array();
     var emotionsData = new Array();
@@ -1343,6 +1339,10 @@ function getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap){
       return [emotions, experience];
     
 }
+/*
+*   radioCheck is the method called by the event listener when the emotion/learning experience radio is selected
+*   It will change the highlighted sentence and the graph to the learning experience or emotion version
+*/
 const radioCheck = function (event){
    var graphs = document.querySelector('#textArea').children;
    for (var i = 0; i < graphs.length; i++) {
@@ -1369,8 +1369,7 @@ const radioCheck = function (event){
             } else{
                 barGraphs[i].style.display = "none";
             }
-            
-            
+                    
         }
     } else if(event.path[0].getAttribute('value') == "emotion"){
         if(barGraphs[i].getAttribute("current") == "true"){
@@ -1386,11 +1385,12 @@ const radioCheck = function (event){
         }
     }
  }
-
-   
-
-    
+  
 }
+/*
+*   clearSelectedElements removes the attribute "selected" from all elements
+*   This makes it easier to not accidentally have multiple sentences selected at once
+*/
 function clearSelectedElements(){
     var comments = document.querySelector('#allComments').children;
     for (var i = 0; i < comments.length; i++) {
@@ -1412,6 +1412,10 @@ function clearSelectedElements(){
     newCommentDiv.style.display = "none";
 }
 
+/*
+*   commentDoubleClick is the method called by the event listener when a comment is double clicked
+*   It will open up the functionality for editing and deleting the comment
+*/
 const commentDoubleClick = function(event){
 
     const comment =  event.path[0]
@@ -1429,10 +1433,6 @@ const commentDoubleClick = function(event){
         comment.setAttribute("editing", "true");
         comment.removeEventListener("click", commentClick);
         comment.removeEventListener("dblclick", commentDoubleClick);
-
-
-
-
 
         var textEntry = document.createElement('textarea');
         textEntry.value = comment.textContent;
@@ -1460,6 +1460,11 @@ const commentDoubleClick = function(event){
     }
     
 }
+/* 
+* commentClick is the function called by the event listener when a comment is clicked on
+* It will highlight the relevant sentence, display the new comment section if needed
+* and scroll so the sentence is in view
+*/
 const commentClick = function(event){
 
     var editing = false;
@@ -1623,9 +1628,6 @@ function nextWeek(id) {
         }
     }
 
-    
-       
-    
 }
 /*
  *  hideEmotionHover is an event listener that hides the moving emotion overlay
@@ -1678,7 +1680,6 @@ const emotionHover = function(event) {
 const sentenceClick = function(event) {
     clearSelectedElements();
     event.path[0].setAttribute("selected", "true");
-    //event.path[0].style.border = "1px solid black";
     var commentEntry = document.getElementById("newCommentDiv");
     
     if(event.path[0].getAttribute("hascomment") == "true"){
@@ -1688,14 +1689,10 @@ const sentenceClick = function(event) {
         commentEntry.style.display = "block";
     }
 
-    //commentEntry.value = event.path[0].getAttribute("comment");
-
     event.path[0].getAttribute("id");
     var comment = document.getElementById("comment " + event.path[0].getAttribute("id"));
     
     comment.setAttribute("selected", "true");
-   // var selectedText = document.getElementById('selectedText');
-   // selectedText.textContent = event.path[0].textContent;
 }
 /*
  *  saveComment is a function that will take what is in the text entry element and
@@ -1758,7 +1755,10 @@ function saveComment(arg){
         }
     }
 }
-
+/*
+*   addComment is a method called by the add comment button on the 'student' page
+*   It will make a comment entry from the text in the text area
+*/
 function addComment(){
 
     var newComment = document.getElementById('commentEntry').value;
@@ -1970,12 +1970,6 @@ const bookmarkClick = function() {
         } 
     }
 
-
-       
-        
-    
-    
-
 }
 
 /*
@@ -1984,16 +1978,12 @@ const bookmarkClick = function() {
  */
 function clearGraphs() {
     document.querySelector('#new').remove();
-    // document.querySelector('#groupButtonDiv').remove();
     var newDiv = document.createElement("div");
     newDiv.setAttribute("id", "new");
     var newDiv2 = document.createElement("div");
     newDiv2.setAttribute("id", "groupButtonDiv");
     var parent = document.querySelector('main');
     parent.appendChild(newDiv);
-
-    
-    //parent.appendChild(newDiv2);
 }
 /*
  * makeAside is a function that builds the area to the right of the graphs.
@@ -2032,10 +2022,6 @@ function makeAside(id) {
     checkbox.setAttribute("id", id + " checkbox");
     checkbox.setAttribute("class", "check");
     checkbox.setAttribute("type", "checkbox");
-    //checkbox.setAttribute("checked", "checked");
-    //label.setAttribute("class", "switch");
-    //label.textContent = "Bookmark";
-    //bookmarkDiv.appendChild(label);
     bookmarkDiv.appendChild(checkbox);
     bookmarkDiv.appendChild(span);
     parentDiv.setAttribute("class", "graphAside");
@@ -2375,8 +2361,7 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
             var exp_total = key.positiveExp + key.negativeExp + key.neutralExp + key.otherExp;
 
-            //var emotion_total = 1
-            //var exp_total = 1;
+          
 
             var dataG = new Array();
             //Trendline things
@@ -2577,9 +2562,6 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
         }
     });
 
-
-   
-
     deadMaps.forEach((value) => {
         makeCanva(value);
         var missingContainer = document.getElementById(value + " container");
@@ -2722,10 +2704,6 @@ function buildForm(map, highestWeek, set) {
         }
     } 
    
-
-
-
-
     for (var i = 1; i < week + 1; i++) {
 
         var option = document.createElement("option");
