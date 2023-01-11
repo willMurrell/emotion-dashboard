@@ -20,38 +20,39 @@ html(lang='en')
         include templates/header.pug
         main
             npm
-            div(class="controls")
-                div(id='groupButtonDiv')
-                    h1 View Teams of:
-                div(class="form") 
+            div(id="menus")
+                div(class="controls")
+                    div(id='groupButtonDiv')
+                        h1 View Teams of:
+                    div(class="form") 
+                        
+                        h2 Filter:
+                        label(for="weekSelector") Week: 
+                        select(id='weekSelector')
+                            option(value="null" selected="selected") All Weeks
+                        br
+                        label(for="weekSelector") Course: 
+                        select(id='groupSelector')
+                            option(value="null" selected="selected") All Courses
+                        br
+                        label(for="bookmarkInput") Bookmarked: 
+                        input(type="checkbox" id="bookmarkInput" value="true")
+                        br
+                        label(for="missingInput") Missing: 
+                        input(type="checkbox" id="missingInput" value="true" checked="true")
+                        br
+                        
+                        label(for="sortSelector") Sort By: 
+                        select(id='sortSelector')
+                            option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                            option(value="overallPos" ) Least Urgent (Overall)
+                            option(value="emotionNeg" ) Most Urgent (by emotion)
+                            option(value="experienceNeg" ) Most Urgent (by experience)
+                            option(value="mostRecent" ) Most Recent
+                            option(value="leastRecent" ) Least Recent
+                        
+                        button(onclick="filterForm(\"course\")") Submit
                     
-                    h2 Filter:
-                    label(for="weekSelector") Week: 
-                    select(id='weekSelector')
-                        option(value="null" selected="selected") All Weeks
-                    br
-                    label(for="weekSelector") Course: 
-                    select(id='groupSelector')
-                        option(value="null" selected="selected") All Courses
-                    br
-                    label(for="bookmarkInput") Bookmarked: 
-                    input(type="checkbox" id="bookmarkInput" value="true")
-                    br
-                    label(for="missingInput") Missing: 
-                    input(type="checkbox" id="missingInput" value="true" checked="true")
-                    br
-                    
-                    label(for="sortSelector") Sort By: 
-                    select(id='sortSelector')
-                        option(value="overallNeg" selected="selected") Most Urgent (Overall)
-                        option(value="overallPos" ) Least Urgent (Overall)
-                        option(value="emotionNeg" ) Most Urgent (by emotion)
-                        option(value="experienceNeg" ) Most Urgent (by experience)
-                        option(value="mostRecent" ) Most Recent
-                        option(value="leastRecent" ) Least Recent
-                    
-                    button(onclick="filterForm(\"course\")") Submit
-                
             div(id='trendsDiv')
                 canvas(id = "expTrend")
                 canvas(id = "emoTrend")
