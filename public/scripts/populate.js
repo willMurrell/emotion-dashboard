@@ -957,6 +957,7 @@ function buildReportHTML(data, week) {
 
     textHeader.setAttribute("class", "textHeader");
 
+    weekTitle.setAttribute("id", "weekTitle");
     weekTitle.textContent = week.substring(0, 4) + " " + week.substring(4);
     var backButtonButton = document.createElement('button');
     backButtonButton.setAttribute("class", "backButtonButton");
@@ -1017,6 +1018,7 @@ function buildReportHTML(data, week) {
             span.setAttribute("id", week + " " + sentenceNumber);
             span.setAttribute("display", "emotion");
             span.setAttribute("class", "sentence");
+            span.setAttribute("shown", "true");
             if (x == 0) {
                 x++;
             } else {
@@ -1161,6 +1163,135 @@ function buildReportHTML(data, week) {
     textArea.appendChild(textEntry);
 
     buildBarGraphs(week, posEmoMap, negEmoMap, posExpMap, negExpMap);
+    addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap);
+}
+
+/*
+ *  addFilterDropDown is a function that adds the emotions and experiences present in the report
+ *  
+*/
+function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
+    var EmoArray = new Array();
+    var ExpArray = new Array();
+    //EmoArray.push(week);
+   // ExpArray.push(week);
+    EmoArray.push("All Emotions");
+    ExpArray.push("All Experiences");
+    posEmoMap.forEach((key, value) => {
+        EmoArray.push(value);
+    });
+    negEmoMap.forEach((key, value) => {
+        EmoArray.push(value);
+    });
+    negExpMap.forEach((key, value) => {
+        ExpArray.push(value);
+    });
+    posExpMap.forEach((key, value) => {
+        ExpArray.push(value);
+    });
+    
+
+    var sentenceFilterLabel = document.getElementById("sentenceFilterLabel");
+    var EmoSentenceFilter = document.createElement("select");
+    var ExpSentenceFilter = document.createElement("select");
+
+    EmoSentenceFilter.setAttribute("id", week+"-EmoSentenceFilter")
+    EmoSentenceFilter.addEventListener("change", optionClick, false);
+
+    ExpSentenceFilter.setAttribute("id", week+"-ExpSentenceFilter")
+    ExpSentenceFilter.addEventListener("change", optionClick, false);
+
+    EmoSentenceFilter.setAttribute("class", "SentenceFilter")
+    ExpSentenceFilter.setAttribute("class", "SentenceFilter")
+
+    if(week != "Week1"){
+        EmoSentenceFilter.style.display = "none";
+        EmoSentenceFilter.setAttribute("selected", "false");
+    } else {
+        EmoSentenceFilter.setAttribute("selected", "true");
+    }
+    ExpSentenceFilter.style.display = "none";
+    ExpSentenceFilter.setAttribute("selected", "false");
+
+
+    EmoArray.forEach((value) =>{
+
+        var option = document.createElement("option");
+        
+        option.setAttribute("value", value)
+        option.textContent = value;
+        EmoSentenceFilter.appendChild(option);
+    });
+    ExpArray.forEach((value) =>{
+
+        var option = document.createElement("option");
+        
+        option.setAttribute("value", value)
+        option.textContent = value;
+        ExpSentenceFilter.appendChild(option);
+    });
+    
+    
+    sentenceFilterLabel.appendChild(EmoSentenceFilter);
+    sentenceFilterLabel.appendChild(ExpSentenceFilter);
+    
+}
+
+const optionClick = function (event){
+    console.log("click");
+    
+    var selecter = event.path[0];
+    var week = selecter.getAttribute("id").split("-")[0];
+    
+    var SelectedValue = selecter.value;
+    
+    var sentence = document.querySelector('#textArea').children
+    for (var i = 0; i < sentence.length; i++) {
+        
+        
+        if(sentence[i].getAttribute("id") == week){
+            
+            var spans = sentence[i].children[1].children;
+            for (var j = 0; j < spans.length; j++) {
+                spans[j].setAttribute("shown", "false");
+
+                var emotionRadio = document.getElementById("emotionRadio");
+                var type = emotionRadio.checked;
+                
+
+                var array;
+                if(type){
+                    type = "emotion"
+                } else {
+                    type = "experience"
+                }
+                if(spans[j].getAttribute(type) != null){
+                    //spans[j].setAttribute("hidden", "true");
+                    array = spans[j].getAttribute(type).split(", ");
+                    
+                    array[0] = array[0].substring(1)
+                    var containsValue = false;
+                   
+                    array.forEach((value) => {
+                        if(value == SelectedValue || SelectedValue == "All Emotions" || SelectedValue == "All Experiences"){
+                            
+                            containsValue = true;
+                        } 
+                            
+                        
+                    })
+                    if(containsValue){
+                        
+                        spans[j].setAttribute("shown", "true");
+                    } 
+                    
+                }
+                
+                
+            }
+        }
+    }
+    
 }
 /*
 *   addToMap takes a value and a map and increments the value associated with it
@@ -1177,7 +1308,7 @@ function addToMap(value, map){
 * buildBarGraphs will build and display the trend graphs
 */
 function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
-
+        
         const data = getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap);
         const emoConfig = {
             type: 'bar',
@@ -1344,6 +1475,7 @@ function getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap){
 *   It will change the highlighted sentence and the graph to the learning experience or emotion version
 */
 const radioCheck = function (event){
+    
    var graphs = document.querySelector('#textArea').children;
    for (var i = 0; i < graphs.length; i++) {
     var spans = graphs[i].children[1].children;
@@ -1371,6 +1503,8 @@ const radioCheck = function (event){
             }
                     
         }
+
+    
     } else if(event.path[0].getAttribute('value') == "emotion"){
         if(barGraphs[i].getAttribute("current") == "true"){
             
@@ -1385,7 +1519,48 @@ const radioCheck = function (event){
         }
     }
  }
-  
+
+    var filters = document.querySelector("#sentenceFilterLabel").children;
+    var week;
+    var found = false;
+    for(var i = 0; i < filters.length; i++){
+        if(filters[i].getAttribute("selected") == "true" && found != true){
+            filters[i].setAttribute("selected", "false");
+            filters[i].style.display = "none";
+            var filterInfArr = filters[i].getAttribute("id").split("-");
+            week = filterInfArr[0];
+            var type = filterInfArr[1].substring(0,3);
+            if(type == "Emo"){
+                
+                
+                var exp = document.getElementById(week+"-ExpSentenceFilter");
+                exp.style.display = "inline-block";
+                exp.setAttribute("selected", "true");
+                found = true;
+            } 
+            if(type == "Exp") {
+                
+                var emo = document.getElementById(week+"-EmoSentenceFilter");
+                emo.style.display = "inline-block";
+                emo.setAttribute("selected", "true");
+                found = true;
+            }
+        }
+    }
+    
+    var selectType;
+    if(event.path[0].getAttribute('value') == "experience"){
+        selectType = "Exp";
+    } else {
+        selectType = "Emo";
+    }
+
+    var selecter = document.getElementById(week+"-"+selectType+"SentenceFilter");
+    var value = selecter.value;
+    var event = new Event('change');
+    selecter.dispatchEvent(event);
+    //selecter.value = "All Emotions";
+   
 }
 /*
 *   clearSelectedElements removes the attribute "selected" from all elements
@@ -1561,6 +1736,21 @@ function previousWeek(id) {
             
         }
     }
+    var filters = document.querySelector("#sentenceFilterLabel").children;
+    
+    for(var i = 0; i < filters.length; i++){
+        if(filters[i].getAttribute("selected") == "true"){
+            filters[i].setAttribute("selected", "false");
+            filters[i].style.display = "none";
+            var filterInfArr = filters[i].getAttribute("id").split("-");
+            filters[i].style.display = "none";
+            
+            var nextFilter = document.getElementById("Week"+nextWeek+"-"+filterInfArr[1]);
+            nextFilter.style.display = "inline-block"
+            nextFilter.setAttribute("selected", "true");
+            
+        }
+    }
 }
 /*
  * nextWeek is a function called by the the "next" button on the individual students page
@@ -1624,6 +1814,22 @@ function nextWeek(id) {
             if(barGraphs[i].getAttribute("id").substring(0,2) == selectedRadio){
                 barGraphs[i].style.display = "block";
             }
+            
+        }
+    }
+
+    var filters = document.querySelector("#sentenceFilterLabel").children;
+    
+    for(var i = 0; i < filters.length; i++){
+        if(filters[i].getAttribute("selected") == "true"){
+            filters[i].setAttribute("selected", "false");
+            filters[i].style.display = "none";
+            var filterInfArr = filters[i].getAttribute("id").split("-");
+            filters[i].style.display = "none";
+            
+            var nextFilter = document.getElementById("Week"+nextWeek+"-"+filterInfArr[1]);
+            nextFilter.style.display = "inline-block"
+            nextFilter.setAttribute("selected", "true");
             
         }
     }
@@ -1913,7 +2119,7 @@ function bookmarkEventListener(set) {
     }
 
     deadMaps.forEach((value) => {
-        console.log(value);
+        
 
         var checkElm = document.getElementById(value + " checkbox");
         checkElm.addEventListener("click", bookmarkClick)
@@ -1938,33 +2144,35 @@ const bookmarkClick = function() {
     } else {  //INDIVIDUAL LEVEL
         const group = document.getElementById("courseTitle").textContent;
             
-        id = infArr[0] + " " + group+" " + infArr[1];
+        StudentID = infArr[0] + " " + group+" " + infArr[1];
+        
 
         map = studentMap;
     }
 
 
     
+    if(document.getElementById(id + " container").hasAttribute("missing")){
+        if(document.getElementById(id + " container").getAttribute("missing") == "true"){
+            if (currentMark) {
 
-    if(document.getElementById(id + " container").getAttribute("missing") == "true"){
-        if (currentMark) {
+                
+                document.getElementById(checkid).checked = true;
 
-            
-            document.getElementById(checkid).checked = true;
+            } else {
+                
+                document.getElementById(checkid).checked = false;
 
-        } else {
-            
-            document.getElementById(checkid).checked = false;
-
+            }
         }
     } else {
        if (currentMark) {
 
-            map.get(id).bookmarkTrue();
+            map.get(StudentID).bookmarkTrue();
             document.getElementById(checkid).checked = true;
 
         } else {
-            map.get(id).bookmarkFalse();
+            map.get(StudentID).bookmarkFalse();
             document.getElementById(checkid).checked = false;
 
         } 

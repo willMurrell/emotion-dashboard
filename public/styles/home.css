@@ -625,32 +625,62 @@ textarea{
     border-radius: 10px;
 }
 
+.sentence[display = "emotion"][experiencetype = "negative"][shown = "false"]{
+    background-color: white;
+    
+}
+.sentence[display = "emotion"][experiencetype = "positive"][shown = "false"]{
+    background-color: white;
+   
+}
+.sentence[display = "emotion"][experiencetype = "mixed"][shown = "false"]{
+    background-color: white;  
+}
 
-.sentence[display = "emotion"][emotionType = "negative"]{
+
+.sentence[display = "emotion"][emotionType = "negative"][shown = "true"]{
     background-color: rgba(255, 0, 8, 0.4);
     
 }
-.sentence[display = "emotion"][emotionType = "positive"]{
+.sentence[display = "emotion"][emotionType = "positive"][shown = "true"]{
     background-color: rgba(138, 201, 38, 0.4);
    
 }
-.sentence[display = "emotion"][emotionType = "mixed"]{
+.sentence[display = "emotion"][emotionType = "mixed"][shown = "true"]{
     background-color: rgba(255, 184, 30, 0.4);
     
 }
 
-.sentence[display = "experience"][experiencetype = "negative"]{
+
+.sentence[display = "experience"][experiencetype = "negative"][shown = "false"]{
+    background-color: white;
+    
+}
+.sentence[display = "experience"][experiencetype = "positive"][shown = "false"]{
+    background-color: white;
+   
+}
+.sentence[display = "experience"][experiencetype = "mixed"][shown = "false"]{
+    background-color: white;  
+}
+
+
+.sentence[display = "experience"][emotionType = "negative"][shown = "true"]{
     background-color: rgba(255, 0, 8, 0.4);
     
 }
-.sentence[display = "experience"][experiencetype = "positive"]{
+.sentence[display = "experience"][emotionType = "positive"][shown = "true"]{
     background-color: rgba(138, 201, 38, 0.4);
    
 }
-.sentence[display = "experience"][experiencetype = "mixed"]{
+.sentence[display = "experience"][emotionType = "mixed"][shown = "true"]{
     background-color: rgba(255, 184, 30, 0.4);
     
 }
+
+
+
+
  
 
 

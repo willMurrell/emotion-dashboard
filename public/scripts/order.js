@@ -12,7 +12,7 @@ function filterForm(arg, set){
     var sort = document.querySelector('#sortSelector').value;
     var set;
     
-   console.log(missing);
+   
     
     if(arg != undefined){
         if(arg == 'course'){
@@ -104,7 +104,7 @@ function order(filterWeek, filterGroup, bookmark, missing){
 
         if(bookmark){
             var bookmarkElement = document.getElementById(group+ " " +fullWeek + " checkbox");
-            console.log(bookmarkElement);
+            
 
             if(!bookmarkElement.checked){
                     container.style.display = "none";
