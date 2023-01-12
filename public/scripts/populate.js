@@ -1167,22 +1167,24 @@ function buildReportHTML(data, week) {
 }
 
 /*
- *  addFilterDropDown is a function that adds the emotions and experiences present in the report
- *  
+ *  addFilterDropDown is a function that adds the emotions and experiences for each week to the report
+ *  It will hide all of them but week 1's emotions
 */
 function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
     var EmoArray = new Array();
     var ExpArray = new Array();
-    //EmoArray.push(week);
-   // ExpArray.push(week);
+    //adding option for all emotions / experiences
     EmoArray.push("All Emotions");
     ExpArray.push("All Experiences");
+
+    //Adding each positive and negative emotion to an array
     posEmoMap.forEach((key, value) => {
         EmoArray.push(value);
     });
     negEmoMap.forEach((key, value) => {
         EmoArray.push(value);
     });
+     //Adding each positive and negative experience to an array
     negExpMap.forEach((key, value) => {
         ExpArray.push(value);
     });
@@ -1204,6 +1206,7 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
     EmoSentenceFilter.setAttribute("class", "SentenceFilter")
     ExpSentenceFilter.setAttribute("class", "SentenceFilter")
 
+        //hide all but emotions week 1
     if(week != "Week1"){
         EmoSentenceFilter.style.display = "none";
         EmoSentenceFilter.setAttribute("selected", "false");
@@ -1214,6 +1217,7 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
     ExpSentenceFilter.setAttribute("selected", "false");
 
 
+    //creating the <options> element for the <select> element
     EmoArray.forEach((value) =>{
 
         var option = document.createElement("option");
@@ -1231,28 +1235,35 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
         ExpSentenceFilter.appendChild(option);
     });
     
-    
+    //Adding to page
     sentenceFilterLabel.appendChild(EmoSentenceFilter);
     sentenceFilterLabel.appendChild(ExpSentenceFilter);
     
 }
 
+/*
+*   optionClick is an event listener that will trigger each time a new <option> is selected
+*   It changes the values of the sentences depending on whether they are being selected or not
+*/
 const optionClick = function (event){
     console.log("click");
     
     var selecter = event.path[0];
     var week = selecter.getAttribute("id").split("-")[0];
-    
+    //The value present in the <select>
     var SelectedValue = selecter.value;
     
+    //Looping over all the sentences
     var sentence = document.querySelector('#textArea').children
     for (var i = 0; i < sentence.length; i++) {
         
-        
+        //Looping over only the ones from the current week
         if(sentence[i].getAttribute("id") == week){
             
             var spans = sentence[i].children[1].children;
             for (var j = 0; j < spans.length; j++) {
+                //The shown attribute refers to the background colour of the sentence
+                // i.e. "false" means there will be no/a white background.  
                 spans[j].setAttribute("shown", "false");
 
                 var emotionRadio = document.getElementById("emotionRadio");
@@ -1265,14 +1276,17 @@ const optionClick = function (event){
                 } else {
                     type = "experience"
                 }
+                //Ignores sentences that have no colour behind them
                 if(spans[j].getAttribute(type) != null){
-                    //spans[j].setAttribute("hidden", "true");
+                    //Turns all the emotions/experiences present in the sentence into an array
                     array = spans[j].getAttribute(type).split(", ");
                     
                     array[0] = array[0].substring(1)
                     var containsValue = false;
                    
+                    //This searches through all of them and compares them to the selected value
                     array.forEach((value) => {
+
                         if(value == SelectedValue || SelectedValue == "All Emotions" || SelectedValue == "All Experiences"){
                             
                             containsValue = true;
@@ -1280,8 +1294,8 @@ const optionClick = function (event){
                             
                         
                     })
+                    //Coded like this to avoid changing this attribute in the middle of the spans for loop
                     if(containsValue){
-                        
                         spans[j].setAttribute("shown", "true");
                     } 
                     
