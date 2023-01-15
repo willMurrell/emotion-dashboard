@@ -4,11 +4,13 @@
  *   emotionColours is a map that containst the emotions and the colour associated with it
  */
 const emotionColours = new Map();
-emotionColours.set("Positive", "#48A9A6");
-emotionColours.set("Negative", "#D1603D");
-emotionColours.set("Other", "#E5E5E5");
-emotionColours.set("Neutral", "#a1a1a1");
-emotionColours.set("Missing", "rgba(0, 0, 0, 0.09)");
+emotionColours.set("Positive", "rgba(96,228,47,0.6)");
+emotionColours.set("Negative", "rgba(228,87,46,0.7)");
+emotionColours.set("Other", "#F7BFB4");
+emotionColours.set("Neutral", "rgba(47,187,228,0.7)");
+emotionColours.set("Missing", "rgba(223,203,116, 0.2)");
+
+
 /*
  *   positiveEmotions and negative Emotions are arrays used when
  *   creating the group data, to tell whether an individual entry
@@ -380,16 +382,16 @@ function buildHorizontalGraph(datac, labels, title, id) {
         options: {
             indexAxis: 'y',
             // Elements options apply to all of the options unless overridden in a dataset
-            // In this case, we are setting the border of each horizontal bar to be 2px wide
+            
             elements: {
                 bar: {
-                    borderWidth: 0,
+                    //borderWidth: 10,
                 }
             },
             responsive: false,
             plugins: {
                 legend: {
-                    position: 'top',
+                    //position: 'top',
                 },
                 title: {
                     display: true,
@@ -407,16 +409,13 @@ function buildHorizontalGraph(datac, labels, title, id) {
             scales: {
                 x: {
                     stacked: true,
-                    display: false
-
+                    display: true,
+                    max: 100
                 },
                 y: {
                     stacked: true,
                     display: false,
-                    ticks: {
-                        beginAtZero: true,
-                        max: 100
-                    }
+                    
                 }
             },
             layout: {
@@ -424,7 +423,7 @@ function buildHorizontalGraph(datac, labels, title, id) {
             },
             barPercentage: 0.90,
             categoryPercentage: 1.0,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
 
         },
     };
@@ -443,12 +442,13 @@ function buildHorizontalGraph(datac, labels, title, id) {
  *   @return obj an object containing label, colour and data
  */
 function datasetMakerDuo(key, emotion_value, exp_value) {
+    
     var obj = new Object();
     var obj = {
         label: key,
         backgroundColor: emotionColours.get(key),
         borderColor: emotionColours.get(key),
-        data: [emotion_value, exp_value]
+        data: [emotion_value * 100, exp_value* 100]
     };
     return obj;
 
@@ -821,9 +821,12 @@ function buildTrendGraph(data, id){
             scales:{
                 x:{
                     ticks: { color: "black"}
+                    
                 },
                 y:{
-                    ticks: { color: "black"}
+                    ticks: { color: "black"},
+                    max: 100,
+                    min: 0
                 }
             }
         }
@@ -855,22 +858,22 @@ function getTrendData(positiveArray, negativeArray, neutralArray){
         label: 'Positive',
         data: positiveArray,
         fill: false,
-        backgroundColor: '#48A9A6',
-        borderColor: '#48A9A6',
+        backgroundColor: emotionColours.get("Positive"),
+        borderColor: emotionColours.get("Positive"),
         tension: 0.1
       }, {
         label: 'Negative',
         data: negativeArray,
         fill: false,
-        backgroundColor: '#D1603D',
-        borderColor: '#D1603D',
+        backgroundColor: emotionColours.get("Negative"),
+        borderColor: emotionColours.get("Negative"),
         tension: 0.1
       }, {
         label: 'Neutral',
         data: neutralArray,
         fill: false,
-        backgroundColor: '#a1a1a1',
-        borderColor: '#a1a1a1',
+        backgroundColor: emotionColours.get("Neutral"),
+        borderColor: emotionColours.get("Neutral"),
         tension: 0.1
       }]
     };
@@ -1246,7 +1249,7 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
 *   It changes the values of the sentences depending on whether they are being selected or not
 */
 const optionClick = function (event){
-    console.log("click");
+    
     
     var selecter = event.path[0];
     var week = selecter.getAttribute("id").split("-")[0];
@@ -2151,6 +2154,8 @@ const bookmarkClick = function() {
     var checkid = this.id;
     
     var map;
+    var StudentID
+    var student = false;
     if ( set == "course") { //COURSE LEVEL
         map = courseMap;
     } else if ( set == "group"){ //GROUP LEVEL
@@ -2159,7 +2164,7 @@ const bookmarkClick = function() {
         const group = document.getElementById("courseTitle").textContent;
             
         StudentID = infArr[0] + " " + group+" " + infArr[1];
-        
+        student = true;
 
         map = studentMap;
     }
@@ -2180,13 +2185,16 @@ const bookmarkClick = function() {
             }
         }
     } else {
+        if(student){
+            id = StudentID;
+        }
        if (currentMark) {
 
-            map.get(StudentID).bookmarkTrue();
+            map.get(id).bookmarkTrue();
             document.getElementById(checkid).checked = true;
 
         } else {
-            map.get(StudentID).bookmarkFalse();
+            map.get(id).bookmarkFalse();
             document.getElementById(checkid).checked = false;
 
         } 
@@ -2409,24 +2417,24 @@ function displayIndividualGraphs(group, map, deadMaps) {
             var emotion_total = key.getTotalEmo();
             var exp_total = key.getTotalExp();
 
-            
+            //This is a very silly sausage moment.
             if(selectedGroup == "null") {
-                positive[key.week] = key.positiveEmotion / emotion_total;
-                negative[key.week] = key.negativeEmotion / emotion_total;
-                neutral[key.week] = key.neutralEmotion / emotion_total;
+                positive[key.week] = addCurrentWeekData(key, positive, key.positiveEmotion);
+                    negative[key.week] = addCurrentWeekData(key, negative, key.negativeEmotion);
+                    neutral[key.week] = addCurrentWeekData(key, neutral, key.neutralEmotion);
 
-                positiveExpArr[key.week] = key.positiveExp / exp_total;
-                negativeExpArr[key.week] = key.negativeExp  / exp_total;
-                neutralExpArr[key.week] = key.neutralExp  / exp_total;
+                    positiveExpArr[key.week] = addCurrentWeekData(key, positiveExpArr, key.positiveExp);
+                    negativeExpArr[key.week] = addCurrentWeekData(key, negativeExpArr, key.negativeExp);
+                    neutralExpArr[key.week] = addCurrentWeekData(key, neutralExpArr, key.neutralExp);
             } else if(selectedGroup == key.name){
                 
-                positive[key.week] = key.positiveEmotion / emotion_total;
-                negative[key.week] = key.negativeEmotion / emotion_total;
-                neutral[key.week] = key.neutralEmotion / emotion_total;
+                    positive[key.week] = addCurrentWeekData(key, positive, key.positiveEmotion);
+                    negative[key.week] = addCurrentWeekData(key, negative, key.negativeEmotion);
+                    neutral[key.week] = addCurrentWeekData(key, neutral, key.neutralEmotion);
 
-                positiveExpArr[key.week] = key.positiveExp / exp_total;
-                negativeExpArr[key.week] = key.negativeExp  / exp_total;
-                neutralExpArr[key.week] = key.neutralExp  / exp_total;
+                    positiveExpArr[key.week] = addCurrentWeekData(key, positiveExpArr, key.positiveExp);
+                    negativeExpArr[key.week] = addCurrentWeekData(key, negativeExpArr, key.negativeExp);
+                    neutralExpArr[key.week] = addCurrentWeekData(key, neutralExpArr, key.neutralExp);
             }
 
             dataG.push(datasetMakerDuo("Positive", (key.positiveEmotion / emotion_total), (key.positiveExp / exp_total)));
@@ -2455,11 +2463,18 @@ function displayIndividualGraphs(group, map, deadMaps) {
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
     });
     
-    var emoTrendData = getTrendData(positive, negative, neutral);
+    var emotions = averageArrays(positive, negative, neutral);
+    var experiences = averageArrays(positiveExpArr, negativeExpArr, neutralExpArr);
+    
+    
+    
+   
+    var emoTrendData = getTrendData(emotions[0], emotions[1], emotions[2]);
     buildTrendGraph(emoTrendData, "emoTrend");
 
-    var expTrendData = getTrendData(positiveExpArr, negativeExpArr, neutralExpArr);
+    var expTrendData = getTrendData(experiences[0], experiences[1], experiences[2]);
     buildTrendGraph(expTrendData, "expTrend");
+
 }
 /*
  * displayAside adds the information to the aside to the right of the graphs
@@ -2563,9 +2578,10 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
     var negativeExpArr= new Array();
     var neutralExpArr = new Array();
 
+    var emotionWeekTotals    
 
     sortedMap.forEach((key, value) => {
-
+        
         if (key.course == course || course == 'course') {
             if(key.week > highestWeek){
                 highestWeek = key.week;
@@ -2581,8 +2597,10 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             var ratioOfCompleted = completed / total;
 
             var emotion_total = key.positiveEmotion + key.negativeEmotion + key.otherEmotion + key.neutralEmotion;
+            //Total used for bar graphs
             var exp_total = key.positiveExp + key.negativeExp + key.neutralExp + key.otherExp;
-
+            //Total used for trend graphs (needs to change depending on the filter)
+            
           
 
             var dataG = new Array();
@@ -2590,56 +2608,54 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
            
             if(course == 'course'){
                 
-                if(positive[key.week] == undefined){
-                    positive[key.week] = 0;
-                    positiveExpArr[key.week] = 0;
-                }
-                if(negative[key.week] == undefined){
-                    negative[key.week] = 0;
-                    negativeExpArr[key.week] = 0;
-                }
-                if(neutral[key.week] == undefined){
-                    neutral[key.week] = 0;
-                    neutralExpArr[key.week] = 0;
-                }
-                
                 if(selectedGroup == "null"){
-                    positive[key.week] = positive[key.week] + (key.positiveEmotion / emotion_total);
-                    negative[key.week] = negative[key.week] + (key.negativeEmotion / emotion_total);
-                    neutral[key.week] = neutral[key.week] + (key.neutralEmotion / emotion_total);
 
-                    positiveExpArr[key.week] = key.positiveExp / exp_total;
-                    negativeExpArr[key.week] = key.negativeExp  / exp_total;
-                    neutralExpArr[key.week] = key.neutralExp  / exp_total;
+                    
+                    positive[key.week] = addCurrentWeekData(key, positive, key.positiveEmotion);
+                    negative[key.week] = addCurrentWeekData(key, negative, key.negativeEmotion);
+                    neutral[key.week] = addCurrentWeekData(key, neutral, key.neutralEmotion);
+
+                    positiveExpArr[key.week] = addCurrentWeekData(key, positiveExpArr, key.positiveExp);
+                    negativeExpArr[key.week] = addCurrentWeekData(key, negativeExpArr, key.negativeExp);
+                    neutralExpArr[key.week] = addCurrentWeekData(key, neutralExpArr, key.neutralExp);
                 } else if (selectedGroup == key.course){
-                    positive[key.week] = positive[key.week] + (key.positiveEmotion / emotion_total);
-                    negative[key.week] = negative[key.week] + (key.negativeEmotion / emotion_total);
-                    neutral[key.week] = neutral[key.week] + (key.neutralEmotion / emotion_total);
 
-                    positiveExpArr[key.week] = key.positiveExp / exp_total;
-                    negativeExpArr[key.week] = key.negativeExp  / exp_total;
-                    neutralExpArr[key.week] = key.neutralExp  / exp_total;
+                    
+
+                    positive[key.week] = addCurrentWeekData(key, positive, key.positiveEmotion);
+                    negative[key.week] = addCurrentWeekData(key, negative, key.negativeEmotion);
+                    neutral[key.week] = addCurrentWeekData(key, neutral, key.neutralEmotion);
+
+                    positiveExpArr[key.week] = addCurrentWeekData(key, positiveExpArr, key.positiveExp);
+                    negativeExpArr[key.week] = addCurrentWeekData(key, negativeExpArr, key.negativeExp);
+                    neutralExpArr[key.week] = addCurrentWeekData(key, neutralExpArr, key.neutralExp);
 
                 }
                 
                 
             } else if(selectedGroup == "null") {
-                positive[key.week] = key.positiveEmotion / emotion_total;
-                negative[key.week] = key.negativeEmotion / emotion_total;
-                neutral[key.week] = key.neutralEmotion / emotion_total;
+                
+               
+            
+            
+                positive[key.week] = addCurrentWeekData(key, positive, key.positiveEmotion);
+                negative[key.week] = addCurrentWeekData(key, negative, key.negativeEmotion);
+                neutral[key.week] = addCurrentWeekData(key, neutral, key.neutralEmotion);
 
-                positiveExpArr[key.week] = key.positiveExp / exp_total;
-                negativeExpArr[key.week] = key.negativeExp  / exp_total;
-                neutralExpArr[key.week] = key.neutralExp  / exp_total;
+                positiveExpArr[key.week] = addCurrentWeekData(key, positiveExpArr, key.positiveExp);
+                negativeExpArr[key.week] = addCurrentWeekData(key, negativeExpArr, key.negativeExp);
+                neutralExpArr[key.week] = addCurrentWeekData(key, neutralExpArr, key.neutralExp);
+
+
             } else if(selectedGroup == key.group){
                 
-                positive[key.week] = key.positiveEmotion / emotion_total;
-                negative[key.week] = key.negativeEmotion / emotion_total;
-                neutral[key.week] = key.neutralEmotion / emotion_total;
+                positive[key.week] = addCurrentWeekData(key, positive, key.positiveEmotion);
+                negative[key.week] = addCurrentWeekData(key, negative, key.negativeEmotion);
+                neutral[key.week] = addCurrentWeekData(key, neutral, key.neutralEmotion);
 
-                positiveExpArr[key.week] = key.positiveExp / exp_total;
-                negativeExpArr[key.week] = key.negativeExp  / exp_total;
-                neutralExpArr[key.week] = key.neutralExp  / exp_total;
+                positiveExpArr[key.week] = addCurrentWeekData(key, positiveExpArr, key.positiveExp);
+                negativeExpArr[key.week] = addCurrentWeekData(key, negativeExpArr, key.negativeExp);
+                neutralExpArr[key.week] = addCurrentWeekData(key, neutralExpArr, key.neutralExp);
             } else {
                 
             }
@@ -2792,14 +2808,63 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
         dataG.push(datasetMakerDuo("Missing", 1, 1));
         buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], value, value);
     });
+    
+    
+  
+    
 
-    var emoTrendData = getTrendData(positive, negative, neutral);
+    var emotions = averageArrays(positive, negative, neutral);
+    var experiences = averageArrays(positiveExpArr, negativeExpArr, neutralExpArr);
+    
+    
+   
+    var emoTrendData = getTrendData(emotions[0], emotions[1], emotions[2]);
     buildTrendGraph(emoTrendData, "emoTrend");
 
-    var expTrendData = getTrendData(positiveExpArr, negativeExpArr, neutralExpArr);
+    var expTrendData = getTrendData(experiences[0], experiences[1], experiences[2]);
     buildTrendGraph(expTrendData, "expTrend");
 
 }
+
+function averageArrays(positive, negative, neutral){
+    
+    for(var i = 0; i < positive.length; i++){
+        var week = i;
+        var weekTotal = getTotal(positive, negative, neutral , week);
+        positive[week] = positive[week] / weekTotal * 100;
+        negative[week] = negative[week] / weekTotal * 100;
+        neutral[week] = neutral[week] / weekTotal * 100;
+    }
+    
+    
+    var array = new Array();
+    array.push(positive);
+    array.push(negative);
+    array.push(neutral);
+
+    return array; 
+}
+
+function getTotal(positive, negative, neutral , week){
+    var array_total = positive[week] + negative[week] + neutral[week];
+    return array_total;
+}
+
+function addCurrentWeekData(key, array, type){
+    var previousValue = array[key.week];
+
+    if(previousValue == undefined){
+        previousValue = 0;
+    }
+               
+    array[key.week] = previousValue + (type);
+
+    return array[key.week]
+}
+               
+
+               
+
 /*
  * displayGroups is a function that adds buttons that take you into their course/group
  */

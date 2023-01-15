@@ -127,11 +127,6 @@ function order(filterWeek, filterGroup, bookmark, missing){
                 
             }
         }
-        
-        
-
-       
-        
 
     }
     
