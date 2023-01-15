@@ -27,7 +27,12 @@ html(lang='en')
                     a(href='/home' id='backButton') 
                         i(class="fa-solid fa-caret-left")
                     h1(id='courseTitle') #{course}
+                
                 div(class="controls")
+                    div(id="pageInfo")
+                        h1 Page Information 
+                        h3(id="coursePageInfo")
+                        h3(id="teamPageInfo")
                     div(id='groupButtonDiv')  
                         h1 View Students of:
                     div(class="form") 
@@ -57,7 +62,9 @@ html(lang='en')
                             option(value="leastRecent" ) Least Recent    
 
                         button(onclick="filterForm(course, set)") Submit
-                
+                    div(id="overallComments")
+                        h1 Overall Comments 
+                        textarea(id="commentTextArea")
                 
             div(id='trendsDiv')
                 canvas(id = "expTrend")

@@ -1,0 +1,27 @@
+[
+ {
+  "Group": "COMP371",
+  "Name": "all",
+  "Comment": "here is a really usefull comment or something!"
+ },
+ {
+  "Group": "COMP372",
+  "Name": "all",
+  "Comment": "Yep more interesting information"
+ },
+ {
+  "Group": "all",
+  "Name": "",
+  "Comment": "This should be on the home page of the dashboard!!!"
+ },
+ {
+  "Group": "COMP373",
+  "Name": "Team1",
+  "Comment": "This should be on COMP371 - Team1 page"
+ },
+ {
+  "Group": "COMP371",
+  "Name": "Koko",
+  "Comment": "KOKO GF 371!! Hopefully!!"
+ }
+]

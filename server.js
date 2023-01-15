@@ -77,11 +77,15 @@ function loadCSVHeader(){
     
     let fileInputName = 'SummerStudent/Project-Group-Student.csv'
     let fileOutputName = 'SummerStudent/Project-Group-Student.json'
+
+    let InputName = 'SummerStudent/overall-comments.csv'
+    let OutputName = 'SummerStudent/overall-comments.json'
     
     const promise = new Promise((resolve, reject) =>{
         csvToJson.formatValueByType().generateJsonFileFromCsv(fileInputName,fileOutputName);
-        
+        csvToJson.formatValueByType().generateJsonFileFromCsv(InputName,OutputName);
     });
+    
     promise
         .then(loadJSONHeader())
         .catch((value) => {

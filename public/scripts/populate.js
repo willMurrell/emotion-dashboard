@@ -515,7 +515,7 @@ function createGroupData(data) {
     var hasNoneExp = 0;
 
     Object.entries(data).forEach((entry) => {
-
+        
         if (positiveEmotions.includes(entry[0])) {
             
             groupMap.get(groupName).addToPositiveEmotion(entry[1]);
@@ -528,6 +528,7 @@ function createGroupData(data) {
 
         } else if (entry[0] == "Other_emotion") {
             //entry[0] == "Other_emotion" || 
+            
             groupMap.get(groupName).addToOtherEmotion(entry[1]);
             courseMap.get(courseName).addToOtherEmotion(entry[1]);
 
@@ -693,7 +694,54 @@ function processData(data, filter) {
     
 }
 
+const getComments = async ()=>{
+    var res;
+    if (set == 'individuals') {
+        res = await fetch("../../home/students/comments");
+    } else {
+        res = await fetch("../home/students/comments");
+    }
 
+    const comments = await res.json();
+    console.log(comments);
+    displayComments(comments);
+}
+
+function displayComments(comments){
+    var textarea = document.getElementById("commentTextArea");
+    var title = document.getElementById("courseTitle").textContent;
+    comments.forEach((commentEntry) =>{
+        var group = commentEntry.Group;
+        var name = commentEntry.Name;
+        var comment = commentEntry.Comment;
+        if(set == "course"){
+            console.log("Set: " + set);
+            if(group == "all"){
+                textarea.value = comment;
+            }
+        } else if(set == "group"){
+            if(group == title && name == "all"){
+                textarea.value = comment;
+            }
+        } else {
+
+        }
+        
+
+        
+    })
+   
+}
+
+function setPageInfo(set, course){
+    console.log(set);
+    console.log(course);
+    //var coursePageInformation = document.getElementById("coursePageInfo")
+    //coursePageInformation.textContent = set;
+
+    //var teamPageInformation = document.getElementById("teamPageInfo")
+    //teamPageInformation.textContent = course;
+}
 /*
  *   getStudents is a function that is immediately called when the page loads.
  *   Its job is to get the data from the web server and pass it on
@@ -701,7 +749,8 @@ function processData(data, filter) {
  *   It also calls the required methods for the page that called it
  */
 const getStudents = async (set, course) => {
-
+    getComments();
+    setPageInfo(set, course);
     //fetching data from server
     var res
     if (set == 'individuals') {
@@ -887,6 +936,7 @@ function getTrendData(positiveArray, negativeArray, neutralArray){
  *   It also calls the required methods for the page that called it
  */
 const processIndividuals = async (set, course) => {
+    getComments();
     //fetching data from server
     const res = await fetch("../../../home/students/individuals");
     const students = await res.json()
@@ -2668,7 +2718,7 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
 
             dataG.push(datasetMakerDuo("Negative", (key.negativeEmotion / emotion_total)* ratioOfCompleted, (key.negativeExp / exp_total)* ratioOfCompleted));
             dataG.push(datasetMakerDuo("Other", (key.otherEmotion / emotion_total)* ratioOfCompleted, (key.otherExp / exp_total)* ratioOfCompleted));
-
+            
             dataG.push(datasetMakerDuo("Missing", 1 - ratioOfCompleted, 1 - ratioOfCompleted));
 
             buildHorizontalGraph(dataG, ["Emotions", "Learning Experience"], key.name, key.name);
@@ -2870,13 +2920,22 @@ function addCurrentWeekData(key, array, type){
  */
 function displayGroups() {
     var courseTitle = document.getElementById("courseTitle");
+    var courseTitleText = document.getElementById("courseTitle").textContent;
+    var titleArray = courseTitleText.split("-");
+    
+    if(courseTitleText == "All Courses"){
+        courseTitle = null;
+    } else {
+        courseTitleText = titleArray[titleArray.length - 1]
+        console.log("Titltteee: " + courseTitleText);
+    }
     var sillyGroup = new Map();
     var path;
     if (courseTitle != null) {
-        path = ("../papers/" + courseTitle.textContent + "/");
+        path = ("../papers/" + courseTitleText + "/");
 
         groupMap.forEach((key, value) => {
-            if (key.course == courseTitle.textContent) {
+            if (key.course == courseTitleText) {
 
                 sillyGroup.set(key.group, key.group);
             }
@@ -2904,14 +2963,16 @@ function displayGroups() {
  */
 function displayStudents(group) {
     var courseTitle = document.getElementById("courseTitle");
+    var titleContentArray = courseTitle.textContent.split("-");
+    var teamName = titleContentArray[titleContentArray.length - 1];
     var sillyGroup = new Map();
     var path;
     if (courseTitle != null) {
         studentMap.forEach((key, value) => {
-            if (key.group == courseTitle.textContent) {
+            if (key.group == teamName) {
 
                 sillyGroup.set(key.name, key.name);
-                path = ("../" + key.course + "/" + courseTitle.textContent + "/");
+                path = ("../" + key.course + "/" + teamName + "/");
             }
 
         });

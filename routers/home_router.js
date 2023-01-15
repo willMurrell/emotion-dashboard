@@ -126,6 +126,7 @@ const learning_experiences = [
     var entries = new Array();
     var textEntries = new Array();
     var csvFolder = 'SummerStudentCSV';
+    var comments;
     //Start of function calls
     iterateOverFiles(csvFolder);
 
@@ -136,6 +137,10 @@ const learning_experiences = [
     router.get('/students/individuals', (req, res) =>{
         res.send(JSON.stringify(textEntries));
     })
+
+    router.get('/students/comments', (req, res) =>{
+        res.send(comments);
+    })
     /*
      * iterateOverFiles will iterate over the folder passed to it and 
      * then call the parseCSV method on each one
@@ -145,9 +150,9 @@ const learning_experiences = [
         const directory = fs.opendirSync(folder, 'utf8');
         let file;
         let filename = "header.json"
-        
+        let commentFilename = "overall-comments.json"
         readHeader(filename);
-        
+        readComments(commentFilename);
         while((file = directory.readSync()) !== null){
         //while((file = directory.readSync()) !== null){
             let info_array, name, group, week, out_name;
@@ -181,6 +186,26 @@ const learning_experiences = [
                 } else {
                     var JSONdata = JSON.parse(data);                   
                     entries.push(JSON.stringify(JSONdata));                    
+                }               
+            }
+        });
+    }
+    /*
+     * readHeader reads the json comment file and turns it into a map
+    */
+    async function readComments(filename){
+        let rawData = fs.readFile('SummerStudent/' + filename, (err, data)=> {            
+            if(err){
+                console.log("there was an error! " + err);
+            } else {
+                if(data.byteLength == 0){
+                    console.log(" no file ot something");
+                    //readHeader(filename)                   
+                } else {
+                    console.log("success");
+                    comments = JSON.parse(data);  
+                    console.log(comments);       
+                    //console.log(JSON.stringify(JSONdata))           
                 }               
             }
         });
@@ -268,11 +293,15 @@ const learning_experiences = [
         for(let i = 0; i < num_sentences; i++){
             
             let entry = data[i];
+            
             emotions.forEach(emotion => {
-               
+                
                 if(data[i][emotion] == 1){
   
                     if(entryMap.has(emotion)){
+                        if(emotion == "Other_issue" || emotion == "Other_emotion" || emotion == "Other_positive" ){
+                            console.log(emotion);
+                        }
                         entryMap.set(emotion, entryMap.get(emotion) + 1)
     
                     } else {

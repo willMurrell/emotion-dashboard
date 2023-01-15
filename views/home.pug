@@ -21,7 +21,15 @@ html(lang='en')
         main
             npm
             div(id="menus")
+                h1(id='courseTitle') All Courses
                 div(class="controls")
+
+                    //div(id="pageInfo")
+                        
+                        //h1 Page Information 
+                        //h3(id="coursePageInfo")
+                        //h3(id="teamPageInfo")
+                        
                     div(id='groupButtonDiv')
                         h1 View Teams of:
                     div(class="form") 
@@ -52,6 +60,10 @@ html(lang='en')
                             option(value="leastRecent" ) Least Recent
                         
                         button(onclick="filterForm(\"course\")") Submit
+                    div(id="overallComments")
+                        h1 Overall Comments 
+                        textarea(id="commentTextArea")
+                    
                     
             div(id='trendsDiv')
                 canvas(id = "expTrend")

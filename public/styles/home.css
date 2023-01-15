@@ -155,18 +155,25 @@ main{
     justify-content: space-around;
 }
 
+.controls > *{
+    
+    border: 1px solid #8ecae6;
+    border-radius: 10px;
+    margin: 5px 5px;
+    padding: 5px 5px;
+}
+
 
 
 
 #groupButtonDiv{
     font-size: 20px;
-    border: #8ecae6;
-    border-style: solid;
+    
     padding: 10px;
     margin-left: 5px;
     margin-top: 5px;
     width: 46%;
-    border-radius: 10px;
+    
     
 }
 
@@ -218,13 +225,8 @@ canvas{
 
 .form{
     font-size: 20px;
-    border: #8ecae6;
-    border-style: solid;
-    padding: 10px;
-    margin-left: 5px;
-    margin-top: 5px;
     width: 46%;
-    border-radius: 10px;
+   
 }
 
 .form span{
@@ -444,6 +446,8 @@ canvas{
     
 
 }
+
+
 #backButtonDiv{
     
     display:block;
