@@ -23,12 +23,13 @@ html(lang='en')
 
         include templates/header.pug
         main
-            div(id="menus")
-                div(id="backButtonDiv")
+            div(id="titleDiv")
                     a(href='/papers/' + course id='backButton') 
                         i(class="fa-solid fa-caret-left")
                     h1(id='courseTitle') #{course}-#{group}
                     //- h1(id='courseTitle') 
+            div(id="menus")
+                
                 div(class="controls")
                     div(id='groupButtonDiv')  
                         h1 View Report of:
@@ -51,14 +52,16 @@ html(lang='en')
                         br
                         label(for="sortSelector") Sort By: 
                         select(id='sortSelector')
-                            option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                            option(value="overallNeg" ) Most Urgent (Overall)
                             option(value="overallPos" ) Least Urgent (Overall)
                             option(value="emotionNeg" ) Most Urgent (by emotion)
                             option(value="experienceNeg" ) Most Urgent (by experience) 
-                            option(value="mostRecent" ) Most Recent
+                            option(value="mostRecent" selected="selected") Most Recent
                             option(value="leastRecent" ) Least Recent
-                        button(onclick="filterForm(group, set)") Submit
-                
+                        button(id="submitButton" onclick="filterForm(group, set)") Submit
+                    div(id="overallComments")
+                        h1 Overall Comments 
+                        textarea(id="commentTextArea")
                 
             div(id='trendsDiv')
                 canvas(id = "expTrend")
@@ -72,3 +75,4 @@ html(lang='en')
             course='#{course}';
             group='#{group}';
             set = 'individuals';
+            student = "all";

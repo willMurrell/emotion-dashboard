@@ -223,6 +223,10 @@ canvas{
     
 }
 
+#submitButton{
+    display: none;
+}
+
 .form{
     font-size: 20px;
     width: 46%;
@@ -472,10 +476,26 @@ canvas{
 #backButton:visited{
     color: black;
 }
+
 #courseTitle{
-    margin-left: 10px;
-    font-size: 30px;
     display: inline-block;
+    margin-left: 10px;
+    
+}
+
+#titleDiv{
+    margin-top: -80px;
+    margin-bottom: 90px;
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+    z-index: 999;
+    position: relative;
+}
+#titleDiv h1{
+    display: inline-block;
+    margin-left: 2px;
+    
 }
 
 #reportArea{
@@ -526,11 +546,6 @@ canvas{
     
 }
 
-#studentName{
-    margin-left: 10px;
-    font-size: 30px;
-    display: inline-block;
-}
 
 
 .tools{
@@ -629,15 +644,15 @@ textarea{
     border-radius: 10px;
 }
 
-.sentence[display = "emotion"][experiencetype = "negative"][shown = "false"]{
+.sentence[display = "emotion"][emotionType = "negative"][shown = "false"]{
     background-color: white;
     
 }
-.sentence[display = "emotion"][experiencetype = "positive"][shown = "false"]{
+.sentence[display = "emotion"][emotionType = "positive"][shown = "false"]{
     background-color: white;
    
 }
-.sentence[display = "emotion"][experiencetype = "mixed"][shown = "false"]{
+.sentence[display = "emotion"][emotionType = "mixed"][shown = "false"]{
     background-color: white;  
 }
 
@@ -669,15 +684,15 @@ textarea{
 }
 
 
-.sentence[display = "experience"][emotionType = "negative"][shown = "true"]{
+.sentence[display = "experience"][experiencetype = "negative"][shown = "true"]{
     background-color: rgba(255, 0, 8, 0.4);
     
 }
-.sentence[display = "experience"][emotionType = "positive"][shown = "true"]{
+.sentence[display = "experience"][experiencetype = "positive"][shown = "true"]{
     background-color: rgba(138, 201, 38, 0.4);
    
 }
-.sentence[display = "experience"][emotionType = "mixed"][shown = "true"]{
+.sentence[display = "experience"][experiencetype = "mixed"][shown = "true"]{
     background-color: rgba(255, 184, 30, 0.4);
     
 }
@@ -727,18 +742,38 @@ h2{
 
 #topInfo{
     display: flex;
-    flex-direction: row ;
-    height: 500px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 50px;
+    
+}
+
+#topInfo > *{
+    border: 1px solid #8ecae6;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#overallComments{
+    width: 20%;
+}
+#overallComments textarea{
+    width: 92%;
+    height: 70%;
+    margin: 0px 2px;
+    /*border: none;*/
 }
 
 #graphArea{
-    margin-top: 50px;
-    margin-left: 15%;
+    padding: 20px;
 }
 
 #graphArea canvas{
+    /*
     height: 350px !important;
     width: 700px !important;
+    */
     padding: 20px;
     border: 1px solid black;
     border-radius: 10px;
@@ -785,8 +820,9 @@ and (max-width: 1550px)
    
 }
 
-
-
+#overallComments{
+    width: auto;
+}
 #groupButtonDiv{
    width: auto;
 }
@@ -819,8 +855,6 @@ and (max-width: 1550px)
     display: flex;
     flex-direction: column;
     margin-left: 0px;
-    
-    
 
 }
 
@@ -863,6 +897,10 @@ and (max-width: 768px)
         display: flex;
         flex-direction: column ;
         height: auto;
+    }
+
+    #overallComments{
+        width: auto;
     }
 
     #graphArea{

@@ -20,8 +20,10 @@ html(lang='en')
         include templates/header.pug
         main
             npm
-            div(id="menus")
+            div(id="titleDiv")
                 h1(id='courseTitle') All Courses
+            div(id="menus")
+                
                 div(class="controls")
 
                     //div(id="pageInfo")
@@ -52,17 +54,17 @@ html(lang='en')
                         
                         label(for="sortSelector") Sort By: 
                         select(id='sortSelector')
-                            option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                            option(value="overallNeg" ) Most Urgent (Overall)
                             option(value="overallPos" ) Least Urgent (Overall)
                             option(value="emotionNeg" ) Most Urgent (by emotion)
                             option(value="experienceNeg" ) Most Urgent (by experience)
-                            option(value="mostRecent" ) Most Recent
+                            option(value="mostRecent" selected="selected" ) Most Recent
                             option(value="leastRecent" ) Least Recent
                         
-                        button(onclick="filterForm(\"course\")") Submit
+                        button(id="submitButton" onclick="filterForm(\"course\")") Submit
                     div(id="overallComments")
                         h1 Overall Comments 
-                        textarea(id="commentTextArea")
+                        textarea(id="commentTextArea" placeholder="Describe yourself here...")
                     
                     
             div(id='trendsDiv')

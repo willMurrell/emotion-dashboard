@@ -696,52 +696,70 @@ function processData(data, filter) {
 
 const getComments = async ()=>{
     var res;
-    if (set == 'individuals') {
-        res = await fetch("../../home/students/comments");
-    } else {
-        res = await fetch("../home/students/comments");
-    }
+    
+        if (set == 'individuals') {
+            res = await fetch("../../../home/students/comments");
+        } else {
+            res = await fetch("../home/students/comments");
+        }
+    
+    
 
     const comments = await res.json();
-    console.log(comments);
+    
     displayComments(comments);
+    
 }
 
 function displayComments(comments){
-    var textarea = document.getElementById("commentTextArea");
-    var title = document.getElementById("courseTitle").textContent;
+   
     comments.forEach((commentEntry) =>{
         var group = commentEntry.Group;
         var name = commentEntry.Name;
         var comment = commentEntry.Comment;
+        
         if(set == "course"){
-            console.log("Set: " + set);
+            var textarea = document.getElementById("commentTextArea");
+            var title = document.getElementById("courseTitle").textContent;
+            
             if(group == "all"){
                 textarea.value = comment;
             }
         } else if(set == "group"){
+            var textarea = document.getElementById("commentTextArea");
+            var title = document.getElementById("courseTitle").textContent;
             if(group == title && name == "all"){
                 textarea.value = comment;
             }
-        } else {
-
-        }
+        } else if(set == "individuals"){
+            
+            if(student == "all"){
+                var textarea = document.getElementById("commentTextArea");
+                var title = document.getElementById("courseTitle").textContent;
+                var names = title.split("-");
+                if(group == names[0] && name == names[1]){
+                    textarea.value = comment;
+                }
+            }else {
+                var textarea = document.getElementById("commentTextArea");
+                var studentName = document.getElementById("studentName").textContent;
+                
+                var course = document.getElementById("courseName").textContent;
+                
+                if(group == course && name == studentName){
+                    textarea.value = comment;
+                }
         
+            
+            }
+        }
 
         
     })
-   
+    
 }
 
-function setPageInfo(set, course){
-    console.log(set);
-    console.log(course);
-    //var coursePageInformation = document.getElementById("coursePageInfo")
-    //coursePageInformation.textContent = set;
 
-    //var teamPageInformation = document.getElementById("teamPageInfo")
-    //teamPageInformation.textContent = course;
-}
 /*
  *   getStudents is a function that is immediately called when the page loads.
  *   Its job is to get the data from the web server and pass it on
@@ -749,8 +767,9 @@ function setPageInfo(set, course){
  *   It also calls the required methods for the page that called it
  */
 const getStudents = async (set, course) => {
+    console.log("hello?")
     getComments();
-    setPageInfo(set, course);
+   
     //fetching data from server
     var res
     if (set == 'individuals') {
@@ -936,7 +955,9 @@ function getTrendData(positiveArray, negativeArray, neutralArray){
  *   It also calls the required methods for the page that called it
  */
 const processIndividuals = async (set, course) => {
+    
     getComments();
+    
     //fetching data from server
     const res = await fetch("../../../home/students/individuals");
     const students = await res.json()
@@ -945,7 +966,9 @@ const processIndividuals = async (set, course) => {
         //title is the name of the data... for some reason... idk
         var studentData = JSON.parse(title);
         //displays the text reports with their emotions
+        
         displayReports(studentData);
+        
     });
     //This event listener hides the emotion overlay when not hovering over a sentence
     var reportArea = document.getElementById('reportArea');
@@ -954,6 +977,7 @@ const processIndividuals = async (set, course) => {
     
     //Adds empty weeks
     addMissingWeeks();
+   
 }
 
 /*
@@ -990,7 +1014,11 @@ function displayReports(data) {
     var group = document.getElementById('groupName').textContent;
     var course = document.getElementById('courseName').textContent;
     var infArr = data[0].split(" ");
-    if (infArr[0] == name && infArr[1] == group && infArr[2] == course) {
+    //console.log(course);
+    
+    
+    if (infArr[0] == name && infArr[1] == group && infArr[2].replace(/\s+/g, "") == course.replace(/\s+/g, "")) {
+        console.log("mothing");
         buildReportHTML(data, infArr[3]);
 
     }
@@ -1228,7 +1256,11 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
     var ExpArray = new Array();
     //adding option for all emotions / experiences
     EmoArray.push("All Emotions");
+    EmoArray.push("Positive Emotions");
+    EmoArray.push("Negative Emotions");
     ExpArray.push("All Experiences");
+    ExpArray.push("Positive Experiences");
+    ExpArray.push("Negative Experiences");
 
     //Adding each positive and negative emotion to an array
     posEmoMap.forEach((key, value) => {
@@ -1336,7 +1368,7 @@ const optionClick = function (event){
                     
                     array[0] = array[0].substring(1)
                     var containsValue = false;
-                   
+                    
                     //This searches through all of them and compares them to the selected value
                     array.forEach((value) => {
 
@@ -1344,7 +1376,28 @@ const optionClick = function (event){
                             
                             containsValue = true;
                         } 
+                        if(SelectedValue == "Positive Emotions"){
+                            if(positiveEmotions.includes(value)){
+                                containsValue = true;
+                            }
+                        } 
+                        if(SelectedValue == "Negative Emotions"){
+                            if(negativeEmotions.includes(value)){
+                                containsValue = true;
+                            }
+                        } 
+                        if(SelectedValue == "Negative Experiences"){
+                            if(negativeExperience.includes(value)){
+                                console.log("here");
+                                containsValue = true;
+                            }
+                        } 
+                        if(SelectedValue == "Positive Experiences"){
                             
+                            if(positiveExperience.includes(value)){
+                                containsValue = true;
+                            }
+                        }
                         
                     })
                     //Coded like this to avoid changing this attribute in the middle of the spans for loop
@@ -2197,7 +2250,6 @@ function bookmarkEventListener(set) {
  * bookmarkClick is actually an event listener. Updates object and page when a bookmark is clicked
  */
 const bookmarkClick = function() {
-    
     var currentMark = this.checked;
     var infArr = this.id.split(" ");
     var id = infArr[0] + " " + infArr[1];
@@ -2609,6 +2661,26 @@ function displayAside(key) {
         expChange.textContent = "0%";
     }
 }
+
+function addFormEventListeners(){
+
+    var weekSelecter = document.getElementById("weekSelector")
+    weekSelecter.addEventListener("change", submitForm, false);
+    var groupSelecter = document.getElementById("groupSelector")
+    groupSelecter.addEventListener("change", submitForm, false);
+    var bookmarkCheck = document.getElementById("bookmarkInput")
+    bookmarkCheck.addEventListener("change", submitForm, false);
+    var missingCheck = document.getElementById("missingInput")
+    missingCheck.addEventListener("change", submitForm, false);
+    var sortSelecter = document.getElementById("sortSelector")
+    sortSelecter.addEventListener("change", submitForm, false);
+    submitForm();
+}
+function submitForm(){
+    console.log("hey man");
+    var button = document.getElementById("submitButton");
+    button.click();
+}
 /*
  *   displayGroupGraph is a function that, when called
  *   will create graphs from the map passed to it
@@ -2927,7 +2999,7 @@ function displayGroups() {
         courseTitle = null;
     } else {
         courseTitleText = titleArray[titleArray.length - 1]
-        console.log("Titltteee: " + courseTitleText);
+        
     }
     var sillyGroup = new Map();
     var path;
@@ -3084,6 +3156,7 @@ function buildForm(map, highestWeek, set) {
         var element = document.getElementById('groupSelector');
         element.appendChild(option);
     });
+    addFormEventListeners();
 }
 
 /*

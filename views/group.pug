@@ -22,17 +22,20 @@ html(lang='en')
 
         include templates/header.pug
         main
+            //div(id="backButtonDiv")
+            
+            div(id="titleDiv")
+                a(href='/home' id='backButton') 
+                    i(class="fa-solid fa-caret-left")    
+                h1(id='courseTitle') #{course}
             div(id="menus")
-                div(id="backButtonDiv")
-                    a(href='/home' id='backButton') 
-                        i(class="fa-solid fa-caret-left")
-                    h1(id='courseTitle') #{course}
+                
                 
                 div(class="controls")
-                    div(id="pageInfo")
-                        h1 Page Information 
-                        h3(id="coursePageInfo")
-                        h3(id="teamPageInfo")
+                    //- div(id="pageInfo")
+                    //-     h1 Page Information 
+                    //-     h3(id="coursePageInfo")
+                    //-     h3(id="teamPageInfo")
                     div(id='groupButtonDiv')  
                         h1 View Students of:
                     div(class="form") 
@@ -54,14 +57,14 @@ html(lang='en')
                         br
                         label(for="sortSelector") Sort By: 
                         select(id='sortSelector')
-                            option(value="overallNeg" selected="selected") Most Urgent (Overall)
+                            option(value="overallNeg" ) Most Urgent (Overall)
                             option(value="overallPos" ) Least Urgent (Overall)
                             option(value="emotionNeg" ) Most Urgent (by emotion)
                             option(value="experienceNeg" ) Most Urgent (by experience) 
-                            option(value="mostRecent" ) Most Recent
+                            option(value="mostRecent" selected="selected") Most Recent
                             option(value="leastRecent" ) Least Recent    
 
-                        button(onclick="filterForm(course, set)") Submit
+                        button(id="submitButton" onclick="filterForm(course, set)") Submit
                     div(id="overallComments")
                         h1 Overall Comments 
                         textarea(id="commentTextArea")

@@ -19,23 +19,38 @@ html(lang='en')
     body(onload="processIndividuals()")
         include templates/header.pug
         main
-            div(id="topInfo")
-                div(id="pageInfo")
+            div(id="titleDiv")
                     a(href='/papers/' + course + '/' + group id='backButton') 
                         i(class="fa-solid fa-caret-left")
+                    
+                    
+                    h1(id='courseName') #{course}  
+                    h1  -
+                    h1(id='groupName') #{group}
+                    h1  -
                     h1(id='studentName') #{student}
-                    br
-                    label(for="groupName") Team:  
-                    h2(id='groupName') #{group}
-                    br
-                    br
-                    br
-                    label(for="courseName") Course:  
-                    h2(id='courseName') #{course}
+                     
+                    
+            div(id="topInfo")
+                
+                    
+                //- div(id="pageInfo")
+                //-     a(href='/papers/' + course + '/' + group id='backButton') 
+                //-         i(class="fa-solid fa-caret-left")
+                //-     h1(id='studentName') #{student}
+                //-     br
+                //-     label(for="groupName") Team:  
+                //-     h2(id='groupName') #{group}
+                //-     br
+                //-     label(for="courseName") Course:  
+                //-     h2(id='courseName') #{course}
                     
                 
                     
                 div(id="graphArea")  
+                div(id="overallComments")
+                        h2 Comments 
+                        textarea(id="commentTextArea")
             div(id="reportArea")
                 div(id="testDiv") 
                 div(id="textArea")
@@ -85,3 +100,4 @@ html(lang='en')
             course='#{course}';
             group='#{group}';
             student='#{student}';
+            set = "individuals";

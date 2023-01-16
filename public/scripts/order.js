@@ -2,6 +2,7 @@
 
 
 function filterForm(arg, set){
+    console.log("CLICK!")
     console.log("SET: " + set);
     console.log("ARG: " + arg);
 
