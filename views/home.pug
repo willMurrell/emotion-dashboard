@@ -64,7 +64,10 @@ html(lang='en')
                         button(id="submitButton" onclick="filterForm(\"course\")") Submit
                     div(id="overallComments")
                         h1 Overall Comments 
-                        textarea(id="commentTextArea" placeholder="Describe yourself here...")
+                        textarea(id="commentTextArea" placeholder="No Comment" readonly editing="false")
+                        button(id="overallCommentEdit" onclick="overallCommentEdit()") Edit
+                        button(id="overallCommentSave" onclick="overallCommentSave(false)") Save
+                        button(id="overallCommentDelete" onclick="overallCommentSave(true)") Delete
                     
                     
             div(id='trendsDiv')

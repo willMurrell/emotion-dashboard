@@ -209,6 +209,29 @@ main{
     color: black;
 }
 
+#overallCommentSave{
+    display: none;
+}
+
+#overallCommentDelete{
+    display: none;
+}
+
+#commentTextArea{
+    resize: none;
+}
+
+#commentTextArea[editing="false"]{
+    border: none;
+}
+#commentTextArea[editing="true"]{
+    border: 1px solid black;
+}
+
+#overallCommentEdit{
+    display: block;
+}
+
 canvas{
     width: 500px;
     height: 400px;

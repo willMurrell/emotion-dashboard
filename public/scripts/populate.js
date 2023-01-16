@@ -584,7 +584,7 @@ function createGroupData(data) {
  *   to the correlating Student object
  */
 function createIndividualData(student) {
-
+    
     var datac = new Array();
 
     var name, week, group, course;
@@ -759,6 +759,43 @@ function displayComments(comments){
     
 }
 
+function overallCommentEdit(){
+    var textArea = document.getElementById("commentTextArea");
+    textArea.setAttribute("editing", "true");
+    textArea.removeAttribute("readonly");
+    textArea.focus();
+
+    var overallCommentEdit = document.getElementById("overallCommentEdit");
+    overallCommentEdit.style.display = "none";
+
+    var overallCommentSave = document.getElementById("overallCommentSave");
+    overallCommentSave.style.display = "block";
+
+    var overallCommentDelete = document.getElementById("overallCommentDelete");
+    overallCommentDelete.style.display = "inline-block";
+
+}
+
+function overallCommentSave(deleteComment){
+    var textArea = document.getElementById("commentTextArea");
+    if(deleteComment){
+        console.log("delete");
+        textArea.value = "";
+    } else {
+        
+
+    }
+    textArea.readOnly = "true";
+    textArea.setAttribute("editing", "false");
+
+    var overallCommentDelete = document.getElementById("overallCommentDelete");
+    var overallCommentSave = document.getElementById("overallCommentSave");
+    var overallCommentEdit = document.getElementById("overallCommentEdit");
+
+    overallCommentDelete.style.display = "none";
+    overallCommentSave.style.display = "none";
+    overallCommentEdit.style.display = "block";
+}
 
 /*
  *   getStudents is a function that is immediately called when the page loads.
@@ -767,10 +804,10 @@ function displayComments(comments){
  *   It also calls the required methods for the page that called it
  */
 const getStudents = async (set, course) => {
-    console.log("hello?")
+    
     getComments();
    
-    //fetching data from server
+    //fetching data from server 
     var res
     if (set == 'individuals') {
         res = await fetch("../../home/students/");
@@ -1014,11 +1051,11 @@ function displayReports(data) {
     var group = document.getElementById('groupName').textContent;
     var course = document.getElementById('courseName').textContent;
     var infArr = data[0].split(" ");
-    //console.log(course);
+    
     
     
     if (infArr[0] == name && infArr[1] == group && infArr[2].replace(/\s+/g, "") == course.replace(/\s+/g, "")) {
-        console.log("mothing");
+        
         buildReportHTML(data, infArr[3]);
 
     }
@@ -1388,7 +1425,7 @@ const optionClick = function (event){
                         } 
                         if(SelectedValue == "Negative Experiences"){
                             if(negativeExperience.includes(value)){
-                                console.log("here");
+                                
                                 containsValue = true;
                             }
                         } 
@@ -2216,9 +2253,9 @@ function bookmarkEventListener(set) {
             map = groupMap;
         } else if (set == "individuals"){
             
-            const group = document.getElementById("courseTitle").textContent;
+            const group = document.getElementById("courseTitle").textContent.split("-");
             
-            id = infArr[0] + " " + group+" " + infArr[1];
+            id = infArr[0] + " " + group[1]+" " + infArr[1];
             map = studentMap;
         }
         
@@ -2250,6 +2287,7 @@ function bookmarkEventListener(set) {
  * bookmarkClick is actually an event listener. Updates object and page when a bookmark is clicked
  */
 const bookmarkClick = function() {
+    
     var currentMark = this.checked;
     var infArr = this.id.split(" ");
     var id = infArr[0] + " " + infArr[1];
@@ -2263,9 +2301,9 @@ const bookmarkClick = function() {
     } else if ( set == "group"){ //GROUP LEVEL
         map = groupMap;
     } else {  //INDIVIDUAL LEVEL
-        const group = document.getElementById("courseTitle").textContent;
+        const group = document.getElementById("courseTitle").textContent.split("-");
             
-        StudentID = infArr[0] + " " + group+" " + infArr[1];
+        StudentID = infArr[0] + " " + group[1]+" " + infArr[1];
         student = true;
 
         map = studentMap;
@@ -2677,7 +2715,7 @@ function addFormEventListeners(){
     submitForm();
 }
 function submitForm(){
-    console.log("hey man");
+    
     var button = document.getElementById("submitButton");
     button.click();
 }
@@ -3039,10 +3077,12 @@ function displayStudents(group) {
     var teamName = titleContentArray[titleContentArray.length - 1];
     var sillyGroup = new Map();
     var path;
+    
     if (courseTitle != null) {
         studentMap.forEach((key, value) => {
+            
             if (key.group == teamName) {
-
+                
                 sillyGroup.set(key.name, key.name);
                 path = ("../" + key.course + "/" + teamName + "/");
             }
@@ -3053,7 +3093,7 @@ function displayStudents(group) {
 
 
     sillyGroup.forEach((key, value) => {
-
+        
         var groupButton = document.createElement('a');
         var element = document.querySelector('#groupButtonDiv');
         groupButton.setAttribute("class", "groupButton");
