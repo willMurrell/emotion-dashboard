@@ -936,6 +936,20 @@ const getStudents = async (set, course) => {
 *   buildTrendGraph takes a dataset and an id and builds and displays the chart
 */
 function buildTrendGraph(data, id){
+    var group = document.getElementById("groupSelector");
+    groupName = group.value;
+    if(group.value == "null"){
+        groupName = "";
+    }
+
+    var expTitle = document.getElementById("expTrendTitle");
+    expTitle.textContent = groupName + " Learning Experiences";
+
+    var emoTitle = document.getElementById("emoTrendTitle");
+    emoTitle.textContent = groupName + " Emotions";
+
+
+
     var currentGraph = document.getElementById(id);
     currentGraph.remove();
     var trend = document.createElement('canvas');
@@ -1516,7 +1530,7 @@ function addToMap(value, map){
 * buildBarGraphs will build and display the trend graphs
 */
 function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
-        
+    
         const data = getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap);
         const emoConfig = {
             type: 'bar',
@@ -2913,6 +2927,8 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
             badArr.sort();
             goodArr.forEach((entry) => {
                 var goodBoy = document.createElement("span")
+                
+
                 goodBoy.setAttribute("class", "goodBoy");
                 goodBoy.style.order = 1;
 
@@ -2920,8 +2936,13 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
                 goodBoy.textContent += entry;
                 elm.appendChild(goodBoy);
                 var icon = document.createElement("i");
-                icon.setAttribute("class", "fa-solid fa-circle-dot");
-                goodBoy.appendChild(icon);
+                icon.setAttribute("class", "fa-solid fa-check-double fa-10x");
+                //icon.setAttribute("class", "fa-regular fa-circle-check");
+                var goodBoyIconDiv = document.createElement("div");
+                goodBoyIconDiv.setAttribute("class", "iconDiv");
+
+                goodBoyIconDiv.appendChild(icon);
+                goodBoy.appendChild(goodBoyIconDiv);
             });
             badArr.forEach((entry) => {
                 var badBoy = document.createElement("span");
@@ -2931,8 +2952,15 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
                 badBoy.textContent += entry;
                 elm.appendChild(badBoy);
                 var icon = document.createElement("i");
-                icon.setAttribute("class", "fa-solid fa-circle-dot");
-                badBoy.appendChild(icon);
+                icon.setAttribute("class", "fa-regular fa-circle-xmark fa-5x");
+
+                var badBoyIconDiv = document.createElement("div");
+                badBoyIconDiv.setAttribute("class", "iconDiv");
+
+                badBoyIconDiv.appendChild(icon);
+                badBoy.appendChild(badBoyIconDiv);
+
+                badBoy.appendChild(badBoyIconDiv);
 
             });
 
@@ -3230,17 +3258,22 @@ function buildForm(map, highestWeek, set) {
                 groupSet.add(key.group);
             }
         } else if(set == "individuals"){
-            if (key.group == courseTitle.textContent) {
+            
+            var groupName = courseTitle.textContent.split("-")[1];
+            if (key.group == groupName) {
+                
                 groupSet.add(key.name);
             }
         } else {
+            
             var group = key.name.split(" ")[0]
             groupSet.add(group);
         }
 
     });
-
+    
     groupSet.forEach((value) => {
+        
         var option = document.createElement("option");
         option.setAttribute("value", value);
         option.textContent = value;

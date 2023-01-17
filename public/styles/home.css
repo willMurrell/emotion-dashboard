@@ -390,6 +390,11 @@ canvas{
     color: #ff595e;
 }
 
+.iconDiv{
+    
+    display: inline;
+}
+
 .missingStudents:hover{
     display: flex;
     flex-direction: column;

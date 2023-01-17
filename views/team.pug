@@ -47,7 +47,7 @@ html(lang='en')
                         label(for="bookmarkInput") Bookmarked: 
                         input(type="checkbox" id="bookmarkInput" value="true")
                         br
-                        label(for="missingInput") Missing: 
+                        label(for="missingInput") Show Missing: 
                         input(type="checkbox" id="missingInput" value="true" checked="true")
                         br
                         label(for="sortSelector") Sort By: 
@@ -68,8 +68,12 @@ html(lang='en')
                             button(id="overallCommentDelete" onclick="overallCommentSave(true, course, group)") Delete
                 
             div(id='trendsDiv')
-                canvas(id = "expTrend")
-                canvas(id = "emoTrend")
+                div(id="expTrendDiv")
+                    p(id="expTrendTitle") Learning Experience
+                    canvas(id = "expTrend")
+                div(id="emoTrendDiv")
+                    p(id="emoTrendTitle") Emotions
+                    canvas(id = "emoTrend")
             div(id='new')
             
             
