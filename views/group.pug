@@ -68,6 +68,9 @@ html(lang='en')
                     div(id="overallComments")
                         h1 Overall Comments 
                         textarea(id="commentTextArea")
+                        button(id="overallCommentEdit" onclick="overallCommentEdit()") Edit
+                        button(id="overallCommentSave" onclick="overallCommentSave(false, course, \"all\")") Save
+                        button(id="overallCommentDelete" onclick="overallCommentSave(true, course, \"all\")") Delete
                 
             div(id='trendsDiv')
                 canvas(id = "expTrend")

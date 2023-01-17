@@ -51,6 +51,9 @@ html(lang='en')
                 div(id="overallComments")
                         h2 Comments 
                         textarea(id="commentTextArea")
+                        button(id="overallCommentEdit" onclick="overallCommentEdit()") Edit
+                        button(id="overallCommentSave" onclick="overallCommentSave(false, course, student)") Save
+                        button(id="overallCommentDelete" onclick="overallCommentSave(true, course, student)") Delete
             div(id="reportArea")
                 div(id="testDiv") 
                 div(id="textArea")

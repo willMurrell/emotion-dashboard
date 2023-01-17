@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const { fstat } = require('fs');
 const e = require('express');
 
+const converter = require('json-2-csv');
 /* create a router (to export) */
 const router = express.Router();
 
@@ -24,6 +25,8 @@ router.get('/', async (req, res) => {
 
     res.render('home');
 })
+
+
 
 
 
@@ -129,7 +132,7 @@ const learning_experiences = [
     var comments;
     //Start of function calls
     iterateOverFiles(csvFolder);
-
+    
     router.get('/students', (req, res) =>{
         res.send(JSON.stringify(entries));
     })
@@ -141,6 +144,60 @@ const learning_experiences = [
     router.get('/students/comments', (req, res) =>{
         res.send(comments);
     })
+
+    
+
+    router.post('/comment', async (req, res) => {
+        res.status(200).send({status: 'recieved'});
+        const parcel = req.body;
+        console.log("hi yeah");
+        updateComments(parcel);
+    })
+
+    function updateComments(data){
+        //console.log(data.group);
+        const fileName = "../SummerStudent/overall-comments.json";
+        const file = require(fileName);
+        //console.log(file);
+        var commentFound = false;
+        file.forEach((comment) => {
+            //console.log("ok!");
+            //console.log(comment.Group + " " + data.group + " and " +comment.Name + " " +data.name);
+            if(comment.Group == data.group && comment.Name == data.name){
+                comment.Comment = data.comment;
+                commentFound = true;
+                console.log("New Comment! " + data.comment);
+            }
+    
+        });
+        if(!commentFound){
+            var newComment = {
+                Group: data.group,
+                Name: data.name,
+                Comment: data.comment
+            }
+            file.push(newComment);
+        }
+        //console.log(file);
+        const newFileName = "./SummerStudent/overall-comments.json";
+        fs.writeFile(newFileName, JSON.stringify(file), function writeJSON(err) {
+            if (err) return console.log(err);
+            //console.log(JSON.stringify(file));
+            console.log('writing to ' + fileName);
+        });
+        converter.json2csv(file, (err, csv) => {
+            if(err){
+                throw err
+            }
+    
+            console.log(csv);
+            fs.writeFileSync("./SummerStudent/overall-comments.csv", csv)
+        })
+    
+    
+        readComments("overall-comments.json");
+    }
+    
     /*
      * iterateOverFiles will iterate over the folder passed to it and 
      * then call the parseCSV method on each one
@@ -204,7 +261,7 @@ const learning_experiences = [
                 } else {
                     console.log("success");
                     comments = JSON.parse(data);  
-                    console.log(comments);       
+                    //console.log(comments);       
                     //console.log(JSON.stringify(JSONdata))           
                 }               
             }
@@ -273,7 +330,8 @@ const learning_experiences = [
                 
                 
                 individualReport(weekData, name, group, week, course);
-                emotionCounter(weekData, name, group, week, course);              
+                emotionCounter(weekData, name, group, week, course);
+                             
             }   
         });
     }

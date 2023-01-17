@@ -17,13 +17,14 @@ csvToJson.fieldDelimiter(',')
 const XLSX = require('xlsx');
 const bodyParser = require('body-parser');
 const app = express();
-
+const converter = require('json-2-csv');
 //local variable of class data
 app.locals.classdata= require("./class.json");
 
 //Default file paths to start with /public/
 app.use('/static', express.static(path.join(__dirname, '/public/')));
 app.use(bodyParser.json());
+app.use(express.json())
 //Using Pug templates
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -32,6 +33,10 @@ app.set('view engine', 'pug');
 app.get('/', (req, res) => {
     res.redirect('/home/');
 });
+
+
+
+
 
 
 /* Setting routers */
@@ -50,6 +55,7 @@ var weekArrayMap = new Map();
 
 /* start of the function calls */
 loadCSVHeader();
+
 
 
 

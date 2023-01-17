@@ -776,15 +776,18 @@ function overallCommentEdit(){
 
 }
 
-function overallCommentSave(deleteComment){
+function overallCommentSave(deleteComment, group, name){
+    
     var textArea = document.getElementById("commentTextArea");
     if(deleteComment){
-        console.log("delete");
+        
         textArea.value = "";
     } else {
         
 
     }
+    var commentValue = textArea.value;
+    
     textArea.readOnly = "true";
     textArea.setAttribute("editing", "false");
 
@@ -795,6 +798,45 @@ function overallCommentSave(deleteComment){
     overallCommentDelete.style.display = "none";
     overallCommentSave.style.display = "none";
     overallCommentEdit.style.display = "block";
+
+    
+    sendCommentToServer(commentValue, group, name);
+}
+
+async function sendCommentToServer(comment, group, name){
+    let parcel = {
+        group: group,
+        name: name,
+        comment: comment
+    };
+
+    var postURL = '../home/comment';
+    //console.log(document.URL)
+    urlArr = document.URL.split('/');
+    console.log(urlArr);
+    if(urlArr.includes("home")){
+
+    } else if(urlArr.includes("papers")){
+        var indexOfPapers = urlArr.indexOf("papers");
+        var length = urlArr.length - 1;
+        var urlString = ""
+        for(var i = 0; i < length - indexOfPapers; i++){
+            urlString += "../"
+        }
+
+        var postURL = urlString + postURL;
+
+        console.log(postURL);
+        
+    }
+
+    const res = await fetch(postURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(parcel)
+    })
 }
 
 /*
