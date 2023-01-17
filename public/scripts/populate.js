@@ -784,7 +784,9 @@ function overallCommentSave(deleteComment, group, name){
     
     var textArea = document.getElementById("commentTextArea");
     if(deleteComment){
-        
+        if(!confirm("Are you sure you want to delete this comment?")){
+            return;
+        }
         textArea.value = "";
     } else {
         
@@ -938,19 +940,22 @@ function buildTrendGraph(data, id){
     currentGraph.remove();
     var trend = document.createElement('canvas');
     trend.setAttribute("id", id);
+    var div = document.getElementById("expTrendDiv");
     var title = "Experience";
     if(id == "emoTrend"){
         title = "Emotions";
+        div = document.getElementById("emoTrendDiv");
     }
     
-    document.getElementById('trendsDiv').appendChild(trend);
+    div.appendChild(trend);
     const config = {
         type: 'line',
         data: data,
         options: {
+            responsive: false,
             plugins: {
                 title:{
-                    display: true,
+                    display: false,
                     text: title,
                     font: {
                         size: 25,

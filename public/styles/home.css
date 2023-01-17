@@ -134,11 +134,45 @@ main{
 */
 
 #trendsDiv{
+    margin-top: -100px;
     display: flex;
+    
     flex-direction: row;
+    
+    justify-content: center; 
+   
+    position: relative;
+    margin-bottom:100px;
+    /* 
     height: 20vw;
-    justify-content: center;
-    margin-bottom: 50px;
+    */
+}
+#trendsDiv canvas{
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+}
+#trendsDiv p{
+    font-size: 30px;
+}
+#expTrendDiv{
+    width: 80%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 3%;
+}
+#emoTrendDiv{
+    width: 80%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 3%;
 }
 #new{
     display: flex;
@@ -209,12 +243,32 @@ main{
     color: black;
 }
 
+
+#overallCommentButtonDiv{
+    display: flex;
+}
+#overallCommentEdit{
+    
+    background-color: #8ecae6;
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+}
 #overallCommentSave{
     display: none;
+    background-color: #8ac926;
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
 }
 
 #overallCommentDelete{
     display: none;
+    background-color: #ff595e;
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+    margin-left: 5px;
 }
 
 #commentTextArea{
@@ -779,13 +833,18 @@ h2{
 }
 
 #overallComments{
-    width: 20%;
+    width: 400px;
+}
+#overallCommentsStudent{
+    width: 600px;
+    
 }
 #overallComments textarea{
-    width: 92%;
-    height: 70%;
+    
+    width: 300px;
+    height: 200px;
     margin: 0px 2px;
-    /*border: none;*/
+    
 }
 
 #graphArea{
@@ -845,6 +904,12 @@ and (max-width: 1550px)
 
 #overallComments{
     width: auto;
+    
+}
+
+#overallComments textarea{
+    width: 50%;
+    height: 100px;
 }
 #groupButtonDiv{
    width: auto;
@@ -854,10 +919,7 @@ and (max-width: 1550px)
     width: auto;
 }
 
-#trendsDiv{
-    height: 24vw;
-    
-}
+
 
 .canvaContainer{
   
@@ -879,6 +941,42 @@ and (max-width: 1550px)
     flex-direction: column;
     margin-left: 0px;
 
+}
+
+#trendsDiv{
+    display: flex;    
+    flex-direction: row;
+    align-content: center;
+    /* 
+    height: 20vw;
+    */
+}
+#trendsDiv canvas{
+    height: 30vw;
+    width: 45vw;
+    border: 1px solid black;
+    
+    border-radius: 5px;
+    position: relative;
+}
+#trendsDiv p{
+    font-size: 20px;
+}
+#expTrendDiv{
+    width: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    
+}
+#emoTrendDiv{
+    width: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    
 }
 
 
