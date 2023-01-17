@@ -741,12 +741,16 @@ function displayComments(comments){
                     textarea.value = comment;
                 }
             }else {
+                
                 var textarea = document.getElementById("commentTextArea");
                 var studentName = document.getElementById("studentName").textContent;
                 
                 var course = document.getElementById("courseName").textContent;
-                
-                if(group == course && name == studentName){
+                console.log(group == course.replace(/\s+/g, ""));
+                console.log(name == studentName.replace(/\s+/g, ""));
+                console.log("=------------")
+                if(group == course.replace(/\s+/g, "") && name == studentName.replace(/\s+/g, "")){
+                    console.log("rabies");
                     textarea.value = comment;
                 }
         
