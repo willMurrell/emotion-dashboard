@@ -966,7 +966,7 @@ function buildTrendGraph(data, id){
         type: 'line',
         data: data,
         options: {
-            responsive: false,
+            responsive: true,
             plugins: {
                 title:{
                     display: false,
