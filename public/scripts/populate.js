@@ -3477,17 +3477,28 @@ function loadCourseButtons() {
  * loadCourse is a function that just loads buttons to the courses
  *
  * Honestly I think it is exactly the same as the loadCourseButtons method...
+ * 
+ * Upon further investigation, they do, in fact, not do the exact same thing
  */
 function loadCourses() {
     getStudents('course');
 
 }
-
+/*
+*   loadStudentCourses is called from the script in the pug file
+*   it calls the getSpecificStudent method with the correct parameters!
+*
+*   Who came up with these names??
+*/
 function loadStudentCourses(name, page){
     
     getSpecificStudent(name, page, null);
 }
 
+/*
+ * loadBlog is called from the script in the pug file
+ * it also just calls the getSpecificStudent method with the correct parameters!
+*/
 function loadBlog(name, course){
     
     
@@ -3506,7 +3517,10 @@ function loadGroup(course) {
 function loadIndividuals(group) {
     getStudents('individuals', group);
 }
-
+/*
+* submitDraftBlog is called by the submit draft blog button (unsurprisingly!)
+* and is set up to take the data from the blog and uh... do something with it
+*/
 function submitDraftBlog(name, course){
     
     const data = getBlogData();
@@ -3517,7 +3531,10 @@ function submitDraftBlog(name, course){
     }
     
 }
-
+/*
+* submitBlog is called by the submit blog button 
+* and should probably do something helpful
+*/
 function submitBlog(name, course){
     
     document.location.href = "/student/"+name+"/"+course+"?draft=false";
