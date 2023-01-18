@@ -1,0 +1,104 @@
+doctype html
+html(lang='en')
+    head
+        title Emotion Dashboard!
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+        link(href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet')
+        link(rel='stylesheet',type="text/css" , href='../../../../static/styles/home.css')
+        link(rel='stylesheet',type="text/css" , href='../../../../static/styles/studentHome.css')
+        script(src="https://kit.fontawesome.com/04e87abddd.js" crossorigin="anonymous")
+        script(defer, src='../../../../static/scripts/populate.js')
+        script(src='../../../../static/scripts/order.js')
+        script(src='https://cdn.jsdelivr.net/npm/chart.js')
+        
+        
+        
+    body(onload="processIndividuals()")
+        include templates/header.pug
+        main
+            
+            div(id="newBlogForm")
+                h1(id="blogTitleInfo") New Blog
+                h2 Blog:
+                textarea(id="blogTextArea" placeholder="Write this weeks blog here!")
+                h2 Self Report! 
+                h4 How did you feel this week?
+                ul(class="likert")
+                    li Terrible 
+                    li 
+                        input(type="radio" name="firstQuestion" value="1")
+                    li 
+                        input(type="radio" name="firstQuestion" value="2")
+                    li 
+                        input(type="radio" name="firstQuestion" value="3")
+                    li 
+                        input(type="radio" name="firstQuestion" value="4")
+                    li 
+                        input(type="radio" name="firstQuestion" value="5")
+                    li Awesome
+                br
+                h4 How much did you learn this week?
+                ul(class="likert")
+                    li Nothing 
+                    li 
+                        input(type="radio" name="secondQuestion" value="1")
+                    li 
+                        input(type="radio" name="secondQuestion" value="2")
+                    li 
+                        input(type="radio" name="secondQuestion" value="3")
+                    li 
+                        input(type="radio" name="secondQuestion" value="4")
+                    li 
+                        input(type="radio" name="secondQuestion" value="5")
+                    li Heaps
+                br
+                h4 How much did you progress this week?
+                ul(class="likert")
+                    li Not at all 
+                    li 
+                        input(type="radio" name="thirdQuestion" value="1")
+                    li 
+                        input(type="radio" name="thirdQuestion" value="2")
+                    li 
+                        input(type="radio" name="thirdQuestion" value="3")
+                    li 
+                        input(type="radio" name="thirdQuestion" value="4")
+                    li 
+                        input(type="radio" name="thirdQuestion" value="5")
+                    li Very Much
+                br
+                h4 How well did your team work?
+                ul(class="likert")
+                    li Terrible 
+                    li 
+                        input(type="radio" name="fourthQuestion" value="1")
+                    li 
+                        input(type="radio" name="fourthQuestion" value="2")
+                    li 
+                        input(type="radio" name="fourthQuestion" value="3")
+                    li 
+                        input(type="radio" name="fourthQuestion" value="4")
+                    li 
+                        input(type="radio" name="fourthQuestion" value="5")
+                    li Awesome
+                br
+                br
+                button(id="sumbitNewBlog" onclick="submitBlog(studentName, course)") Submit Blog
+                button(id="saveNewBlogDraft" onclick="submitDraftBlog(studentName, course)") Save Blog as Draft
+        include templates/footer.pug
+        script. 
+            course='#{courseName}';
+            student = '#{studentName}';
+            studentName='#{studentName}';
+            set = "individuals";
+            week = '#{week}'
+            window.onload = function(){
+                document.getElementById("blogTitleInfo").textContent = studentName + " " + course + " Week " + week;
+                //- document.getElementById("courseName").textContent = course;
+                //- document.getElementById("backButton").setAttribute("href", "/student/" + studentName)
+                //- document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + studentName + "/" + course + "/newBlog" )
+                //- loadBlog(studentName, course);
+            }

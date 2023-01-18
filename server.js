@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const home_router = require('./routers/home_router');
 const papers_router = require('./routers/papers_router');
+const student_router = require('./routers/student_router');
 const csvToJson = require('convert-csv-to-json');
 csvToJson.fieldDelimiter(',')
 const XLSX = require('xlsx');
@@ -39,9 +40,12 @@ app.get('/', (req, res) => {
 
 
 
+
+
 /* Setting routers */
 app.use('/home/', home_router);
 app.use('/papers/', papers_router);
+app.use('/student/', student_router);
 
 /*local host at 8080 */
 app.listen(8080);    

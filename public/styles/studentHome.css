@@ -1,0 +1,88 @@
+.courseDiv{
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    padding: 20px;
+    margin-top: 10px ;
+}
+
+.courseDiv div{
+    margin: 5px 2px;
+}
+
+
+.overlayButton{
+    margin-top: 15px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.overlayButton:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#newBlogButton{
+    padding: 10px;
+    background-color: #A6EF8C;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#newBlogButton:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.likert li {
+    float: left;
+    list-style-type: none;
+    padding: 5px;
+  }
+
+#newBlogForm{
+    width: 50%;
+    margin: 0% 25%;
+}
+
+#newBlogForm h4{
+    text-decoration: underline;
+}
+
+#blogTextArea{
+    height: 700px;
+}
+
+input[type=radio] {
+    border: 0px;
+    width: 100%;
+    height: 20px;
+}
+
+#sumbitNewBlog{
+    padding: 10px;
+    background-color: #A6EF8C;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#saveNewBlogDraft{
+    padding: 10px;
+    background-color: #FF9400;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#saveNewBlogDraft:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#sumbitNewBlog:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}

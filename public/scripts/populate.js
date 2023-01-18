@@ -845,6 +845,156 @@ async function sendCommentToServer(comment, group, name){
     })
 }
 
+const getSpecificStudent = async(name, page, course) =>{
+    console.log("There name is " + name);
+   
+    var groupsStudentIsIn = new Map();
+    //fetching data from server
+    var url = "../home/students/individuals"
+    if(page == "blog") {
+        console.log("hmmm")
+        url = "../../home/students/individuals";
+    } 
+    const res = await fetch(url);
+    const students = await res.json()
+    //iterating over each entry
+    students.forEach((title, data) => {
+        //title is the name of the data... for some reason... idk
+        var studentData = JSON.parse(title);
+        //displays the text reports with their emotions
+        var titleArray = studentData[0].split(" ");
+        //console.log(titleArray[0]);
+        if(titleArray[0] == name){
+            //console.log(titleArray);
+            groupsStudentIsIn.set(titleArray[2], titleArray[1]);
+        }
+        
+        if(page == "blog"){
+            studentDisplayReports(studentData);
+        }
+        
+    });
+
+    if(page == "home"){
+       displayStudentCourses(groupsStudentIsIn, name);
+    }
+    if(page == "blog"){
+        addMissingWeeks("student");
+        removeTeacherParts();
+        showOverlay(false);
+        sentenceEventListeners(false, true);
+        document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + name + "/" + course + "/newBlog/" + getNewWeek())
+    }
+    
+}
+
+function sentenceEventListeners(present, firstTime){
+    if(present){
+
+    } else {
+        console.log("this will remove all event listeners");
+
+    }
+
+    var sentences = document.querySelector('#textArea').children
+    for (var i = 0; i < sentences.length; i++) {
+        var spans = sentences[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            //console.log(spans[j]);
+            //console.log("hi?")
+            if(!present){
+                spans[j].removeEventListener("mousemove", emotionHover);
+            } else {
+                spans[j].addEventListener("mousemove", emotionHover);
+            }
+            if(firstTime){
+                spans[j].removeEventListener("click", sentenceClick);
+            }
+            //spans[j].removeEventListener("click??", show);
+        }
+    }
+
+}
+function removeTeacherParts(){
+    //An array full of all the things I want to get rid of
+    var uselessArray = ["graphArea", "overallCommentsStudent", "filterDiv", "death"]
+    uselessArray.forEach((id) =>{
+        elementKiller(id);
+    })
+    var comments = document.getElementById("allComments").children;
+    
+    for(var i = 0; i < comments.length; i++){
+        //console.log(comments[i].id);
+        document.getElementById(comments[i].id).removeEventListener("dblclick", commentDoubleClick)
+    }
+
+}
+
+function elementKiller(id){
+    document.getElementById(id).style.display = "none";
+}
+
+function showOverlay(show){
+    var showButton = document.getElementById("showStudentsDataButton")
+    var hideButton = document.getElementById("hideStudentsDataButton")
+    if(show){
+        showButton.style.display = "none";
+        hideButton.style.display = "block";
+        sentenceEventListeners(true, false);
+        document.getElementById("death").style.display = "block";
+    } else {
+        showButton.style.display = "block";
+        hideButton.style.display = "none";
+        sentenceEventListeners(false, false);
+        document.getElementById("testDiv").style.display = "none";
+        document.getElementById("death").style.display = "none";
+    }
+    var sentences = document.querySelector('#textArea').children
+    for (var i = 0; i < sentences.length; i++) {
+        var spans = sentences[i].children[1].children;
+        for (var j = 0; j < spans.length; j++) {
+            //console.log(spans[j]);
+            //console.log("hi?")
+            spans[j].setAttribute("shown", show);
+            
+        }
+    }
+}
+
+function displayStudentCourses(map, name){
+    console.log("display thinfs!!");
+    map.forEach((value, key) => {
+        console.log(value);
+        console.log(key);
+        var courses = document.getElementById("studentCourses");
+        courses.appendChild(createCourseDiv(value, key, name));
+    })
+    
+}
+
+const getStudentsBlog = async(name, page) =>{
+    console.log("aH");
+}
+
+function createCourseDiv(value, key, name){
+    var div = document.createElement("div");
+    div.setAttribute("class", "courseDiv");
+
+    var courseName = document.createElement("div");
+    courseName.textContent = key;
+    courseName.setAttribute("class", "courseNameDiv");
+    var groupName = document.createElement("div");
+    groupName.textContent = value;
+    groupName.setAttribute("class", "groupNameDiv");
+
+    var pageLink = document.createElement("a");
+    pageLink.setAttribute("href", "/student/"+name+"/"+key);
+    pageLink.appendChild(groupName);
+    div.appendChild(courseName);
+    div.appendChild(pageLink);
+
+    return div;
+}
 /*
  *   getStudents is a function that is immediately called when the page loads.
  *   Its job is to get the data from the web server and pass it on
@@ -1086,8 +1236,27 @@ const processIndividuals = async (set, course) => {
  * addMissingWeeks is a fucntion that finds the highest week and fills in empty
  * entries.
  */
-function addMissingWeeks() {
-    var name = document.getElementById('studentName').textContent;
+function addMissingWeeks(arg) {
+    if(arg != undefined){
+        console.log("yeow");
+        var weeks = document.getElementById('textArea').children;
+    var topWeek = 0;
+    for (var i = 0; i < weeks.length; i++) {
+
+        var weekNumber = parseInt(weeks[i].id.substring(4));
+        if (weekNumber > topWeek) {
+            topWeek = weekNumber;
+        }
+    }
+    for (var i = 1; i < weekNumber + 1; i++) {
+        var elm = document.getElementById("Week" + i);
+        if (elm == null) {
+            
+            buildReportHTML(null, ("Week" + i));
+        }
+    }
+    } else {
+        var name = document.getElementById('studentName').textContent;
     var group = document.getElementById('groupName').textContent;
     var course = document.getElementById('courseName').textContent;
     var weeks = document.getElementById('textArea').children;
@@ -1106,6 +1275,8 @@ function addMissingWeeks() {
             buildReportHTML(null, ("Week" + i));
         }
     }
+    }
+    
 
 }
 /*
@@ -1125,6 +1296,23 @@ function displayReports(data) {
 
     }
 }
+
+function studentDisplayReports(data) {
+    
+    var name = document.getElementById('studentName').textContent;
+    var course = document.getElementById('courseName').textContent;
+    var infArr = data[0].split(" ");
+    
+    
+    
+    if (infArr[0] == name && infArr[2].replace(/\s+/g, "") == course.replace(/\s+/g, "")) {
+        
+        buildReportHTML(data, infArr[3]);
+
+    }
+}
+
+
 /*
  * buildReportHTML is a function builds and displays all the sentences of an entry
  */
@@ -3298,6 +3486,18 @@ function loadCourses() {
     getStudents('course');
 
 }
+
+function loadStudentCourses(name, page){
+    console.log(page);
+    getSpecificStudent(name, page, null);
+}
+
+function loadBlog(name, course){
+    console.log(name + " " + course);
+    
+    getSpecificStudent(name, "blog", course);
+    
+}
 /*
  * loadGroup is a function that calls getStudents with group parameters and the pages course
  */
@@ -3309,4 +3509,73 @@ function loadGroup(course) {
  */
 function loadIndividuals(group) {
     getStudents('individuals', group);
+}
+
+function submitDraftBlog(name, course){
+    console.log(name + course);
+    const data = getBlogData();
+    console.log(data);
+    //document.location.href = "/student/"+name+"/"+course;
+}
+
+function submitBlog(name, course){
+    console.log(name + course);
+    document.location.href = "/student/"+name+"/"+course;
+}
+
+function getBlogData(){
+    var blog = document.getElementById("blogTextArea").value;
+    var firstQuestion = document.getElementsByName("firstQuestion");
+    var firstQuestionAnswer;
+    for(var i = 0; i < firstQuestion.length; i++){
+        if(firstQuestion[i].checked){
+            firstQuestionAnswer = firstQuestion[i].value;
+        }
+    }
+    var secondQuestion = document.getElementsByName("secondQuestion");
+    var secondQuestionAnswer;
+    for(var i = 0; i < secondQuestion.length; i++){
+        if(secondQuestion[i].checked){
+            secondQuestionAnswer = secondQuestion[i].value;
+        }
+    }
+
+    var thirdQuestion = document.getElementsByName("thirdQuestion");
+    var thirdQuestionAnswer;
+    for(var i = 0; i < thirdQuestion.length; i++){
+        if(thirdQuestion[i].checked){
+            thirdQuestionAnswer = thirdQuestion[i].value;
+        }
+    }
+
+    var fourthQuestion = document.getElementsByName("fourthQuestion");
+    var fourthQuestionAnswer;
+    for(var i = 0; i < fourthQuestion.length; i++){
+        if(fourthQuestion[i].checked){
+            fourthQuestionAnswer = fourthQuestion[i].value;
+        }
+    }
+    var data = {
+        blog: blog,
+        firstQuestion: firstQuestionAnswer,
+        secondQuestion: secondQuestionAnswer,
+        thirdQuestion: thirdQuestionAnswer,
+        forthQuestion: fourthQuestionAnswer
+    }
+    return data;
+}
+
+function getNewWeek(){
+    console.log("yea");
+    var notFound = true;
+    var i = 1;
+    var weeks = document.getElementById('textArea').children;
+    var arr = Array.prototype.slice.call( weeks )
+    console.log(arr);
+    return arr.length+1;
+    // for(var i =0; i < 10; i++){
+    //     var latestWeek = document.getElementById("Week" + i)
+    //     console.log(latestWeek);
+    // }
+    
 }

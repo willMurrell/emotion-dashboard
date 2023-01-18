@@ -1,0 +1,103 @@
+doctype html
+html(lang='en')
+    head
+        title Emotion Dashboard!
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='preconnect' href='https://fonts.googleapis.com')
+        link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+        link(href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet')
+        link(rel='stylesheet',type="text/css" , href='../../../static/styles/home.css')
+        link(rel='stylesheet',type="text/css" , href='../../../static/styles/studentHome.css')
+        script(src="https://kit.fontawesome.com/04e87abddd.js" crossorigin="anonymous")
+        script(defer, src='../../../static/scripts/populate.js')
+        script(src='../../../static/scripts/order.js')
+        script(src='https://cdn.jsdelivr.net/npm/chart.js')
+        
+        
+        
+    body(onload="processIndividuals()")
+        include templates/header.pug
+        main
+            div(id="titleDiv")
+                    a(href='/student/' id='backButton') 
+                        i(class="fa-solid fa-caret-left")
+                    
+                    h1(id='studentName') 
+                    h1 -
+                    h1(id='courseName') 
+                     
+            div(id="newBlogDiv")
+                a(href="/student" id="newBlogAnchor")
+                    button(id="newBlogButton" onclick="newBlog()") Create New Blog!      
+            div(id="topInfo")    
+                div(id="graphArea")  
+                div(id="overallCommentsStudent")
+                        h2 Comments 
+                        textarea(id="commentTextArea" readonly)
+                        div(id="overallCommentButtonDiv")
+                            button(id="overallCommentEdit" onclick="overallCommentEdit()") Edit
+                            button(id="overallCommentSave" onclick="overallCommentSave(false, course, student)") Save
+                            button(id="overallCommentDelete" onclick="overallCommentSave(true, course, student)") Delete
+            div(id="reportArea")
+                div(id="testDiv") 
+                div(id="textArea")
+                    
+                       
+                div(class="tools") 
+                    
+                    div(id="filterDiv" ) 
+                    form(id="death")
+                        h2 Filter: 
+                        label(for="emotionRadio") Emotions
+                        input(type="radio" name="filter" value="emotion" id="emotionRadio" checked="checked")
+                        
+                        br
+                        label(for="experienceRadio") Experiences
+                        input(type="radio" name="filter" value="experience" id="experienceRadio")
+                        
+                        br
+                        label( id="sentenceFilterLabel") Show Only:
+                        
+                        
+                    
+                 
+                  
+                    div(id="studentOptionsDiv")
+                        button(class="overlayButton" id="showStudentsDataButton" onclick="showOverlay(true)") Show Teacher View 
+                        button(class="overlayButton" id="hideStudentsDataButton" onclick="showOverlay(false)" style="display: none") Hide Teacher View 
+                    //span(id="selectedText") 
+                    div(id="newCommentContainer")
+                    h2 Comments:
+                        div(id="newCommentDiv")
+                            textarea(id="commentEntry" placeholder="New Comment!" autofocus="autofocus")
+                            button(id="commentAdd" onclick="addComment()") Add Comment
+                    
+                    //
+                        button(id="commentEdit" onclick="editComment()") edit
+                        button(id="commentSave" onclick="addComment()") save
+                    
+                    div(id="allComments")
+                    div(id="whiteBar")
+
+                    
+            div(id='new')
+            
+            
+
+        include templates/footer.pug
+        script. 
+            course='#{courseName}';
+            //group='#{group}';
+            student = '#{studentName}';
+            studentName='#{studentName}';
+            set = "individuals";
+            
+            window.onload = function(){
+                document.getElementById("studentName").textContent = studentName;
+                document.getElementById("courseName").textContent = course;
+                document.getElementById("backButton").setAttribute("href", "/student/" + studentName)
+                document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + studentName + "/" + course + "/newBlog/")
+                loadBlog(studentName, course);
+                
+            }
