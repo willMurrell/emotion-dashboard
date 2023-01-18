@@ -94,9 +94,13 @@ html(lang='en')
             student = '#{studentName}';
             studentName='#{studentName}';
             set = "individuals";
-            week = '#{week}'
+            week = '#{week}';
+            draft = '#{draft}';
             window.onload = function(){
                 document.getElementById("blogTitleInfo").textContent = studentName + " " + course + " Week " + week;
+                if(draft == "true"){
+                    loadDraftBlog(student, course, week);
+                }
                 //- document.getElementById("courseName").textContent = course;
                 //- document.getElementById("backButton").setAttribute("href", "/student/" + studentName)
                 //- document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + studentName + "/" + course + "/newBlog" )

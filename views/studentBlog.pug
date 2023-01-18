@@ -29,7 +29,9 @@ html(lang='en')
                      
             div(id="newBlogDiv")
                 a(href="/student" id="newBlogAnchor")
-                    button(id="newBlogButton" onclick="newBlog()") Create New Blog!      
+                    button(id="newBlogButton") Create New Blog! 
+                a(href="/student" id="editBlogAnchor")
+                    button(id="editBlogButton") Edit Blog Draft!           
             div(id="topInfo")    
                 div(id="graphArea")  
                 div(id="overallCommentsStudent")
@@ -92,12 +94,18 @@ html(lang='en')
             student = '#{studentName}';
             studentName='#{studentName}';
             set = "individuals";
+            draft = '#{draft}'
             
             window.onload = function(){
                 document.getElementById("studentName").textContent = studentName;
                 document.getElementById("courseName").textContent = course;
                 document.getElementById("backButton").setAttribute("href", "/student/" + studentName)
-                document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + studentName + "/" + course + "/newBlog/")
+                //document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + studentName + "/" + course + "/newBlog/")
+                //document.getElementById("editBlogAnchor").setAttribute("href", "/student/" + studentName + "/" + course + "/newBlog/")
                 loadBlog(studentName, course);
+                console.log(draft);
+                draftButton(draft);
+                
+                
                 
             }

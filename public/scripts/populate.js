@@ -746,11 +746,9 @@ function displayComments(comments){
                 var studentName = document.getElementById("studentName").textContent;
                 
                 var course = document.getElementById("courseName").textContent;
-                console.log(group == course.replace(/\s+/g, ""));
-                console.log(name == studentName.replace(/\s+/g, ""));
-                console.log("=------------")
+                
                 if(group == course.replace(/\s+/g, "") && name == studentName.replace(/\s+/g, "")){
-                    console.log("rabies");
+                    
                     textarea.value = comment;
                 }
         
@@ -817,9 +815,9 @@ async function sendCommentToServer(comment, group, name){
     };
 
     var postURL = '../home/comment';
-    //console.log(document.URL)
+    
     urlArr = document.URL.split('/');
-    console.log(urlArr);
+    
     if(urlArr.includes("home")){
 
     } else if(urlArr.includes("papers")){
@@ -832,7 +830,7 @@ async function sendCommentToServer(comment, group, name){
 
         var postURL = urlString + postURL;
 
-        console.log(postURL);
+        
         
     }
 
@@ -846,13 +844,12 @@ async function sendCommentToServer(comment, group, name){
 }
 
 const getSpecificStudent = async(name, page, course) =>{
-    console.log("There name is " + name);
-   
+    
     var groupsStudentIsIn = new Map();
     //fetching data from server
     var url = "../home/students/individuals"
     if(page == "blog") {
-        console.log("hmmm")
+        
         url = "../../home/students/individuals";
     } 
     const res = await fetch(url);
@@ -863,9 +860,9 @@ const getSpecificStudent = async(name, page, course) =>{
         var studentData = JSON.parse(title);
         //displays the text reports with their emotions
         var titleArray = studentData[0].split(" ");
-        //console.log(titleArray[0]);
+        
         if(titleArray[0] == name){
-            //console.log(titleArray);
+            
             groupsStudentIsIn.set(titleArray[2], titleArray[1]);
         }
         
@@ -883,7 +880,8 @@ const getSpecificStudent = async(name, page, course) =>{
         removeTeacherParts();
         showOverlay(false);
         sentenceEventListeners(false, true);
-        document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + name + "/" + course + "/newBlog/" + getNewWeek())
+        document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + name + "/" + course + "/newBlog/" + getNewWeek()+"?draft=false")
+        document.getElementById("editBlogAnchor").setAttribute("href", "/student/" + name + "/" + course + "/newBlog/" + getNewWeek()+"?draft=true")
     }
     
 }
@@ -892,7 +890,7 @@ function sentenceEventListeners(present, firstTime){
     if(present){
 
     } else {
-        console.log("this will remove all event listeners");
+        
 
     }
 
@@ -900,8 +898,7 @@ function sentenceEventListeners(present, firstTime){
     for (var i = 0; i < sentences.length; i++) {
         var spans = sentences[i].children[1].children;
         for (var j = 0; j < spans.length; j++) {
-            //console.log(spans[j]);
-            //console.log("hi?")
+            
             if(!present){
                 spans[j].removeEventListener("mousemove", emotionHover);
             } else {
@@ -924,7 +921,7 @@ function removeTeacherParts(){
     var comments = document.getElementById("allComments").children;
     
     for(var i = 0; i < comments.length; i++){
-        //console.log(comments[i].id);
+        
         document.getElementById(comments[i].id).removeEventListener("dblclick", commentDoubleClick)
     }
 
@@ -962,10 +959,9 @@ function showOverlay(show){
 }
 
 function displayStudentCourses(map, name){
-    console.log("display thinfs!!");
+    
     map.forEach((value, key) => {
-        console.log(value);
-        console.log(key);
+        
         var courses = document.getElementById("studentCourses");
         courses.appendChild(createCourseDiv(value, key, name));
     })
@@ -973,7 +969,7 @@ function displayStudentCourses(map, name){
 }
 
 const getStudentsBlog = async(name, page) =>{
-    console.log("aH");
+    
 }
 
 function createCourseDiv(value, key, name){
@@ -988,7 +984,7 @@ function createCourseDiv(value, key, name){
     groupName.setAttribute("class", "groupNameDiv");
 
     var pageLink = document.createElement("a");
-    pageLink.setAttribute("href", "/student/"+name+"/"+key);
+    pageLink.setAttribute("href", "/student/"+name+"/"+key+"?draft=false");
     pageLink.appendChild(groupName);
     div.appendChild(courseName);
     div.appendChild(pageLink);
@@ -1238,7 +1234,7 @@ const processIndividuals = async (set, course) => {
  */
 function addMissingWeeks(arg) {
     if(arg != undefined){
-        console.log("yeow");
+        
         var weeks = document.getElementById('textArea').children;
     var topWeek = 0;
     for (var i = 0; i < weeks.length; i++) {
@@ -3488,12 +3484,12 @@ function loadCourses() {
 }
 
 function loadStudentCourses(name, page){
-    console.log(page);
+    
     getSpecificStudent(name, page, null);
 }
 
 function loadBlog(name, course){
-    console.log(name + " " + course);
+    
     
     getSpecificStudent(name, "blog", course);
     
@@ -3512,25 +3508,35 @@ function loadIndividuals(group) {
 }
 
 function submitDraftBlog(name, course){
-    console.log(name + course);
+    
     const data = getBlogData();
-    console.log(data);
-    //document.location.href = "/student/"+name+"/"+course;
+    if(data == null){
+        alert("Please fill out all fields!");
+    } else {
+        document.location.href = "/student/"+name+"/"+course+"?draft=true";
+    }
+    
 }
 
 function submitBlog(name, course){
-    console.log(name + course);
-    document.location.href = "/student/"+name+"/"+course;
+    
+    document.location.href = "/student/"+name+"/"+course+"?draft=false";
 }
 
 function getBlogData(){
     var blog = document.getElementById("blogTextArea").value;
+    if(blog == ""){
+        return null;
+    }
     var firstQuestion = document.getElementsByName("firstQuestion");
     var firstQuestionAnswer;
     for(var i = 0; i < firstQuestion.length; i++){
         if(firstQuestion[i].checked){
             firstQuestionAnswer = firstQuestion[i].value;
         }
+    }
+    if(firstQuestionAnswer == undefined){
+        return null;
     }
     var secondQuestion = document.getElementsByName("secondQuestion");
     var secondQuestionAnswer;
@@ -3539,7 +3545,9 @@ function getBlogData(){
             secondQuestionAnswer = secondQuestion[i].value;
         }
     }
-
+    if(secondQuestionAnswer == undefined){
+        return null;
+    }
     var thirdQuestion = document.getElementsByName("thirdQuestion");
     var thirdQuestionAnswer;
     for(var i = 0; i < thirdQuestion.length; i++){
@@ -3547,13 +3555,18 @@ function getBlogData(){
             thirdQuestionAnswer = thirdQuestion[i].value;
         }
     }
-
+    if(thirdQuestionAnswer == undefined){
+        return null;
+    }
     var fourthQuestion = document.getElementsByName("fourthQuestion");
     var fourthQuestionAnswer;
     for(var i = 0; i < fourthQuestion.length; i++){
         if(fourthQuestion[i].checked){
             fourthQuestionAnswer = fourthQuestion[i].value;
         }
+    }
+    if(fourthQuestionAnswer == undefined){
+        return null;
     }
     var data = {
         blog: blog,
@@ -3566,16 +3579,56 @@ function getBlogData(){
 }
 
 function getNewWeek(){
-    console.log("yea");
+    
     var notFound = true;
     var i = 1;
     var weeks = document.getElementById('textArea').children;
     var arr = Array.prototype.slice.call( weeks )
-    console.log(arr);
+    
     return arr.length+1;
-    // for(var i =0; i < 10; i++){
-    //     var latestWeek = document.getElementById("Week" + i)
-    //     console.log(latestWeek);
-    // }
     
 }
+
+function loadDraftBlog(student, course, week){
+    
+    var exampleDraft = {
+        blog: "Here is an example of a blog draft",
+        firstQuestion: 2,
+        secondQuestion: 3,
+        thirdQuestion: 2,
+        fourthQuestion: 4
+    }
+    document.getElementById("blogTextArea").value = exampleDraft.blog;
+    
+    var firstQuestion = document.getElementsByName("firstQuestion");
+    
+    firstQuestion[exampleDraft.firstQuestion - 1].checked = true;
+
+    var secondQuestion = document.getElementsByName("secondQuestion");
+
+    secondQuestion[exampleDraft.secondQuestion - 1].checked = true;
+
+    var thirdQuestion = document.getElementsByName("thirdQuestion");
+
+    thirdQuestion[exampleDraft.thirdQuestion - 1].checked = true;
+
+    var fourthQuestion = document.getElementsByName("fourthQuestion");
+
+    
+    fourthQuestion[exampleDraft.fourthQuestion - 1].checked = true;
+}
+
+function draftButton(draft){
+    console.log(draft)
+    if(draft == "true"){
+        console.log("if true")
+        document.getElementById("editBlogButton").style.display = "block";
+        document.getElementById("newBlogButton").style.display = "none";
+    } else if(draft == "false") {
+        console.log("if false")
+        document.getElementById("editBlogButton").style.display = "none";
+        document.getElementById("newBlogButton").style.display = "block";
+    }
+}
+
+

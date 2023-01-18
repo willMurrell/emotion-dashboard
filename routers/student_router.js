@@ -25,14 +25,17 @@ router.get('/:name/', async (req, res) => {
 router.get('/:name/:course', async (req, res) => {
     var studentName = req.params.name;
     var courseName = req.params.course;
-    res.render('studentBlog', {studentName: studentName, courseName: courseName});
+    var draft = req.query.draft;
+    
+    res.render('studentBlog', {studentName: studentName, courseName: courseName, draft: draft});
 })
 
 router.get('/:name/:course/newBlog/:week', async (req, res) => {
     var studentName = req.params.name;
     var courseName = req.params.course;
     var week = req.params.week;
-    res.render('blogWriter', {studentName: studentName, courseName: courseName, week: week});
+    var draft = req.query.draft;
+    res.render('blogWriter', {studentName: studentName, courseName: courseName, week: week, draft: draft});
 })
 
     // router.get('/:course/:group', async (req, res) => {
