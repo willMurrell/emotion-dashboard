@@ -3892,7 +3892,7 @@ function draftButton(draft){
  * @returns the event path
  */
 function eventPath(evt) {
-    
+    console.log("Is this helping??");
     var path = (evt.composedPath && evt.composedPath()) || evt.path,
         target = evt.target;
 
