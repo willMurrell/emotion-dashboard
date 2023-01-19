@@ -1752,8 +1752,8 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
 */
 const optionClick = function (event){
     
-    console.log(event);
-    var selecter = event.path[0];
+    
+    var selecter = eventPath(event)[0];
     var week = selecter.getAttribute("id").split("-")[0];
     //The value present in the <select>
     var SelectedValue = selecter.value;
@@ -2030,13 +2030,14 @@ function getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap){
 const radioCheck = function (event){
     
    var graphs = document.querySelector('#textArea').children;
+   var path = eventPath(event)[0];
    for (var i = 0; i < graphs.length; i++) {
     var spans = graphs[i].children[1].children;
     for (var j = 0; j < spans.length; j++) {
-        if(event.path[0].getAttribute('value') == "experience"){
+        if(path.getAttribute('value') == "experience"){
             spans[j].setAttribute("display", "experience");
             
-        } else if(event.path[0].getAttribute('value') == "emotion"){
+        } else if(path.getAttribute('value') == "emotion"){
             spans[j].setAttribute("display", "emotion");
             
         }
@@ -2044,7 +2045,7 @@ const radioCheck = function (event){
   }
  var barGraphs = document.querySelector("#graphArea").children;
  for(var i = 0; i < barGraphs.length; i++){
-    if(event.path[0].getAttribute('value') == "experience"){
+    if(path.getAttribute('value') == "experience"){
         
         if(barGraphs[i].getAttribute("current") == "true"){
             
@@ -2058,7 +2059,7 @@ const radioCheck = function (event){
         }
 
     
-    } else if(event.path[0].getAttribute('value') == "emotion"){
+    } else if(path.getAttribute('value') == "emotion"){
         if(barGraphs[i].getAttribute("current") == "true"){
             
             if(barGraphs[i].getAttribute("id").substring(0,2) =="em"){
@@ -2102,7 +2103,7 @@ const radioCheck = function (event){
     }
     
     var selectType;
-    if(event.path[0].getAttribute('value') == "experience"){
+    if(path.getAttribute('value') == "experience"){
         selectType = "Exp";
     } else {
         selectType = "Emo";
@@ -2196,7 +2197,7 @@ const commentDoubleClick = function(event){
  *  @param event its an event!!
  */
 const commentClick = function(event){
-
+    var path = eventPath(event)[0];
     var editing = false;
     var comments = document.querySelector('#allComments').children;
     for (var i = 0; i < comments.length; i++) {
@@ -2211,16 +2212,16 @@ const commentClick = function(event){
     if(editing){
         
         
-    } else if(event.path[0].getAttribute("id") == "commentSave" || event.path[0].getAttribute("id") == "commentDelete"){
+    } else if(path.getAttribute("id") == "commentSave" ||path.getAttribute("id") == "commentDelete"){
     
     } else {
         
         clearSelectedElements();
-        event.path[0].setAttribute("selected", "true");
+        path.setAttribute("selected", "true");
 
-        event.path[0].getAttribute("id");
+        path.getAttribute("id");
         
-        var sentence = document.getElementById(event.path[0].getAttribute("id").substring(8));
+        var sentence = document.getElementById(path.getAttribute("id").substring(8));
         sentence.setAttribute("selected", "true");
         sentence.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
     
@@ -2406,7 +2407,10 @@ const hideEmotionHover = function(event) {
  */
 const emotionHover = function(event) {
     var test = document.getElementById('testDiv');
-    var span = event.path[0];
+    
+    //var span = event.path[0];
+    var span = eventPath(event)[0];
+    
     var text;
     if(span.getAttribute('display') == "emotion"){
         if (span.getAttribute("emotionType") == "negative") {
@@ -3869,14 +3873,51 @@ function loadDraftBlog(student, course, week){
 function draftButton(draft){
     
     if(draft == "true"){
-        console.log("if true")
+        
         document.getElementById("editBlogButton").style.display = "block";
         document.getElementById("newBlogButton").style.display = "none";
     } else if(draft == "false") {
-        console.log("if false")
+        
         document.getElementById("editBlogButton").style.display = "none";
         document.getElementById("newBlogButton").style.display = "block";
     }
+}
+/**
+ * Function graciously stolen from https://stackoverflow.com/questions/39245488/event-path-is-undefined-running-in-firefox
+ * 
+ * Thank you Guido Bouman!!!
+ * 
+ * @author Guido Bouman
+ * @param {Event} evt 
+ * @returns the event path
+ */
+function eventPath(evt) {
+    
+    var path = (evt.composedPath && evt.composedPath()) || evt.path,
+        target = evt.target;
+
+    if (path != null) {
+        // Safari doesn't include Window, but it should.
+        return (path.indexOf(window) < 0) ? path.concat(window) : path;
+    }
+
+    if (target === window) {
+        return [window];
+    }
+
+    function getParents(node, memo) {
+        memo = memo || [];
+        var parentNode = node.parentNode;
+
+        if (!parentNode) {
+            return memo;
+        }
+        else {
+            return getParents(parentNode, memo.concat(parentNode));
+        }
+    }
+
+    return [target].concat(getParents(target), window);
 }
 
 
