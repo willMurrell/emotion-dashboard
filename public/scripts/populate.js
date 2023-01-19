@@ -1,4 +1,21 @@
-
+/**
+ * populate.js is the far-to-large, probably-quite-confusing file that basically runs the whole thing!
+ * 
+ * How does it work? God knows! A good place to start would be the async function as they are generally the ones
+ * that are pulling data from the server.  They usually start by creating some sort of map, and then branch off 
+ * into all sorts of function and things.  The async functions are usually called by an "inbetween" method that
+ * is called onload of the webpage!
+ * 
+ * There is egregeous use of maps that could probably have been done in a far smarter way! Maps for everything and
+ * anything! There is also alot of functions ending with a call to another method, so have fun chasing down those
+ * leads!
+ * 
+ * I use group/team interchangably just to confuse you!
+ * 
+ * Good luck and have fun!
+ * 
+ * @author Will Murrell
+ */
 
 /*
  *   emotionColours is a map that containst the emotions and the colour associated with it
@@ -192,11 +209,13 @@ class GroupPerWeek {
 
     }
 }
-/*
+/**
  *   coursePerWeek is a class that takes course and week as a constructor
  *
  *   addToPositive / Negative / Other are setters that allow
  *   the total number in each value to be increased
+ * 
+ * 
  */
 class CoursePerWeek {
     constructor(course, week) {
@@ -272,7 +291,7 @@ class CoursePerWeek {
         this.bookmarked = false;
     }
 }
-/*
+/**
  *   Student is a class that takes name, group, course and week as a constructor
  *
  * 
@@ -362,10 +381,15 @@ class Student {
 
 
 
-/*
+/** 
  *   buildHorizontalGraph is a function that takes a dataset, an array of labels
  *   a title and the HTML element id and creates a horizontal bar graph
  *   in that location by using Chartly
+ * 
+ * @param datac an array of datasets
+ * @param labels an array of the titles of the bars
+ * @param title is the title of the graph
+ * @param id is the ID used
  */
 function buildHorizontalGraph(datac, labels, title, id) {
     var titleArr = title.split(" ");
@@ -435,10 +459,13 @@ function buildHorizontalGraph(datac, labels, title, id) {
 }
 
 
-/*
+/**
  *   datasetMakerDuo is a function that takes a key (the name if the value)
  *   and 2 values (emotion and learning experience) and creates a Chartly dataset for a graph
  *
+ *   @param {String} key is the type of data e.g. "Positive" or "Negative" or "Other" 
+ *   @param emotion_value is the value going into the Emotion bar
+ *   @param exp_value is the value going into the Experience bar
  *   @return obj an object containing label, colour and data
  */
 function datasetMakerDuo(key, emotion_value, exp_value) {
@@ -454,13 +481,15 @@ function datasetMakerDuo(key, emotion_value, exp_value) {
 
 }
 
-/*
+/**
  *  createGroupData is function that is passed each entry and
  *  adds the positive, negative and other emotions to the
  *  group map.
  * 
  *  This is where the groupMap, courseMap and studentsEntryPerGroup
  *  map are created.
+ * 
+ *  @param data is an entry from the raw (no sauce?) data from the webserver
  */
 
 function createGroupData(data) {
@@ -579,9 +608,11 @@ function createGroupData(data) {
 
 }
 
-/*
+/**
  *   createIndividualData is a function that takes an entry and adds that information
  *   to the correlating Student object
+ * 
+ *  @param student is an entry from the data from the webserver
  */
 function createIndividualData(student) {
     
@@ -675,9 +706,12 @@ function createIndividualData(student) {
 
 }
 
-/*
+/**
  *   processData the function that is called by iteration of all the data.
  *   It takes a single entry and passes it on to other methods
+ * 
+ *   @param data an entry of the data from the webserver
+ *   @param {String} filter is a variable used to distinguish between loading the course/team or individual pages
  */
 
 function processData(data, filter) {
@@ -694,6 +728,11 @@ function processData(data, filter) {
     
 }
 
+/**
+ * getComments is a function that gets the comment data from the webserver
+ * 
+ * It also then passes the data to the displayComments function
+ */
 const getComments = async ()=>{
     var res;
     
@@ -710,7 +749,10 @@ const getComments = async ()=>{
     displayComments(comments);
     
 }
-
+/**
+ * displayComments is a function that check if there is a comment for the current page, and display it if so
+ * @param comments is the json data with all the comments
+ */
 function displayComments(comments){
    
     comments.forEach((commentEntry) =>{
@@ -807,6 +849,13 @@ function overallCommentSave(deleteComment, group, name){
     sendCommentToServer(commentValue, group, name);
 }
 
+/**
+ * sendCommentToServer makes an object from the parameters and sends it to the webserver
+ * 
+ * @param {String} comment the comment submitted
+ * @param {String} group the name of the course the comment is from
+ * @param {String} name the name of the student (if required)
+ */
 async function sendCommentToServer(comment, group, name){
     let parcel = {
         group: group,
@@ -843,6 +892,13 @@ async function sendCommentToServer(comment, group, name){
     })
 }
 
+/**
+ * getSpecificStudent is a function that gets data from the webserver and passes it to the correct methods and such
+ * 
+ * @param {String} name is the name of the student that the data is required for 
+ * @param {String} page tells the function what page it is on and therefore which methods to run
+ * @param {String} course is the name of the course that the student is in
+ */
 const getSpecificStudent = async(name, page, course) =>{
     
     var groupsStudentIsIn = new Map();
@@ -885,7 +941,13 @@ const getSpecificStudent = async(name, page, course) =>{
     }
     
 }
-
+/**
+ * sentenceEventListener is a function that brutally, and unapologetically rips eventListeners from
+ * the sentences in the student blog page
+ * 
+ * @param {Boolean} present might do something... idk 
+ * @param {Boolean} firstTime first time? remove "click" event listeners if true
+ */
 function sentenceEventListeners(present, firstTime){
     if(present){
 
@@ -912,6 +974,13 @@ function sentenceEventListeners(present, firstTime){
     }
 
 }
+/**
+ * removeTeacherParts DOES NOT REMOVE BODY PIECES FROM YOUR TEACHER
+ * 
+ * It will hide some of the extra jazz that is for teachers only.
+ * Is this an super lazy way of reusing the teacher code? Yep!
+ * Does it work? Absolutely!!
+ */
 function removeTeacherParts(){
     //An array full of all the things I want to get rid of
     var uselessArray = ["graphArea", "overallCommentsStudent", "filterDiv", "death"]
@@ -927,10 +996,21 @@ function removeTeacherParts(){
 
 }
 
+/**
+ * despite the name, elementKiller doesn't actually kill any elements.  It did at first but was changed just to hide 
+ * them :(
+ * @param {String} id the html id attribute of the soon-to-be-killed element
+ */
 function elementKiller(id){
     document.getElementById(id).style.display = "none";
 }
-
+/**
+ * showOverlay is a function that toggles between displaying the teacher view and the student view
+ * 
+ * probably...
+ * 
+ * @param {Boolean} show this variable just toggles whether it is hiding or showing the elements 
+ */
 function showOverlay(show){
     var showButton = document.getElementById("showStudentsDataButton")
     var hideButton = document.getElementById("hideStudentsDataButton")
@@ -950,14 +1030,18 @@ function showOverlay(show){
     for (var i = 0; i < sentences.length; i++) {
         var spans = sentences[i].children[1].children;
         for (var j = 0; j < spans.length; j++) {
-            //console.log(spans[j]);
-            //console.log("hi?")
-            spans[j].setAttribute("shown", show);
-            
+            spans[j].setAttribute("shown", show);  
         }
     }
 }
-
+/**
+ * displayStudentCourses is a function that displays the elements created in the createCoursesDiv
+ * 
+ * A fraud of a method that should feel bad for stealing all the fame from createCoursesDiv
+ * 
+ * @param {Map} map map map map map map map map map its the map to be used! 
+ * @param {*} name  is the name of the student... as it has been in all of these methods!!
+ */
 function displayStudentCourses(map, name){
     
     map.forEach((value, key) => {
@@ -967,11 +1051,27 @@ function displayStudentCourses(map, name){
     })
     
 }
-
+/**
+ * getStudentsBlog is an async function that takes a name and a page in its parameters and the does
+ * absolutely nothing with it! There is nothing in this method! I should just delete it!!!
+ * 
+ * @param {String} name the name of the student ig
+ * @param {String} page The page
+ */
 const getStudentsBlog = async(name, page) =>{
     
 }
 
+/**
+ * createCourseDiv is the real powerhouse of the creating-and-displaying-the-course-and-team-that-each-student-belong-to
+ * 
+ * it builds the html elements and inserts the data into into it
+ * 
+ * @param {*} value is the group/team name
+ * @param {*} key is the course name
+ * @param {*} name IS THE NAME OF THE STUDENT LIKE IT ALWAYS HAS AND ALWAYS WILL BE
+ * @returns an html div containing all of your hopes, dreams and aspirations
+ */
 function createCourseDiv(value, key, name){
     var div = document.createElement("div");
     div.setAttribute("class", "courseDiv");
@@ -991,11 +1091,18 @@ function createCourseDiv(value, key, name){
 
     return div;
 }
-/*
+/**
  *   getStudents is a function that is immediately called when the page loads.
  *   Its job is to get the data from the web server and pass it on
  * 
  *   It also calls the required methods for the page that called it
+ * 
+ *   THIS IS WHERE THE FUN BEGINS !!!
+ *   It is painfully obvious that this was one of the first methods I wrote and never decided
+ *   to change or update it.  It sucks!! I mean, just look at those parameters...
+ * 
+ *   @param {String} set a variable saying where its individual/group/course
+ *   @param {String}course the course being loaded
  */
 const getStudents = async (set, course) => {
     
@@ -1078,9 +1185,11 @@ const getStudents = async (set, course) => {
 
 }
 
-/*
-*   buildTrendGraph takes a dataset and an id and builds and displays the chart
-*/
+/**
+ *   buildTrendGraph takes a dataset and an id and builds and displays the chart
+ *   @param data data data data data dataa data
+ *   @param id id id id id id id id id id id id
+ */
 function buildTrendGraph(data, id){
     var group = document.getElementById("groupSelector");
     groupName = group.value;
@@ -1156,10 +1265,13 @@ function buildTrendGraph(data, id){
 
 
 }
-/*
-*   getTrendData takes a positive, negative and neutral emotion/experience array and returns a dataset
-*   for a Chartly.js chart
-*/
+/**
+ *   getTrendData takes a positive, negative and neutral emotion/experience array and returns a dataset
+ *   for a Chartly.js chart
+ *   @param positiveArray an array containing all the positive values
+ *   @param negativeArray an array containing all the negative values
+ *   @param neutralArray I bet you can't guess what this one does!!
+ */
 function getTrendData(positiveArray, negativeArray, neutralArray){
     var labels = new Array();
     for(let i = 1; i < positiveArray.length +1; i++){
@@ -1196,11 +1308,14 @@ function getTrendData(positiveArray, negativeArray, neutralArray){
 
     return data;
 }
-/*
+/**
  *   processIndividuals is a function that is immediately called when the page loads.
  *   Its job is to get the data from the web server and pass it on
  * 
  *   It also calls the required methods for the page that called it
+ * 
+ *   @param set Hi, whats up?
+ *   @param course these parameters arn't used and should really be merk'd
  */
 const processIndividuals = async (set, course) => {
     
@@ -1228,9 +1343,11 @@ const processIndividuals = async (set, course) => {
    
 }
 
-/*
+/**
  * addMissingWeeks is a fucntion that finds the highest week and fills in empty
  * entries.
+ * 
+ * @param arg the thing that your parents do while you are just trying to sleep! Nah jk! it does something, I just don't know what it is!
  */
 function addMissingWeeks(arg) {
     if(arg != undefined){
@@ -1275,8 +1392,10 @@ function addMissingWeeks(arg) {
     
 
 }
-/*
+/**
  * displayReports is a function calls passes on data only if it is required
+ * 
+ * @param data student data probably ig 
  */
 function displayReports(data) {
     var name = document.getElementById('studentName').textContent;
@@ -1292,7 +1411,12 @@ function displayReports(data) {
 
     }
 }
-
+/**
+ * 
+ * studentDisplayReports in an in-between function that calls the buildReportHTML on the correct things
+ * 
+ * @param data is just some data I don't know
+ */
 function studentDisplayReports(data) {
     
     var name = document.getElementById('studentName').textContent;
@@ -1309,8 +1433,11 @@ function studentDisplayReports(data) {
 }
 
 
-/*
+/**
  * buildReportHTML is a function builds and displays all the sentences of an entry
+ * 
+ * @param data data data data data data
+ * @param week the week it is for!
  */
 function buildReportHTML(data, week) {
     var weekNumber = parseInt(week.substring(4));
@@ -1533,9 +1660,15 @@ function buildReportHTML(data, week) {
     addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap);
 }
 
-/*
+/**
  *  addFilterDropDown is a function that adds the emotions and experiences for each week to the report
  *  It will hide all of them but week 1's emotions
+ * 
+ * @param week which week blog this is for
+ * @param posEmoMap map with the values present in this weeks blog
+ * @param negEmoMap map with the values present in this weeks blog
+ * @param posExpMap map with the values present in this weeks blog
+ * @param negExpMap map with the values present in this weeks blog
 */
 function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
     var EmoArray = new Array();
@@ -1612,9 +1745,10 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
     
 }
 
-/*
+/**
 *   optionClick is an event listener that will trigger each time a new <option> is selected
 *   It changes the values of the sentences depending on whether they are being selected or not
+*   @param event the event!
 */
 const optionClick = function (event){
     
@@ -1699,9 +1833,11 @@ const optionClick = function (event){
     }
     
 }
-/*
-*   addToMap takes a value and a map and increments the value associated with it
-*/
+/**
+ *   addToMap takes a value and a map and increments the value associated with it
+ *   @param value the item in the map to be incremented
+ *   @param map which map to add to 
+ */
 function addToMap(value, map){
     if(!map.has(value)){
         map.set(value, 1);
@@ -1710,9 +1846,14 @@ function addToMap(value, map){
     }
 
 }
-/*
-* buildBarGraphs will build and display the trend graphs
-*/
+/**
+ * buildBarGraphs will build and display the trend graphs
+ * @param week which week blog this is for
+ * @param posEmoMap map with the values present in this weeks blog
+ * @param negEmoMap map with the values present in this weeks blog
+ * @param posExpMap map with the values present in this weeks blog
+ * @param negExpMap map with the values present in this weeks blog
+ */
 function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
     
         const data = getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap);
@@ -1809,9 +1950,14 @@ function buildBarGraphs(week,posEmoMap, negEmoMap, posExpMap, negExpMap){
 
 }
 
-/*
-*   getBarGraphDatasets takes the positive/negative emotion/learning experience maps and returns the datasets
-*   for the Chartly.js charts
+/**
+    *   getBarGraphDatasets takes the positive/negative emotion/learning experience maps and returns the datasets
+    *   for the Chartly.js charts
+    * @param week which week blog this is for
+    * @param posEmoMap map with the values present in this weeks blog
+    * @param negEmoMap map with the values present in this weeks blog
+    * @param posExpMap map with the values present in this weeks blog
+    * @param negExpMap map with the values present in this weeks blog
 */
 function getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap){
     var emotionsLabels = new Array();
@@ -1876,10 +2022,11 @@ function getBarGraphDatasets(posEmoMap, negEmoMap, posExpMap, negExpMap){
       return [emotions, experience];
     
 }
-/*
-*   radioCheck is the method called by the event listener when the emotion/learning experience radio is selected
-*   It will change the highlighted sentence and the graph to the learning experience or emotion version
-*/
+/**
+ *   radioCheck is the method called by the event listener when the emotion/learning experience radio is selected
+ *   It will change the highlighted sentence and the graph to the learning experience or emotion version
+ * @param event its an event!!
+ */
 const radioCheck = function (event){
     
    var graphs = document.querySelector('#textArea').children;
@@ -1968,7 +2115,7 @@ const radioCheck = function (event){
     //selecter.value = "All Emotions";
    
 }
-/*
+/**
 *   clearSelectedElements removes the attribute "selected" from all elements
 *   This makes it easier to not accidentally have multiple sentences selected at once
 */
@@ -1993,9 +2140,10 @@ function clearSelectedElements(){
     newCommentDiv.style.display = "none";
 }
 
-/*
+/**
 *   commentDoubleClick is the method called by the event listener when a comment is double clicked
 *   It will open up the functionality for editing and deleting the comment
+*   @param event its an event!!
 */
 const commentDoubleClick = function(event){
 
@@ -2041,11 +2189,12 @@ const commentDoubleClick = function(event){
     }
     
 }
-/* 
-* commentClick is the function called by the event listener when a comment is clicked on
-* It will highlight the relevant sentence, display the new comment section if needed
-* and scroll so the sentence is in view
-*/
+/** 
+ * commentClick is the function called by the event listener when a comment is clicked on
+ * It will highlight the relevant sentence, display the new comment section if needed
+ * and scroll so the sentence is in view
+ *  @param event its an event!!
+ */
 const commentClick = function(event){
 
     var editing = false;
@@ -2078,9 +2227,10 @@ const commentClick = function(event){
     }
     
 }
-/*
+/**
  * previousWeek is a function called by the the "back" button on the individual students page
  * it hides the current entry and displays the previous one
+ * @param id id!!!!
  */
 function previousWeek(id) {
     var weeks = document.getElementById("textArea").children;
@@ -2158,9 +2308,10 @@ function previousWeek(id) {
         }
     }
 }
-/*
+/**
  * nextWeek is a function called by the the "next" button on the individual students page
  * it hides the current entry and displays the next one
+ * @param id id!!!!
  */
 function nextWeek(id) {
     var weeks = document.getElementById("textArea").children;
@@ -2241,15 +2392,17 @@ function nextWeek(id) {
     }
 
 }
-/*
+/**
  *  hideEmotionHover is an event listener that hides the moving emotion overlay
+ * @param event its an event!!
  */
 const hideEmotionHover = function(event) {
     var test = document.getElementById('testDiv');
     test.style.display = "none"
 }
-/*
+/**
  *  emotionHover is an event listener that displays the cursor following emotion overlay
+ * @param event its an event!!
  */
 const emotionHover = function(event) {
     var test = document.getElementById('testDiv');
@@ -2286,8 +2439,9 @@ const emotionHover = function(event) {
     test.style.top = event.pageY + -70 + "px";
     test.style.left = event.pageX + 5 + "px";
 }
-/*
+/**
  *  sentenceClick is an event listener is used to select a sentence to add a comment to it
+ * @param event its an event!!
  */
 const sentenceClick = function(event) {
     clearSelectedElements();
@@ -2306,9 +2460,10 @@ const sentenceClick = function(event) {
     
     comment.setAttribute("selected", "true");
 }
-/*
+/**
  *  saveComment is a function that will take what is in the text entry element and
  *  set the sentence's comment attribute to it.
+ * @param arg RAAAAWWWWWRRRRR
 */
 function saveComment(arg){
     
@@ -2367,7 +2522,7 @@ function saveComment(arg){
         }
     }
 }
-/*
+/**
 *   addComment is a method called by the add comment button on the 'student' page
 *   It will make a comment entry from the text in the text area
 */
@@ -2411,9 +2566,10 @@ function addComment(){
     document.getElementById('newCommentDiv').style.display = "none";
 }
 
-/*
+/**
  *  fillInMissingWeeks is a function used to find missing entries
- *
+ * @param map the map to search in for missing values
+ * @param set individual/group/course
  * @return missingEntries an array of missing entries
  */
 function fillInMissingWeeks(map, set) {
@@ -2479,10 +2635,11 @@ function fillInMissingWeeks(map, set) {
     return (missingEntries);
 }
 
-/*
+/**
  *  bookmarkEventListener isn't an event listener... nice!
  * This function actual sees if an object should be bookmarked,
  * bookmarks it if so, then adds an event listener to the bookmark button
+ * @param set individual/group/course
  */
 function bookmarkEventListener(set) {
 
@@ -2532,7 +2689,7 @@ function bookmarkEventListener(set) {
     }) 
     
 }
-/*
+/**
  * bookmarkClick is actually an event listener. Updates object and page when a bookmark is clicked
  */
 const bookmarkClick = function() {
@@ -2591,7 +2748,7 @@ const bookmarkClick = function() {
 
 }
 
-/*
+/**
  *   clearGraphs is a function that removes all canva elements
  *   and creates a new empty div
  */
@@ -2604,9 +2761,10 @@ function clearGraphs() {
     var parent = document.querySelector('main');
     parent.appendChild(newDiv);
 }
-/*
+/**
  * makeAside is a function that builds the area to the right of the graphs.
  * This contains information like % change and number of students
+ * @param id id!!
  */
 function makeAside(id) {
 
@@ -2658,9 +2816,10 @@ function makeAside(id) {
     return parentDiv;
 }
 
-/*
+/**
  *   makeCanva is a function that creates a canva HTML element
  *   it takes an id to be used to identify it.
+ *   @param id id!!
  */
 function makeCanva(id) {
     var canvaContainer = document.createElement("div");
@@ -2681,8 +2840,9 @@ function makeCanva(id) {
 
 }
 
-/*
+/**
  * sortMapNegative is a function that returns the correct map, sorted by the most negative first
+ *@param set individual/group/course
  */
 function sortMapNegative(set) {
     
@@ -2696,8 +2856,9 @@ function sortMapNegative(set) {
     }
     return unsortedArray.sort((a, b) => (a[1].getOverallNegative() < b[1].getOverallNegative()) ? 1 : -1);
 }
-/*
+/**
  * sortMapEmoNegative is a function that returns the correct map, sorted by the most negative emotiond first
+ * @param set individual/group/course
  */
 function sortMapEmoNegative(set) {
 
@@ -2711,9 +2872,10 @@ function sortMapEmoNegative(set) {
     }
     return unsortedArray.sort((a, b) => (a[1].getEmoNegative() < b[1].getEmoNegative()) ? 1 : -1);
 }
-/*
+/**
  * sortMapExpNegative is a function that returns the correct map, sorted by the most negative
  * learning experience first.
+ * @param set individual/group/course
  */
 function sortMapExpNegative(set) {
 
@@ -2729,8 +2891,9 @@ function sortMapExpNegative(set) {
     return unsortedArray.sort((a, b) => (a[1].getExpNegative() < b[1].getExpNegative()) ? 1 : -1);
 }
 
-/*
+/**
  * sortMapPositive is a function that returns the correct map, sorted by the most positive
+ * @param set individual/group/course
  */
 function sortMapPositive(set) {
 
@@ -2745,8 +2908,9 @@ function sortMapPositive(set) {
     return unsortedArray.sort((a, b) => (a[1].getOverallNegative() > b[1].getOverallNegative()) ? 1 : -1);
 }
 
-/*
+/**
  * sortMapMostRecent is a function that returns the correct map, sorted by the most recent week
+ * @param set individual/group/course
  */
 function sortMapMostRecent(set) {
     var unsortedArray;
@@ -2760,8 +2924,9 @@ function sortMapMostRecent(set) {
     return unsortedArray.sort((a, b) => (a[1].week < b[1].week) ? 1 : -1);
 }
 
-/*
+/**
  * sortMapLeastRecent is a function that returns the correct map, sorted by the least recent week
+ * @param set individual/group/course
  */
 function sortMapLeastRecent(set) {
     var unsortedArray;
@@ -2775,8 +2940,11 @@ function sortMapLeastRecent(set) {
     return unsortedArray.sort((a, b) => (a[1].week > b[1].week) ? 1 : -1);
 }
 
-/*
+/**
  * displayIndividualGraphs is a function that will create and display the graphs of individual students
+ * @param group the group the student is in!
+ * @param map the map containing the data
+ * @param deadMaps the map containing the missing values
  */
 function displayIndividualGraphs(group, map, deadMaps) {
     var selectedGroup =  document.getElementById('groupSelector').value;
@@ -2865,8 +3033,9 @@ function displayIndividualGraphs(group, map, deadMaps) {
     buildTrendGraph(expTrendData, "expTrend");
 
 }
-/*
+/**
  * displayAside adds the information to the aside to the right of the graphs
+ * @param key the current entry being processed
  */
 function displayAside(key) {
     var emoChange = document.getElementById(key.name + " Week" + key.week + " emo change");
@@ -2948,7 +3117,9 @@ function displayAside(key) {
         expChange.textContent = "0%";
     }
 }
-
+/**
+ * addFormEventListeners adds event listeners to the filter form, duh.
+ */
 function addFormEventListeners(){
 
     var weekSelecter = document.getElementById("weekSelector")
@@ -2963,16 +3134,26 @@ function addFormEventListeners(){
     sortSelecter.addEventListener("change", submitForm, false);
     submitForm();
 }
+
+/**
+ * submitForm is my favourite method. Originally I had a button you had to press to implement the filter,
+ * but this was changed so it was automatic.  this was done by just hiding the button and making the eventListeners
+ * press this invisible button!!
+ */
 function submitForm(){
     
     var button = document.getElementById("submitButton");
     button.click();
 }
-/*
+/**
  *   displayGroupGraph is a function that, when called
  *   will create graphs from the map passed to it
  * 
  * It also adds information to the aside
+ * 
+ * @param course is the course the group belongs to
+ * @param sortedMap the sorted map containing the data
+ * @param deadMaps the map containing the missing values
  */
 
 function displayGroupGraph(course, sortedMap, deadMaps) {
@@ -3249,6 +3430,13 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
 
 }
 
+/**
+ * averageArrays takes 3 arrays and averages each week of them.  With themselves, not with the other weeks
+ * @param {Array} positive an array of the positive values
+ * @param {Array} negative an array of the negative values
+ * @param {Array} neutral an array of the neutral values
+ * @returns the normalized array
+ */
 function averageArrays(positive, negative, neutral){
     
     for(var i = 0; i < positive.length; i++){
@@ -3267,12 +3455,26 @@ function averageArrays(positive, negative, neutral){
 
     return array; 
 }
-
+/**
+ * getTotal returns the sum of this weeks values across the tree arrays
+ * @param {Array} positive an array of the positive values
+ * @param {Array} negative an array of the negative values
+ * @param {Array} neutral an array of the neutral values
+ * @param  week the week being worked on
+ * @returns total of that week
+ */
 function getTotal(positive, negative, neutral , week){
     var array_total = positive[week] + negative[week] + neutral[week];
     return array_total;
 }
-
+/**
+ * I genuinely am looking at this method and have no clue what it does!
+ * 
+ * @param {*} key 
+ * @param {*} array 
+ * @param {*} type 
+ * @returns something idk
+ */
 function addCurrentWeekData(key, array, type){
     var previousValue = array[key.week];
 
@@ -3288,7 +3490,7 @@ function addCurrentWeekData(key, array, type){
 
                
 
-/*
+/**
  * displayGroups is a function that adds buttons that take you into their course/group
  */
 function displayGroups() {
@@ -3331,8 +3533,9 @@ function displayGroups() {
         element.appendChild(groupButton);
     });
 }
-/*
+/**
  * displayStudents is a function that adds buttons that take you into their individual page
+ * @param group the group that the students belong to
  */
 function displayStudents(group) {
     var courseTitle = document.getElementById("courseTitle");
@@ -3366,14 +3569,14 @@ function displayStudents(group) {
         element.appendChild(groupButton);
     });
 }
-/*
+/**
  * getIndividuals is a function called by the html page
  */
 function getIndividuals() {
     clearGraphs();
     getStudents('individuals');
 }
-/*
+/**
  * getGroups is a function called by the html page
  */
 function getGroups() {
@@ -3383,8 +3586,11 @@ function getGroups() {
 }
 
 
-/*
+/**
  * buildForm add the values to the filter form
+ * @param map a map, usually printed, is a visual medium used to locate things in physical space
+ * @param highestWeek the highest week
+ * @param set my least favourite variable
  */
 function buildForm(map, highestWeek, set) {
 
@@ -3467,7 +3673,7 @@ function buildForm(map, highestWeek, set) {
     addFormEventListeners();
 }
 
-/*
+/**
  * loadCourseButtons is a function that just loads buttons to the courses
  */
 function loadCourseButtons() {
@@ -3484,20 +3690,25 @@ function loadCourses() {
     getStudents('course');
 
 }
-/*
-*   loadStudentCourses is called from the script in the pug file
-*   it calls the getSpecificStudent method with the correct parameters!
-*
-*   Who came up with these names??
-*/
+/**
+ *   loadStudentCourses is called from the script in the pug file
+ *   it calls the getSpecificStudent method with the correct parameters!
+ *
+ *   Who came up with these names??
+ * @param name you know what this is
+ * @param page and this too hopefully!
+ */
 function loadStudentCourses(name, page){
     
     getSpecificStudent(name, page, null);
 }
 
-/*
+/**
  * loadBlog is called from the script in the pug file
  * it also just calls the getSpecificStudent method with the correct parameters!
+ * 
+ * @param name name of student
+ * @param course name of course
 */
 function loadBlog(name, course){
     
@@ -3505,22 +3716,26 @@ function loadBlog(name, course){
     getSpecificStudent(name, "blog", course);
     
 }
-/*
+/**
  * loadGroup is a function that calls getStudents with group parameters and the pages course
+ * @param course name of course
  */
 function loadGroup(course) {
     getStudents('group', course);
 }
-/*
+/**
  * loadIndividuals is a function that calls getStudents with individual parameters and the group
+ * @param group name of group
  */
 function loadIndividuals(group) {
     getStudents('individuals', group);
 }
-/*
-* submitDraftBlog is called by the submit draft blog button (unsurprisingly!)
-* and is set up to take the data from the blog and uh... do something with it
-*/
+/**
+ * submitDraftBlog is called by the submit draft blog button (unsurprisingly!)
+ * and is set up to take the data from the blog and uh... do something with it
+ * @param name name of student
+ * @param course name of course
+ */
 function submitDraftBlog(name, course){
     
     const data = getBlogData();
@@ -3531,15 +3746,20 @@ function submitDraftBlog(name, course){
     }
     
 }
-/*
-* submitBlog is called by the submit blog button 
-* and should probably do something helpful
-*/
+/**
+ * submitBlog is called by the submit blog button 
+ * and should probably do something helpful
+* @param name name of student
+ * @param course name of course
+ */
 function submitBlog(name, course){
     
     document.location.href = "/student/"+name+"/"+course+"?draft=false";
 }
-
+/**
+ * getBlogData is a method that creates an object from the users submitted blog
+ * @returns an object containing the blog and the answers to the self report
+ */
 function getBlogData(){
     var blog = document.getElementById("blogTextArea").value;
     if(blog == ""){
@@ -3594,7 +3814,10 @@ function getBlogData(){
     }
     return data;
 }
-
+/**
+ * finds out which week is next
+ * @returns the next week!
+ */
 function getNewWeek(){
     
     var notFound = true;
@@ -3605,7 +3828,12 @@ function getNewWeek(){
     return arr.length+1;
     
 }
-
+/**
+ *  loadDraftBlog is unfinished, but should load the users draft into the page to be finished/edited
+ * @param student student name
+ * @param course course name
+ * @param week which week
+ */
 function loadDraftBlog(student, course, week){
     
     var exampleDraft = {
@@ -3634,9 +3862,12 @@ function loadDraftBlog(student, course, week){
     
     fourthQuestion[exampleDraft.fourthQuestion - 1].checked = true;
 }
-
+/**
+ * draftButton switches between which button is shown
+ * @param draft true or false!
+ */
 function draftButton(draft){
-    console.log(draft)
+    
     if(draft == "true"){
         console.log("if true")
         document.getElementById("editBlogButton").style.display = "block";

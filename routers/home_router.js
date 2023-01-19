@@ -1,4 +1,5 @@
-/* home_router.js
+/**
+ * home_router.js
  *
  * @author Will Murrell
 */
@@ -153,16 +154,18 @@ const learning_experiences = [
         console.log("hi yeah");
         updateComments(parcel);
     })
-
+/**
+ * updateComments is a function that will update the csv file of comments with the new comment given in data
+ * @param {Object} data an object containing a name, group and the comment
+ */
     function updateComments(data){
-        //console.log(data.group);
+        
         const fileName = "../SummerStudent/overall-comments.json";
         const file = require(fileName);
-        //console.log(file);
+        
         var commentFound = false;
         file.forEach((comment) => {
-            //console.log("ok!");
-            //console.log(comment.Group + " " + data.group + " and " +comment.Name + " " +data.name);
+            
             if(comment.Group == data.group && comment.Name == data.name){
                 comment.Comment = data.comment;
                 commentFound = true;
@@ -178,11 +181,11 @@ const learning_experiences = [
             }
             file.push(newComment);
         }
-        //console.log(file);
+        
         const newFileName = "./SummerStudent/overall-comments.json";
         fs.writeFile(newFileName, JSON.stringify(file), function writeJSON(err) {
             if (err) return console.log(err);
-            //console.log(JSON.stringify(file));
+            
             console.log('writing to ' + fileName);
         });
         converter.json2csv(file, (err, csv) => {
@@ -198,9 +201,11 @@ const learning_experiences = [
         readComments("overall-comments.json");
     }
     
-    /*
+    /**
      * iterateOverFiles will iterate over the folder passed to it and 
      * then call the parseCSV method on each one
+     * 
+     * @param {String} folder the name of the folder going to be iterated over
      * 
     */
     function iterateOverFiles(folder){
@@ -229,8 +234,10 @@ const learning_experiences = [
 
     }
 
-    /*
+    /**
      * readHeader reads the csv header and turns it into json and adds it to entries array
+     * 
+     * @param {String} filename the name of the file to be read
     */
     async function readHeader(filename){
         let rawData = fs.readFile('SummerStudentCSV/' + filename, (err, data)=> {            
@@ -247,8 +254,10 @@ const learning_experiences = [
             }
         });
     }
-    /*
+    /**
      * readHeader reads the json comment file and turns it into a map
+     * 
+     * @param {String} filename the name of the file to be read
     */
     async function readComments(filename){
         let rawData = fs.readFile('SummerStudent/' + filename, (err, data)=> {            
@@ -257,20 +266,22 @@ const learning_experiences = [
             } else {
                 if(data.byteLength == 0){
                     console.log(" no file ot something");
-                    //readHeader(filename)                   
+                                     
                 } else {
                     console.log("success");
                     comments = JSON.parse(data);  
-                    //console.log(comments);       
-                    //console.log(JSON.stringify(JSONdata))           
+            
                 }               
             }
         });
     }
 
-    /*
+    /**
      * parseCSV uses Papa.js to turn the csv files into json files
      * It will call readJSON on each file if converted properly
+     * 
+     * @param {String} input the name of the input file
+     * @param {String} output the name of the output file
     */
     function parseCSV(input, output){
         let fileInputName = csvFolder+'/' + input; 
@@ -300,9 +311,11 @@ const learning_experiences = [
     }
 
 
-    /*
+    /**
      *  readJSON is a method that reads a JSON file and passes its information to 
      * the individualReport and emotionCounter method
+     * 
+     * @param {String} filename the name of the file to be read
     */
     async function readJSON (filename){
         let rawData = fs.readFile(filename, (err, data)=> {
@@ -337,8 +350,14 @@ const learning_experiences = [
     }
     
     
-    /*
+    /**
      * emotionCounter is a method that counts which emotions and their frequency per entry
+     * 
+     * @param data the data of that weeks entry
+     * @param {String} name the name of the student
+     * @param {String} group the name of the group/team
+     * @param week which week of the course it is
+     * @param {String} course the name of the course
     */
     function emotionCounter(data, name, group, week, course){
         const entryMap = new Map();
@@ -395,9 +414,15 @@ const learning_experiences = [
  
     }
 
-    /*
+    /**
      * IndividualReport creates arrays of sentences to be used for the pages that 
      * view what the students have written
+     * 
+     * @param weekData this weeks entry's data
+     * @param {String} name the name of the student
+     * @param {String} group the name of the group/team
+     * @param week which week of the course it is
+     * @param {String} course the name of the course
     */
     function individualReport(weekData, name, group, week, course){
         

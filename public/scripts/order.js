@@ -1,5 +1,17 @@
 
-
+/**
+ * filterForm is a method called by the filter on the main pages that have all the graphs on them
+ * It will get the correctly sorted map first, then pass the variables to order() to filter out graphs.
+ * 
+ * I know what you are thinking... Why does the function called "filterForm" NOT filter out anything, only
+ * change the order on the graphs? Also, why does the function called "order" NOT change the order of anything,
+ * but actually filter out graphs?! And to that I say, yeah fair.  In the amount of time it took me to write this
+ * I could've changed them around, but where is the fun in that??
+ * 
+ * 
+ * @param {String} arg just a variable that will change the functionalty of this method. Usually somehting like course/group/individual
+ * @param {String} set the scope of the dataset that needs to be worked on.  
+ */
 
 function filterForm(arg, set){
     console.log("CLICK!")
@@ -70,7 +82,17 @@ function filterForm(arg, set){
     
     
 }
-
+/**
+ * order.  Probably best to look at the code comments for filterForm if you really want the full experience
+ * 
+ * This method just filters out stuff. My tummy hurts
+ * 
+ * @param filterWeek idk if this is a string or int but yeah its just the week number
+ * @param {String} filterGroup name of the group
+ * @param {Boolean} bookmark wanna see the bookmarked values or nah?
+ * @param {Boolean} missing wanna see the missing values or nah
+ * 
+ */
 function order(filterWeek, filterGroup, bookmark, missing){
     
     const graphs = document.querySelector('#new').children
@@ -112,13 +134,6 @@ function order(filterWeek, filterGroup, bookmark, missing){
               
                 
             }
-
-            // if(container.getAttribute("missing")){
-            //     var arr = container.getAttribute("id").split(" ");
-            //    document.getElementById(arr[0]+ " " +arr[1] + " checkbox").checked = true;
-            //    console.log(document.getElementById(arr[0]+ " " +arr[1] + " checkbox").checked);
-                
-            // }
         }
 
         if(!missing){

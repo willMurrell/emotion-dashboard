@@ -38,19 +38,5 @@ router.get('/:name/:course/newBlog/:week', async (req, res) => {
     res.render('blogWriter', {studentName: studentName, courseName: courseName, week: week, draft: draft});
 })
 
-    // router.get('/:course/:group', async (req, res) => {
-    //     var course = req.params.course;
-    //     var group = req.params.group;
-    //     console.log(group);
-    //     res.render('team', {course: course, group: group} );
-    // })
-
-    // router.get('/:course/:group/:student', async (req, res) => {
-    //     var course = req.params.course;
-    //     var group = req.params.group;
-    //     var student = req.params.student;
-    //     console.log("AHHHHHHH"+student);
-    //     res.render('student', {course: course, group: group, student: student} );
-    // })
 
 module.exports = router; // export the router

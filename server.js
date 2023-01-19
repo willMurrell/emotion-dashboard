@@ -1,4 +1,4 @@
-/*
+/**
 * Server.js
 *
 * @author Will Murrell
@@ -63,8 +63,16 @@ loadCSVHeader();
 
 
 
-/*
+/**
 *  makeObject() creates and returns an object from the given parameters
+* @param name - The name of the student
+* @param year - The year of the entry
+* @param month - The month of the entry
+* @param day - The day of the entry
+* @param filename - the title of the file for the entry
+* @param course - The course the entry is from
+* @param group - The group the entry is from
+* @return obj - an object made with all the parameters
 */
 function makeObject(name, year, month, day, filename, course, group){
     var obj = new Object({
@@ -80,8 +88,9 @@ function makeObject(name, year, month, day, filename, course, group){
     })
     return obj;
 }
-/* loadCSVHeader converts the Project-Group_Student.csv to a json file
- * It will call loadJSONHeader if conversion is successful
+/** 
+ * loadCSVHeader converts the Project-Group_Student.csv to a json file. It will call loadJSONHeader if conversion is successful
+ * 
 */
 function loadCSVHeader(){
     
@@ -103,7 +112,9 @@ function loadCSVHeader(){
         });
 }
 
-/* loadJSONHeader */
+/**
+ *  loadJSONHeader loads the 'Project-Group-Student.json' file, creates some maps from the data and then calls the xlsxToCsv() function
+ */
 function loadJSONHeader(){
 
 
@@ -190,7 +201,7 @@ function loadJSONHeader(){
         
     
 }
-/*
+/**
 *   xlsxToCSV() converts all the xlsx files specified to the folder variable to .csv files
 *   it also finds out which week the entry is from and renames it, adding group and week
 *   
@@ -339,10 +350,10 @@ function xlsxToCSV(){
 }
 
 
-/*
- *  getWeekOfMonth takes a date and returns the date of the start of that week
+/**
+ *  getWeekOfMonth takes a date and returns the date of the start of that week. i.e. if the entry date is on a wednesday or thursday, it will return the date of the monday of that week
  *
- * i.e. if the entry date is on a wednesday or thursday, it will return the date of the monday of that week
+ *  @param {date} date a date 
 */
 function getWeekOfMonth(date) {
     
