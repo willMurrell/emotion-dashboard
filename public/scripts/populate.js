@@ -1752,7 +1752,7 @@ function addFilterDropDown(week, posEmoMap, negEmoMap, posExpMap, negExpMap){
 */
 const optionClick = function (event){
     
-    
+    console.log(event);
     var selecter = event.path[0];
     var week = selecter.getAttribute("id").split("-")[0];
     //The value present in the <select>

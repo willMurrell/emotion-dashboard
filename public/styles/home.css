@@ -639,17 +639,19 @@ canvas{
     display: flex;
     flex-direction: column;
     /*
-    border-left: 1px solid black;
+    border-bottom: 1px solid black;
     */
     background-color: #C7E5F2;
     border-radius: 10px;
     border-top: 5px solid black;
+    border-bottom: 5px solid black;
     
    
     
 }
 
 #whiteBar{
+    display: none;
     width: 104.5%;
     height: 25px;
     background-color:#C7E5F2;  
@@ -871,7 +873,7 @@ h2{
 
 
 footer{
-   /* position: fixed;*/
+    /*position: fixed;*/
     bottom: 0;
     width: 100%;
     height: 200px;
@@ -895,6 +897,13 @@ footer p{
 
 #pageInfo h2{
     display: inline-block;
+}
+/*
+    Don't go looking for this. Trust me.
+*/
+#secretDiv{
+    
+    color: rgb(142,211,230);
 }
 
 /* For Laptop Screens*/  
@@ -1053,6 +1062,8 @@ and (max-width: 768px)
         border: none;
         /*background-color: #C2e0f9;*/
         background-color: #C7E5F2;
+        border-top: 5px solid black;
+        border-bottom: 5px solid black;
     }
     
     #textArea{
