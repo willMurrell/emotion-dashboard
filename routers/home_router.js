@@ -448,7 +448,7 @@ const learning_experiences = [
             //Randomly generated comments for testing
             let x = Math.floor(Math.random() * 3);
             let y = Math.floor(Math.random() * 6);
-            const arr = ["Hmm sure whatever", "Eggs on toast", "not cool", "you smell", "try be better", "have you tried no being bad?", "You really woke up and decided to wear that?"];
+            const arr = ["Maybe you need to work on this", "This is really good!", "I'm not so sure about this", "That must've been really annoying!", "Trying doing this is a different way", "Maybe you and your team should discuss this?"];
             if(x == 1){
 
                 singleEntry.push(arr[y]);
