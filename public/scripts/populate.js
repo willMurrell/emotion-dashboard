@@ -2449,18 +2449,19 @@ const emotionHover = function(event) {
  */
 const sentenceClick = function(event) {
     clearSelectedElements();
-    event.path[0].setAttribute("selected", "true");
+    var eventPath = eventPath(event);
+    eventPath.setAttribute("selected", "true");
     var commentEntry = document.getElementById("newCommentDiv");
     
-    if(event.path[0].getAttribute("hascomment") == "true"){
+    if(eventPath.getAttribute("hascomment") == "true"){
         
         commentEntry.style.display = "none";
     } else {
         commentEntry.style.display = "block";
     }
 
-    event.path[0].getAttribute("id");
-    var comment = document.getElementById("comment " + event.path[0].getAttribute("id"));
+    eventPath.getAttribute("id");
+    var comment = document.getElementById("comment " + eventPath.getAttribute("id"));
     
     comment.setAttribute("selected", "true");
 }
