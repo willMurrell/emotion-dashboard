@@ -938,6 +938,7 @@ const getSpecificStudent = async(name, page, course) =>{
         sentenceEventListeners(false, true);
         document.getElementById("newBlogAnchor").setAttribute("href", "/student/" + name + "/" + course + "/newBlog/" + getNewWeek()+"?draft=false")
         document.getElementById("editBlogAnchor").setAttribute("href", "/student/" + name + "/" + course + "/newBlog/" + getNewWeek()+"?draft=true")
+        document.getElementById("textArea").addEventListener("mouseover", hideEmotionHover);
     }
     
 }
