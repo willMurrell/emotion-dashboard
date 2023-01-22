@@ -839,16 +839,29 @@ h2{
     padding: 10px;
 }
 
+#selfReportDisplayDiv{
+    width: 400px;
+}
+#selfReportDisplayDiv h2{
+    margin: 0px;
+}
+
 #overallComments{
     width: 400px;
 }
 #overallComments h1{
-    margin-top: 0px;
+    margin: 0px;
 }
 #overallCommentsStudent{
     width: 600px;
     
 }
+
+#overallCommentsStudent h2{
+    margin: 0px;
+    
+}
+
 #overallComments textarea{
     
     width: 300px;

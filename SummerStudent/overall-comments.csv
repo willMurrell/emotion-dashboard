@@ -1,24 +1,22 @@
 Group,Name,Comment
-COMP371,all,"Im pretty sure you can break these comments pretty easily!!
-heres an example:
- - oh no!
-
-- OR this one!
-
-- Or tjho one@"
+COMP371,all,"""Im pretty sure you can break these comments pretty easily!!"
+heres an example:,,
+ - oh no!,,
+- OR this one!,,
+"- Or tjho one@""",,
 COMP372,all,Yep more interesting information
-all,,"to do list:
- - this
- - that
- -"" hmm""
-{
-   ok: ""I really thought this would break it""
-}
-"
+all,,
+ - this,,
+ - that,,
+" -"""" hmm""""",,
+{,,
+"   ok: """"I really thought this would break it""""",,
+},,
+"""",,
  - Make bookmarks and report comments post back to web server,,
  - Create some sort of javadoc type thing,,
  - Trend graphs only responsive after refresh,,
-" - Change red and green circles to red and green check / cross""",,
+""" - Change red and green circles to red and green check / cross""""""",,
 COMP373,Team1,This should be on COMP371 - Team1 page
 COMP371,Koko,Ummmm eerrrrr ummm yeah 
 COMP371,Gf,dhgssd
