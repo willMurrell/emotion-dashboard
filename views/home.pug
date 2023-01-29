@@ -1,4 +1,8 @@
 doctype html
+
+
+//This is the home page! For the teacher's dashboard anyways... It shows all the courses and stuff.
+
 html(lang='en')
     head
         title Emotion Dashboard!
@@ -26,11 +30,7 @@ html(lang='en')
                 
                 div(class="controls")
 
-                    //div(id="pageInfo")
-                        
-                        //h1 Page Information 
-                        //h3(id="coursePageInfo")
-                        //h3(id="teamPageInfo")
+                    
                         
                     div(id='groupButtonDiv')
                         h1 View Teams of Course:
@@ -77,11 +77,9 @@ html(lang='en')
                 div(id="emoTrendDiv")
                     p(id="emoTrendTitle") Emotions
                     canvas(id = "emoTrend")
-                //button(onclick="orderMissingStudents()") Submit
-            //input(type="file" id="file-input")
-            //div(id="file-content")
+            
 
-
+            //This div here, "new" is where all of the graphs get appended to.  Another terrible name !
             div(id='new')
             
             
@@ -90,4 +88,4 @@ html(lang='en')
         script. 
             course=null;
             set = 'course';
-            //orderMissingStudents();
+            

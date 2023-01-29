@@ -1,4 +1,7 @@
 doctype html
+
+//This is for the "team-wide" view page (Teachers Dashboars).  Group admititedly is a terrible name. Should be like, "team" or something idk
+
 html(lang='en')
     head
         title Emotion Dashboard!
@@ -32,10 +35,7 @@ html(lang='en')
                 
                 
                 div(class="controls")
-                    //- div(id="pageInfo")
-                    //-     h1 Page Information 
-                    //-     h3(id="coursePageInfo")
-                    //-     h3(id="teamPageInfo")
+                    
                     div(id='groupButtonDiv')  
                         h1 View Students of Team:
                     div(class="form") 
@@ -80,6 +80,7 @@ html(lang='en')
                 div(id="emoTrendDiv")
                     p(id="emoTrendTitle") Emotions
                     canvas(id = "emoTrend")
+            //This div here, "new" is where all of the graphs get appended to.  Another terrible name !
             div(id='new')
             
             

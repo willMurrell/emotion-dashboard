@@ -1,4 +1,7 @@
 doctype html
+//This page is part of the Teachers Dashboard
+//This is the page that contains a single students blog entry and all the overlays and comments that go with them.
+
 html(lang='en')
     head
         title Emotion Dashboard!
@@ -33,17 +36,7 @@ html(lang='en')
                     
             div(id="topInfo")
                 
-                    
-                //- div(id="pageInfo")
-                //-     a(href='/papers/' + course + '/' + group id='backButton') 
-                //-         i(class="fa-solid fa-caret-left")
-                //-     h1(id='studentName') #{student}
-                //-     br
-                //-     label(for="groupName") Team:  
-                //-     h2(id='groupName') #{group}
-                //-     br
-                //-     label(for="courseName") Course:  
-                //-     h2(id='courseName') #{course}
+
                     
                 
                     
@@ -143,21 +136,19 @@ html(lang='en')
                  
                   
                     
-                    //span(id="selectedText") 
+                    
                     div(id="newCommentContainer")
                     h2 Comments:
                         div(id="newCommentDiv")
                             textarea(id="commentEntry" placeholder="New Comment!" autofocus="autofocus")
                             button(id="commentAdd" onclick="addComment()") Add Comment
                     
-                    //
-                        button(id="commentEdit" onclick="editComment()") edit
-                        button(id="commentSave" onclick="addComment()") save
+                 
                     
                     div(id="allComments")
                     div(id="whiteBar")
 
-                    
+            //This div here, "new" is where all of the graphs get appended to.  Another terrible name !       
             div(id='new')
             
             
