@@ -1,24 +1,24 @@
 Group,Name,Comment
-COMP371,all,"""""""Im pretty sure you can break these comments pretty easily!!"""
+COMP371,all,Here is a comment!
 heres an example:,,
  - oh no!,,
 - OR this one!,,
-"""- Or tjho one@""""""",,
+"""""""- Or tjho one@""""""""""""""",,
 COMP372,all,Yep more interesting information
 all,,
  - this,,
  - that,,
-""" -"""""""" hmm""""""""""",,
+""""""" -"""""""""""""""" hmm""""""""""""""""""""""",,
 {,,
-"""   ok: """"""""I really thought this would break it""""""""""",,
+"""""""   ok: """"""""""""""""I really thought this would break it""""""""""""""""""""""",,
 },,
-"""""""""",,
+"""""""""""""""""""""",,
  - Make bookmarks and report comments post back to web server,,
  - Create some sort of javadoc type thing,,
  - Trend graphs only responsive after refresh,,
-""""""" - Change red and green circles to red and green check / cross""""""""""""""",,
+""""""""""""""" - Change red and green circles to red and green check / cross""""""""""""""""""""""""""""""",,
 COMP373,Team1,This should be on COMP371 - Team1 page
-COMP371,Koko,Ummmm eerrrrr ummm yeah 
+COMP371,Koko,The student cannot see these comments!
 COMP371,Gf,dhgssd
 COMP371,OB3,DIFERERNET
 COMP371,Riri,fesfd

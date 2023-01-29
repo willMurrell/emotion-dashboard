@@ -870,6 +870,12 @@ h2{
     
 }
 
+#selfReportDisplayDiv .likert li {
+    float: left;
+    list-style-type: none;
+    padding: 5px;
+  }
+
 #graphArea{
     padding: 20px;
 }

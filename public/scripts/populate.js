@@ -766,12 +766,14 @@ function displayComments(comments){
             
             if(group == "all"){
                 textarea.value = comment;
+                textarea.setAttribute("readonly");
             }
         } else if(set == "group"){
             var textarea = document.getElementById("commentTextArea");
             var title = document.getElementById("courseTitle").textContent;
             if(group == title && name == "all"){
                 textarea.value = comment;
+                textarea.setAttribute("readonly");
             }
         } else if(set == "individuals"){
             
@@ -781,6 +783,7 @@ function displayComments(comments){
                 var names = title.split("-");
                 if(group == names[0] && name == names[1]){
                     textarea.value = comment;
+                    textarea.setAttribute("readonly");
                 }
             }else {
                 
@@ -792,6 +795,7 @@ function displayComments(comments){
                 if(group == course.replace(/\s+/g, "") && name == studentName.replace(/\s+/g, "")){
                     
                     textarea.value = comment;
+                    textarea.setAttribute("readonly");
                 }
         
             
@@ -1195,7 +1199,7 @@ function buildTrendGraph(data, id){
     var group = document.getElementById("groupSelector");
     groupName = group.value;
     if(group.value == "null"){
-        groupName = "";
+        groupName = "Overall";
     }
 
     var expTitle = document.getElementById("expTrendTitle");
@@ -1246,13 +1250,19 @@ function buildTrendGraph(data, id){
             },
             scales:{
                 x:{
-                    ticks: { color: "black"}
+                    ticks: { color: "black"},
+                    
                     
                 },
                 y:{
+                    
                     ticks: { color: "black"},
                     max: 100,
-                    min: 0
+                    min: 0,
+                    title: {
+                        display: true,
+                        text: "Average Number of Sentences (%)"
+                    }
                 }
             }
         }
@@ -1341,8 +1351,22 @@ const processIndividuals = async (set, course) => {
     
     //Adds empty weeks
     addMissingWeeks();
+
+    //
+    //displaySelfReport();
    
 }
+
+// function displaySelfReport(){
+//     var selfReportElement = document.getElementById("selfReportDisplayDiv");
+//     for(var i = 1; i < 5; i++){
+//         var div = document.createElement("div");
+//         var span = document.createElement("span");
+//         span.textContent = "Example Question Response Here:  " + i + "/5";
+//         div.appendChild(span);
+//         selfReportElement.appendChild(div);
+//     }
+// }
 
 /**
  * addMissingWeeks is a fucntion that finds the highest week and fills in empty
@@ -2450,19 +2474,21 @@ const emotionHover = function(event) {
  */
 const sentenceClick = function(event) {
     clearSelectedElements();
-    var eventPath = eventPath(event);
-    eventPath.setAttribute("selected", "true");
+    
+    //var eventPathElement = eventPath(event);
+    eventPathElement = event.target;
+    eventPathElement.setAttribute("selected", "true");
     var commentEntry = document.getElementById("newCommentDiv");
     
-    if(eventPath.getAttribute("hascomment") == "true"){
+    if(eventPathElement.getAttribute("hascomment") == "true"){
         
         commentEntry.style.display = "none";
     } else {
         commentEntry.style.display = "block";
     }
 
-    eventPath.getAttribute("id");
-    var comment = document.getElementById("comment " + eventPath.getAttribute("id"));
+    eventPathElement.getAttribute("id");
+    var comment = document.getElementById("comment " + eventPathElement.getAttribute("id"));
     
     comment.setAttribute("selected", "true");
 }
@@ -3427,12 +3453,14 @@ function displayGroupGraph(course, sortedMap, deadMaps) {
     var experiences = averageArrays(positiveExpArr, negativeExpArr, neutralExpArr);
     
     
-   
+    
+
     var emoTrendData = getTrendData(emotions[0], emotions[1], emotions[2]);
     buildTrendGraph(emoTrendData, "emoTrend");
-
     var expTrendData = getTrendData(experiences[0], experiences[1], experiences[2]);
     buildTrendGraph(expTrendData, "expTrend");
+
+    
 
 }
 
