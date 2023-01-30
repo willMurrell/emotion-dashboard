@@ -1,7 +1,10 @@
 # Emotion Dashboard
 
-Welcome to the Emotion Dashboard (Needs a better name) prototype. This documentation is an overview to hopefully help
-anyone who is trying to pick up where I left off.  There are markdown files in this folder containing all the methods and their comments and such.
+Welcome to the Emotion Dashboard (Needs a better name) prototype. This documentation is an overview to hopefully help anyone who is trying to pick up where I left off.  There are markdown files in this folder containing all the methods and their comments and such.
+
+Currently the website is also hosted online (through Render connected to the github repository) [right here](https://emotion-dashboard.onrender.com/home/)
+
+Although I expect if anyone ends up working on this it will have been taken offline by then...
 
 # How it works
 
@@ -16,6 +19,7 @@ The backend is pretty crude, and starts by turning xlsx files of each student's 
 - The submission of blogs goes nowhere.  Needs to be integrated into the backend.  However this is probably best done by redoing the whole backend, so everything is nice and compatible!
 - Self Report is hard coded.
 - Self Report is not added to Student Blog page
+
 - The blogs should display the most recent week's blog not always Week 1
 - Hyperlinks of the graphs to take you to the course/team/student they are displaying
 - Hyperlink / breadcrumbs on the titles of the pages.
