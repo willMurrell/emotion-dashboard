@@ -766,14 +766,14 @@ function displayComments(comments){
             
             if(group == "all"){
                 textarea.value = comment;
-                textarea.setAttribute("readonly");
+                //textarea.setAttribute("readonly");
             }
         } else if(set == "group"){
             var textarea = document.getElementById("commentTextArea");
             var title = document.getElementById("courseTitle").textContent;
             if(group == title && name == "all"){
                 textarea.value = comment;
-                textarea.setAttribute("readonly");
+                //textarea.setAttribute("readonly");
             }
         } else if(set == "individuals"){
             
@@ -783,7 +783,7 @@ function displayComments(comments){
                 var names = title.split("-");
                 if(group == names[0] && name == names[1]){
                     textarea.value = comment;
-                    textarea.setAttribute("readonly");
+                    //textarea.setAttribute("readonly");
                 }
             }else {
                 
@@ -795,7 +795,7 @@ function displayComments(comments){
                 if(group == course.replace(/\s+/g, "") && name == studentName.replace(/\s+/g, "")){
                     
                     textarea.value = comment;
-                    textarea.setAttribute("readonly");
+                    //textarea.setAttribute("readonly");
                 }
         
             
@@ -2173,7 +2173,8 @@ function clearSelectedElements(){
 */
 const commentDoubleClick = function(event){
 
-    const comment =  event.path[0]
+    //const comment =  event.path[0];
+    const comment =  event.target;
     if(comment.getAttribute("selected") == "false"){
 
     } else {

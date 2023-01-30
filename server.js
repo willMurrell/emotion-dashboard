@@ -1,6 +1,8 @@
 /**
 * Server.js
 *
+*   This is the main javascript page of the backend of the webapp
+*
 * @author Will Murrell
 * 2022
 */
